@@ -1,5 +1,4 @@
-package edu.ncsu.cs.ai4se.vmlb.draft;
-
+package examples;
 
 /*
  * Title:        CloudSim Toolkit
@@ -32,6 +31,7 @@ import org.cloudbus.cloudsim.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.VmSchedulerTimeShared;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
+import org.cloudbus.cloudsim.provisioners.PeProvisioner;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
@@ -58,7 +58,7 @@ public class CloudSimExample1 {
 			int num_user = 1; // number of cloud users
 			Calendar calendar = Calendar.getInstance(); // Calendar whose fields have been initialized with the current date and time.
  			boolean trace_flag = false; // trace events
-
+ 			
 			/* Comment Start - Dinesh Bhagwat 
 			 * Initialize the CloudSim library. 
 			 * init() invokes initCommonVariable() which in turn calls initialize() (all these 3 methods are defined in CloudSim.java).
@@ -169,8 +169,12 @@ public class CloudSimExample1 {
 
 		int mips = 1000;
 
-		// 3. Create PEs and add these into a list.
+		// 3. 4-core cpu
 		peList.add(new Pe(0, new PeProvisionerSimple(mips))); // need to store Pe id and MIPS Rating
+		peList.add(new Pe(1, new PeProvisionerSimple(1200)));
+		peList.add(new Pe(2, new PeProvisionerSimple(1200)));
+		peList.add(new Pe(3, new PeProvisionerSimple(800)));
+		
 
 		// 4. Create Host with its id and list of PEs and add them to the list
 		// of machines
@@ -181,7 +185,7 @@ public class CloudSimExample1 {
 
 		hostList.add(
 			new Host(
-				hostId,
+				++hostId,
 				new RamProvisionerSimple(ram),
 				new BwProvisionerSimple(bw),
 				storage,
@@ -189,8 +193,52 @@ public class CloudSimExample1 {
 				new VmSchedulerTimeShared(peList)
 			)
 		); // This is our machine
+		
+		hostList.add(
+				new Host(
+					++hostId,
+					new RamProvisionerSimple(ram),
+					new BwProvisionerSimple(bw),
+					storage,
+					peList,
+					new VmSchedulerTimeShared(peList)
+				)
+			); // This is our machine
+		
+		hostList.add(
+				new Host(
+					++hostId,
+					new RamProvisionerSimple(ram),
+					new BwProvisionerSimple(bw),
+					storage,
+					peList,
+					new VmSchedulerTimeShared(peList)
+				)
+			); // This is our machine
+		
+		hostList.add(
+				new Host(
+					++hostId,
+					new RamProvisionerSimple(ram),
+					new BwProvisionerSimple(bw),
+					storage,
+					peList,
+					new VmSchedulerTimeShared(peList)
+				)
+			); // This is our machine
+		
+		hostList.add(
+				new Host(
+					++hostId,
+					new RamProvisionerSimple(ram),
+					new BwProvisionerSimple(bw),
+					storage,
+					peList,
+					new VmSchedulerTimeShared(peList)
+				)
+			); // This is our machine
 
-		// 5. Create a DatacenterCharacteristics object that stores the
+		// 5. Create a Datacenter Characteristics object that stores the
 		// properties of a data center: architecture, OS, list of
 		// Machines, allocation policy: time- or space-shared, time zone
 		// and its price (G$/Pe time unit).
