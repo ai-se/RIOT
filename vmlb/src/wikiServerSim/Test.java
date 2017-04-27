@@ -9,7 +9,6 @@ import java.util.List;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
-import org.cloudbus.cloudsim.DatacenterBroker;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.Log;
@@ -20,14 +19,12 @@ import org.cloudbus.cloudsim.UtilizationModelFull;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmSchedulerTimeShared;
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.core.SimEntity;
-import org.cloudbus.cloudsim.core.SimEvent;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
 public class Test {
-	private static List<Cloudlet> cloudletList;
+	private static List<MyCloudlet> cloudletList;
 	private static List<Vm> vmlist;
 
 	private static Datacenter createDatacenter(String name) {
@@ -77,23 +74,8 @@ public class Test {
 
 		return datacenter;
 	}
-	
-	
-	private static DatacenterBroker createBroker(String name) {
-		DatacenterBroker broker = null;
-		try {
-			broker = new DatacenterBroker(name);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		return broker;
-	}
-	
-	private static DatacenterBroker createBroker(){
-		return createBroker("Broker");
-	}
 
+	@SuppressWarnings("deprecation")
 	private static void printCloudletList(List<Cloudlet> list) {
 		int size = list.size();
 		Cloudlet cloudlet;
@@ -121,29 +103,29 @@ public class Test {
 	}
 
 	private static List<Vm> createVM(int userId, int vms, int idShift) {
-		//Creates a container to store VMs. This list is passed to the broker later
+		// Creates a container to store VMs. This list is passed to the broker
+		// later
 		LinkedList<Vm> list = new LinkedList<Vm>();
 
-		//VM Parameters
-		long size = 10000; //image size (MB)
-		int ram = 512; //vm memory (MB)
+		// VM Parameters
+		long size = 10000; // image size (MB)
+		int ram = 512; // vm memory (MB)
 		int mips = 250;
 		long bw = 1000;
-		int pesNumber = 1; //number of cpus
-		String vmm = "Xen"; //VMM name
+		int pesNumber = 1; // number of cpus
+		String vmm = "Xen"; // VMM name
 
-		//create VMs
+		// create VMs
 		Vm[] vm = new Vm[vms];
 
-		for(int i=0;i<vms;i++){
+		for (int i = 0; i < vms; i++) {
 			vm[i] = new Vm(idShift + i, userId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
 			list.add(vm[i]);
 		}
 
 		return list;
 	}
-	
-	
+
 	public static void main(String[] args) {
 		// Initial the cloud simulator
 		int num_user = 1; // number of cloud users
@@ -159,47 +141,50 @@ public class Test {
 		System.out.println("the id for wiki_dc is " + wiki_dc1.getId());
 
 		// Create the broker
-		DatacenterBroker broker = createBroker();
-		int brokerId = broker.getId();
+		OnlineDatacenterBroker broker = null;
+		try {
+			broker = new OnlineDatacenterBroker("dc_broker");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
+		int brokerId = broker.getId();
+		// System.out.println("THE BROKER ID IS " + brokerId);
 		// Create the virtual machine
 		vmlist = new ArrayList<Vm>();
 
 		vmlist = createVM(brokerId, 5, 0);
 		broker.submitVmList(vmlist);
 
+		cloudletList = createCloudlet(broker.getId(), 10, 0); // creating 10
+																// cloudlets
 
-//		GlobalBroker globalBroker = new GlobalBroker("GlobalBroker", broker, vmlist);
-		GlobalBroker globalBroker = new GlobalBroker("GlobalBroker");
-
-		
-		cloudletList = createCloudlet(broker.getId(), 10, 0); // creating 10 cloudlets
 		broker.submitCloudletList(cloudletList);
 		// Start the simulation
 		CloudSim.startSimulation();
-		CloudSim.stopSimulation();
 
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
-		newList.addAll(globalBroker.getBroker().getCloudletReceivedList());
+		CloudSim.stopSimulation();
+
 		printCloudletList(newList);
 	}
-	
-	
-	private static List<Cloudlet> createCloudlet(int userId, int cloudlets, int idShift){
-		// Creates a container to store Cloudlets
-		LinkedList<Cloudlet> list = new LinkedList<Cloudlet>();
 
-		//cloudlet parameters
+	private static List<MyCloudlet> createCloudlet(int userId, int cloudlets, int idShift) {
+		// Creates a container to store Cloudlets
+		LinkedList<MyCloudlet> list = new LinkedList<MyCloudlet>();
+
+		// cloudlet parameters
 		long length = 40000;
 		long fileSize = 300;
 		long outputSize = 300;
 		int pesNumber = 1;
 		UtilizationModel utilizationModel = new UtilizationModelFull();
 
-		Cloudlet[] cloudlet = new Cloudlet[cloudlets];
+		MyCloudlet[] cloudlet = new MyCloudlet[cloudlets];
 
-		for(int i=0;i<cloudlets;i++){
-			cloudlet[i] = new Cloudlet(idShift + i, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
+		for (int i = 0; i < cloudlets; i++) {
+			cloudlet[i] = new MyCloudlet(idShift + i, length, pesNumber, fileSize, outputSize, utilizationModel,
+					utilizationModel, utilizationModel, i * 30);
 			// setting the owner of these Cloudlets
 			cloudlet[i].setUserId(userId);
 			list.add(cloudlet[i]);
@@ -207,75 +192,4 @@ public class Test {
 
 		return list;
 	}
-	
-	public static class GlobalBroker extends SimEntity {
-
-		private static final int CREATE_BROKER = 0;
-		private List<Vm> vmList;
-		private List<Cloudlet> cloudletList;
-		private DatacenterBroker broker;
-
-		public GlobalBroker(String name) {
-			super(name);
-		}
-
-		@Override
-		public void processEvent(SimEvent ev) {
-			switch (ev.getTag()) {
-			case CREATE_BROKER:
-				setBroker(createBroker(super.getName()+"_"));
-
-				//Create VMs and Cloudlets and send them to broker
-				setVmList(createVM(getBroker().getId(), 5, 100)); //creating 5 vms
-				setCloudletList(createCloudlet(getBroker().getId(), 10, 100)); // creating 10 cloudlets
-
-				broker.submitVmList(getVmList());
-				broker.submitCloudletList(getCloudletList());
-
-				CloudSim.resumeSimulation();
-
-				break;
-
-			default:
-				Log.printLine(getName() + ": unknown event type");
-				break;
-			}
-		}
-
-		@Override
-		public void startEntity() {
-			Log.printLine(super.getName()+" is starting...");
-			schedule(getId(), 200, CREATE_BROKER);
-		}
-
-		@Override
-		public void shutdownEntity() {
-		}
-
-		public List<Vm> getVmList() {
-			return vmList;
-		}
-
-		protected void setVmList(List<Vm> vmList) {
-			this.vmList = vmList;
-		}
-
-		public List<Cloudlet> getCloudletList() {
-			return cloudletList;
-		}
-
-		protected void setCloudletList(List<Cloudlet> cloudletList) {
-			this.cloudletList = cloudletList;
-		}
-
-		public DatacenterBroker getBroker() {
-			return broker;
-		}
-
-		protected void setBroker(DatacenterBroker broker) {
-			this.broker = broker;
-		}
-
-	}
-
 }
