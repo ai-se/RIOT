@@ -11,6 +11,12 @@ import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
 import org.cloudbus.cloudsim.core.CloudSim;
 
+/**
+ * Here defines the location of virtual machines. that is
+ * given a vm, determine which PM it should be located
+ * @author jianfeng
+ *
+ */
 class StaticRandomVmAllocationPolicy extends VmAllocationPolicy{
 
 	private final Map<String, Host> vm_table = new HashMap<String, Host>();
@@ -27,12 +33,14 @@ class StaticRandomVmAllocationPolicy extends VmAllocationPolicy{
 	public boolean allocateHostForVm(Vm vm) {
 		if(this.vm_table.containsKey(vm.getUid()))
 			return true;
-		
+		int tmp = 0;
 		// otherwise,
 		while (true){
 			Host assigned = hosts.get(new Random().nextInt(hosts.size()));
+//			Host assigned = hosts.get(tmp);
 			if (this.allocateHostForVm(vm, assigned))
 				return true;
+			tmp += 1;
 		}
 	}
 
@@ -69,6 +77,9 @@ class StaticRandomVmAllocationPolicy extends VmAllocationPolicy{
 	@Override
 	public List<Map<String, Object>> optimizeAllocation(List<? extends Vm> vmList) {
 		// TODO Auto-generated method stub
+		//http://www.programcreek.com/java-api-examples/index.php?source_dir=CS249_Workflow_project-master/cloudsim-3.0.1/sources/org/cloudbus/cloudsim/power/PowerVmAllocationPolicyMigrationAbstract.java
+		
+		System.out.println("this function is touched");
 		return null;
 	}
 	

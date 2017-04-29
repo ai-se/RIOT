@@ -27,8 +27,11 @@ public class MyCloudlet extends Cloudlet
 		super(cloudletId, cloudletLength, pesNumber, cloudletFileSize,
 				cloudletOutputSize, utilizationModelCpu, utilizationModelRam,
 				utilizationModelBw);
-		// TODO Auto-generated constructor stub
+		
+		if (startTime == 0)
+			startTime = 0.001;  // NOTE: the startTime can not be 0 [bug in cloudsim?]
 		this.startTime = startTime;
+		
 	}
 	
 	public double getStartTime() {

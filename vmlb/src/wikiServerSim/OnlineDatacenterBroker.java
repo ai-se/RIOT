@@ -10,7 +10,7 @@ import org.cloudbus.cloudsim.core.SimEvent;
 import org.cloudbus.cloudsim.lists.VmList;
 
 public class OnlineDatacenterBroker extends DatacenterBroker {
-	private int vmIndex = 0;
+	private int vmIndex = 0; // rotating the vm to put cloudlets into
 
 	public OnlineDatacenterBroker(String name) throws Exception {
 		super(name);
@@ -51,11 +51,19 @@ public class OnlineDatacenterBroker extends DatacenterBroker {
 		case CloudSimTags.CLOUDLET_SUBMIT:
 			submitCloudlet();
 			break;
+		case CloudSimTags.VM_MIGRATE:
+			processVmMigrate(ev);
+			System.out.println("debuging message... vm migration...");
+			break;
 		// other unknown tags are processed by this method
 		default:
 			processOtherEvent(ev);
 			break;
 		}
+	}
+
+	protected void processVmMigrate(SimEvent ev) {
+
 	}
 
 	/**
@@ -128,7 +136,10 @@ public class OnlineDatacenterBroker extends DatacenterBroker {
 		vm = getVmsCreatedList().get(vmIndex);
 		Log.printLine(CloudSim.clock() + ": " + getName() + ": Sending cloudlet " + cloudlet.getCloudletId()
 				+ " to VM #" + vm.getId());
-		cloudlet.setVmId(vm.getId());
+
+		if (cloudlet.getVmId() < 0) // using the rotation strategy only when VM
+									// id not assigned
+			cloudlet.setVmId(vmIndex);
 		sendNow(getVmsToDatacentersMap().get(vm.getId()), CloudSimTags.CLOUDLET_SUBMIT, cloudlet);
 		vmIndex = (vmIndex + 1) % getVmsCreatedList().size();
 		// remove submitted cloudlet from waiting list
