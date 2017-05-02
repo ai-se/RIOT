@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package edu.ncsu.wls;
+package edu.ncsu.examples;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -93,11 +93,11 @@ public class WorkflowSimBasicExample1 {
              * the data center or the host doesn't have sufficient resources the
              * exact vmNum would be smaller than that. Take care.
              */
-            int vmNum = 20;//number of vms;
+            int vmNum = 5;//number of vms;
             /**
              * Should change this based on real physical path
              */
-            String daxPath = "/Users/weiweich/NetBeansProjects/WorkflowSim-1.0/config/dax/Montage_100.xml";
+            String daxPath = "/Users/jianfeng/Downloads/WorkflowSim-1.0/config/dax/Montage_100.xml";
             File daxFile = new File(daxPath);
             if (!daxFile.exists()) {
                 Log.printLine("Warning: Please replace daxPath with the physical path in your working environment!");

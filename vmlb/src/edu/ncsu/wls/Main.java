@@ -2,12 +2,12 @@ package edu.ncsu.wls;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.cloudbus.cloudsim.Cloudlet;
+import org.cloudbus.cloudsim.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
@@ -19,8 +19,6 @@ import org.cloudbus.cloudsim.UtilizationModelFull;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmSchedulerTimeShared;
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.power.PowerDatacenter;
-import org.cloudbus.cloudsim.power.PowerHost;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
@@ -101,7 +99,13 @@ public class Main {
 		Vm[] vm = new Vm[vms];
 
 		for (int i = 0; i < vms; i++) {
-			vm[i] = new Vm(idShift + i, userId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
+			// vm[i] = new Vm(idShift + i, userId, mips, pesNumber, ram, bw,
+			// size, vmm, new CloudletSchedulerTimeShared()); // Run the
+			// cloudlet simulately inside one VM if possible
+			vm[i] = new Vm(idShift + i, userId, mips, pesNumber, ram, bw, size, vmm,
+					new CloudletSchedulerSpaceShared()); // Only allow one
+															// running cloudlet
+															// in one VM
 			list.add(vm[i]);
 		}
 
@@ -126,7 +130,8 @@ public class Main {
 					utilizationModel, utilizationModel, ThreadLocalRandom.current().nextInt(0, 1));
 			// setting the owner of these Cloudlets
 			cloudlet[i].setUserId(userId);
-			cloudlet[i].setVmId(ThreadLocalRandom.current().nextInt(0,100));
+			// cloudlet[i].setVmId(ThreadLocalRandom.current().nextInt(0,100));
+			cloudlet[i].setVmId(i % 2);
 			list.add(cloudlet[i]);
 		}
 
@@ -141,7 +146,7 @@ public class Main {
 		CloudSim.init(num_user, calendar, trace_flag);
 
 		// create the data center
-		createDatacenter("WIKI"); 
+		createDatacenter("WIKI");
 
 		// Create the broker
 		OnlineDatacenterBroker broker = null;
@@ -155,11 +160,11 @@ public class Main {
 		// Create the virtual machine
 		vmlist = new ArrayList<Vm>();
 
-		vmlist = createVMs(dcBrokerId, 100, 0);
+		vmlist = createVMs(dcBrokerId, 5, 0);
 		broker.submitVmList(vmlist);
 
 		// Create cloudlets
-		cloudletList = createCloudlet(broker.getId(), 100, 0);
+		cloudletList = createCloudlet(broker.getId(), 15, 0);
 
 		broker.submitCloudletList(cloudletList);
 
@@ -174,6 +179,8 @@ public class Main {
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		CloudSim.stopSimulation();
 
-		MyCloudSimHelper.printCloudletList(newList.subList(newList.size()-3, (newList.size()-1)));
+		// MyCloudSimHelper.printCloudletList(newList.subList(newList.size()-3,
+		// (newList.size()-1)));
+		MyCloudSimHelper.printCloudletList(newList);
 	}
 }

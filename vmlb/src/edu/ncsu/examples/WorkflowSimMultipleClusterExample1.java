@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package edu.ncsu.wls;
+package edu.ncsu.examples;
 
 import java.io.File;
 import java.util.ArrayList;
