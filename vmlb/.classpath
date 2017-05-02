@@ -2,10 +2,14 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/cloudsim-4.0/jars/cloudsim-4.0.jar" sourcepath="/Users/jianfeng/git/sway_vm_lb/cloudsim-cloudsim-4.0.zip">
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/cloudsim-4.0.jar" sourcepath="/Users/jianfeng/git/sway_vm_lb/cloudsim-cloudsim-4.0.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="http://www.cloudbus.org/cloudsim/doc/api/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/commons-math3-3.2-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/commons-math3-3.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/flanagan.jar"/>
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/jdom-2.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
