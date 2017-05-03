@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.CloudletSchedulerSpaceShared;
-import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
@@ -103,7 +100,7 @@ public class Main {
 			// size, vmm, new CloudletSchedulerTimeShared()); // Run the
 			// cloudlet simulately inside one VM if possible
 			vm[i] = new Vm(idShift + i, userId, mips, pesNumber, ram, bw, size, vmm,
-					new CloudletSchedulerSpaceShared()); // Only allow one
+					new DAGCloudletSchedulerSpaceShared()); // Only allow one
 															// running cloudlet
 															// in one VM
 			list.add(vm[i]);
@@ -127,11 +124,11 @@ public class Main {
 
 		for (int i = 0; i < cloudlets; i++) {
 			cloudlet[i] = new MyCloudlet(idShift + i, length, pesNumber, fileSize, outputSize, utilizationModel,
-					utilizationModel, utilizationModel, ThreadLocalRandom.current().nextInt(0, 1));
+					utilizationModel, utilizationModel, 0);
 			// setting the owner of these Cloudlets
 			cloudlet[i].setUserId(userId);
 			// cloudlet[i].setVmId(ThreadLocalRandom.current().nextInt(0,100));
-			cloudlet[i].setVmId(i % 2);
+			cloudlet[i].setVmId(0 % 2);
 			list.add(cloudlet[i]);
 		}
 
@@ -162,25 +159,18 @@ public class Main {
 
 		vmlist = createVMs(dcBrokerId, 5, 0);
 		broker.submitVmList(vmlist);
-
 		// Create cloudlets
-		cloudletList = createCloudlet(broker.getId(), 15, 0);
+		cloudletList = createCloudlet(broker.getId(), 5, 0);
+		((DAGCloudletSchedulerSpaceShared)vmlist.get(0).getCloudletScheduler()).addCloudWorkflow(cloudletList.get(2), cloudletList.get(1));
+		((DAGCloudletSchedulerSpaceShared)vmlist.get(0).getCloudletScheduler()).addCloudWorkflow(cloudletList.get(4), cloudletList.get(1));
 
 		broker.submitCloudletList(cloudletList);
-
-		// this is a testing
-		// HashMap<String, Object> migrationData = new HashMap<String,
-		// Object>();
-		// // sendNow(broker.getId(), CloudSimTags.VM_MIGRATE, migrationData);
-		// PowerDatacenter x = null;
 
 		// Start the simulation
 		CloudSim.startSimulation();
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		CloudSim.stopSimulation();
 
-		// MyCloudSimHelper.printCloudletList(newList.subList(newList.size()-3,
-		// (newList.size()-1)));
 		MyCloudSimHelper.printCloudletList(newList);
 	}
 }
