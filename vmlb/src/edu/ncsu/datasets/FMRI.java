@@ -71,7 +71,7 @@ public class FMRI {
 	private void createTasks() {
 		tasks.put("align_warp/1", createCloudlet(38.0)); // 0
 		tasks.put("align_warp/3", createCloudlet(37.0)); // 1
-		tasks.put("align_warp/4", createCloudlet(31.6)); // 2
+		tasks.put("align_warp/5", createCloudlet(31.6)); // 2
 		tasks.put("align_warp/7", createCloudlet(39.6)); // 3
 		tasks.put("reslice/2", createCloudlet(67.0)); // 4
 		tasks.put("reslice/4", createCloudlet(66.9)); // 5
@@ -93,6 +93,9 @@ public class FMRI {
 	 * @param to
 	 */
 	private void set(String from, String to) {
+//		if (!this.tasks.keySet().contains(from) || !this.tasks.keySet().contains(to)){
+//			System.out.println(from + " " + to);
+//		}
 		this.workflow.addCloudWorkflow(tasks.get(from), tasks.get(to));
 	}
 
@@ -113,7 +116,7 @@ public class FMRI {
 		set("slicer/14", "convert/15");
 	}
 
-//	public static void main(String[] args) {
-//		FMRI x = new FMRI(0, 0);
-//	}
+	public static void main(String[] args) {
+		FMRI x = new FMRI(0, 0);
+	}
 }

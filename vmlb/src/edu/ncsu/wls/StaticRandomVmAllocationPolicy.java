@@ -17,7 +17,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
  * @author jianfeng
  *
  */
-class StaticRandomVmAllocationPolicy extends VmAllocationPolicy{
+public class StaticRandomVmAllocationPolicy extends VmAllocationPolicy{
 
 	private final Map<String, Host> vm_table = new HashMap<String, Host>();
 	private final List<Host> hosts;
