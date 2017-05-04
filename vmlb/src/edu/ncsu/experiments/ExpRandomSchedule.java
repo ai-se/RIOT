@@ -24,7 +24,7 @@ public class ExpRandomSchedule {
 	static List<MyCloudlet> cloudletList;
 	static CloudletPassport workflow;
 
-	public static void main(String[] args) {
+	public static double core(String[] args) {
 		// Initial the cloud simulator
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
@@ -46,7 +46,8 @@ public class ExpRandomSchedule {
 		// Create the virtual machine
 		List<Vm> vmlist = new ArrayList<Vm>();
 
-		vmlist = Infrastructure.createEqualVms(dcBrokerId, 2, 0);
+		// vmlist = Infrastructure.createEqualVms(dcBrokerId, 2, 0);
+		vmlist = Infrastructure.createEC2Vms(dcBrokerId, 0);
 		broker.submitVmList(vmlist);
 
 		if (args.length > 0) {
@@ -63,11 +64,11 @@ public class ExpRandomSchedule {
 				break;
 			case "random":
 				cloudletList = Randomset.createCloudlet(broker.getId(), 10, 0);
-				workflow = new CloudletPassport();
+				workflow = Randomset.getPassport(cloudletList);
 				break;
 			default:
 				System.out.println("Check the dataset name");
-				return;
+				return -1;
 			}
 		} else {
 			cloudletList = Randomset.createCloudlet(broker.getId(), 10, 0);
@@ -79,13 +80,22 @@ public class ExpRandomSchedule {
 		Collections.shuffle(cloudletList);
 		broker.submitCloudletList(cloudletList);
 
-		// Log.disable();
+		Log.disable();
 		CloudSim.startSimulation();
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		CloudSim.stopSimulation();
+		// Log.enable();
 		MyCloudSimHelper.printCloudletList(newList);
 
-		Log.printLine("Total Finish Cloudlets # " + newList.size());
+		return newList.get(newList.size() - 1).getFinishTime();
+	}
 
+	public static void main(String[] args) {
+		int repeat = 500;
+		int[] makespan = new int[repeat];
+		for (int i = 0; i < repeat; i++) {
+//			System.out.println(i);
+			makespan[i] = (int) core(args);
+		}
 	}
 }

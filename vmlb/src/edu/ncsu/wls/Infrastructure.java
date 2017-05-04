@@ -34,7 +34,7 @@ public class Infrastructure {
 		// create VMs
 		// VM Parameters
 		size = 10000; // image size (MB)
-		ram = 4 * 1024; // vm memory (MB)
+		ram = 4096; // vm memory (MB)
 		mips = 250;
 		bw = 1000;
 		pesNumber = 2; // number of cpus
@@ -80,11 +80,11 @@ public class Infrastructure {
 
 		// create (same configured) PMs in a datacenter
 		int hostId = 0;
-		int ram = 2048; // host memory (MB)
+		int ram = 100000; // host memory (MB)
 		long storage = 1000000; // host storage
 		int bw = 10000;
 
-		for (int i = 0; i < 100; ++i) {
+		for (int i = 0; i < 5; ++i) {
 			// hostList.add(new PowerHost(hostId++, new
 			// RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage,
 			// peList, new VmSchedulerTimeShared(peList), new

@@ -30,7 +30,7 @@ public class Randomset {
 			// setting the owner of these Cloudlets
 			cloudlet[i].setUserId(userId);
 			// cloudlet[i].setVmId(ThreadLocalRandom.current().nextInt(0,100));
-			cloudlet[i].setVmId(i % 3);
+//			cloudlet[i].setVmId(i % 3);
 			list.add(cloudlet[i]);
 		}
 

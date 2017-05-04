@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 
@@ -38,7 +39,7 @@ public class Eprotein {
 	}
 
 	public List<MyCloudlet> getCloudletList() {
-		System.out.println("RUNNING at Eprotein getcloudlist...");
+		Log.printLine("RUNNING at Eprotein getcloudlist...");
 		List<MyCloudlet> cloudletList = new ArrayList<MyCloudlet>();
 
 		for (String name : this.tasks.keySet())

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 
@@ -40,7 +41,7 @@ public class FMRI {
 	}
 
 	public List<MyCloudlet> getCloudletList() {
-		System.out.println("RUNNING at f-MRI getcloudlist...");
+		Log.printLine("RUNNING at f-MRI getcloudlist...");
 		List<MyCloudlet> cloudletList = new ArrayList<MyCloudlet>();
 
 		for (String name : this.tasks.keySet())
