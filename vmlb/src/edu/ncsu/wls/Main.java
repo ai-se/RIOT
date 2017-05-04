@@ -2,6 +2,7 @@ package edu.ncsu.wls;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class Main {
 		// Create the virtual machine
 		vmlist = new ArrayList<Vm>();
 
-		vmlist = createVMs(dcBrokerId, 5, 0);
+		vmlist = createVMs(dcBrokerId, 2, 0);
 		broker.submitVmList(vmlist);
 		
 		// Create cloudlets
@@ -144,7 +145,7 @@ public class Main {
 		
 		for (Vm vm : vmlist)
 			((DAGCloudletSchedulerSpaceShared)(vm.getCloudletScheduler())).setCloudletPassport(workflow);
-		
+		Collections.shuffle(cloudletList);
 		broker.submitCloudletList(cloudletList);
 
 		// Start the simulation
