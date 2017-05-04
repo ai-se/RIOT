@@ -9,16 +9,17 @@ import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Storage;
-import org.cloudbus.cloudsim.UtilizationModel;
-import org.cloudbus.cloudsim.UtilizationModelFull;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmSchedulerTimeShared;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
+
+import edu.ncsu.datasets.Eprotein;
 
 public class Main {
 	private static List<MyCloudlet> cloudletList;
@@ -109,32 +110,6 @@ public class Main {
 		return list;
 	}
 
-	private static List<MyCloudlet> createCloudlet(int userId, int cloudlets, int idShift) {
-		// Creates a container to store Cloudlets
-		LinkedList<MyCloudlet> list = new LinkedList<MyCloudlet>();
-
-		// cloudlet parameters
-		long length = 40000;
-		long fileSize = 300;
-		long outputSize = 300;
-		int pesNumber = 1;
-		UtilizationModel utilizationModel = new UtilizationModelFull();
-
-		MyCloudlet[] cloudlet = new MyCloudlet[cloudlets];
-
-		for (int i = 0; i < cloudlets; i++) {
-			cloudlet[i] = new MyCloudlet(idShift + i, length, pesNumber, fileSize, outputSize, utilizationModel,
-					utilizationModel, utilizationModel, 0);
-			// setting the owner of these Cloudlets
-			cloudlet[i].setUserId(userId);
-			// cloudlet[i].setVmId(ThreadLocalRandom.current().nextInt(0,100));
-			cloudlet[i].setVmId(0 % 2);
-			list.add(cloudlet[i]);
-		}
-
-		return list;
-	}
-
 	public static void main(String[] args) {
 		// Initial the cloud simulator
 		int num_user = 1; // number of cloud users
@@ -159,11 +134,17 @@ public class Main {
 
 		vmlist = createVMs(dcBrokerId, 5, 0);
 		broker.submitVmList(vmlist);
+		
 		// Create cloudlets
-		cloudletList = createCloudlet(broker.getId(), 5, 0);
-		((DAGCloudletSchedulerSpaceShared)vmlist.get(0).getCloudletScheduler()).addCloudWorkflow(cloudletList.get(2), cloudletList.get(1));
-		((DAGCloudletSchedulerSpaceShared)vmlist.get(0).getCloudletScheduler()).addCloudWorkflow(cloudletList.get(4), cloudletList.get(1));
-
+//		cloudletList = Randomset.createCloudlet(broker.getId(), 10, 0);
+//		CloudletPassport workflow = Randomset.getPassport(cloudletList);
+		Eprotein eprotein = new Eprotein(broker.getId(), 0);
+		cloudletList = eprotein.getCloudletList();
+		CloudletPassport workflow = eprotein.getCloudletPassport();
+		
+		for (Vm vm : vmlist)
+			((DAGCloudletSchedulerSpaceShared)(vm.getCloudletScheduler())).setCloudletPassport(workflow);
+		
 		broker.submitCloudletList(cloudletList);
 
 		// Start the simulation
@@ -172,5 +153,7 @@ public class Main {
 		CloudSim.stopSimulation();
 
 		MyCloudSimHelper.printCloudletList(newList);
+		
+		Log.printLine("Total Finish Cloudlets # " + newList.size());
 	}
 }

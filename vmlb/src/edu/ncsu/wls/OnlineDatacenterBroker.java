@@ -11,6 +11,8 @@ import org.cloudbus.cloudsim.lists.VmList;
 
 public class OnlineDatacenterBroker extends DatacenterBroker {
 	private int vmIndex = 0; // rotating the vm to put cloudlets into
+	// private HashMap<Cloudlet, List<Cloudlet>> requiring = new
+	// HashMap<Cloudlet, List<Cloudlet>>();
 
 	public OnlineDatacenterBroker(String name) throws Exception {
 		super(name);
@@ -52,7 +54,7 @@ public class OnlineDatacenterBroker extends DatacenterBroker {
 			submitCloudlet();
 			break;
 		case CloudSimTags.VM_MIGRATE:
-//			processVmMigrate(ev);
+			// processVmMigrate(ev);
 			System.out.println("debuging message... vm migration...");
 			break;
 		// other unknown tags are processed by this method
@@ -61,10 +63,10 @@ public class OnlineDatacenterBroker extends DatacenterBroker {
 			break;
 		}
 	}
-//
-//	protected void processVmMigrate(SimEvent ev) {
-//		send(this.getId(), CloudSimTags.VM_MIGRATE)
-//	}
+	//
+	// protected void processVmMigrate(SimEvent ev) {
+	// send(this.getId(), CloudSimTags.VM_MIGRATE)
+	// }
 
 	/**
 	 * Process the ack received due to a request for VM creation.

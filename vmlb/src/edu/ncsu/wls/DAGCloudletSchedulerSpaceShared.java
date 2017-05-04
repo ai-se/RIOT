@@ -1,7 +1,6 @@
 package edu.ncsu.wls;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
@@ -22,6 +21,10 @@ import org.cloudbus.cloudsim.core.CloudSim;
  * DAG - the cloudlet is organized as the DAG. If one cloudlet is not ready, it
  * will process the next available cloudlet
  * 
+ * The DAG is creating through method addCloudWorkflow
+ * 
+ * Scheduling the cloudlets INSIDE one VM
+ * 
  * @author Jianfeng Chen
  */
 
@@ -36,10 +39,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	/** The number of used PEs. */
 	protected int usedPes;
 
-	private List<Integer> receivedCloudletIDs = new ArrayList<Integer>();
-	private HashMap<Cloudlet, List<Cloudlet>> requiring = new HashMap<Cloudlet, List<Cloudlet>>();
-	// private HashMap<Cloudlet, List<Cloudlet>> reversed_requiring = new
-	// HashMap<Cloudlet, List<Cloudlet> >();
+	private CloudletPassport cp;
 
 	/**
 	 * ® Creates a new CloudletSchedulerSpaceShared object. This method must be
@@ -52,10 +52,11 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		super();
 		usedPes = 0;
 		currentCpus = 0;
+		cp = new CloudletPassport();
 	}
 
 	private String printResCloudLetList(List<ResCloudlet> list, String tag) {
-		String res = tag + ": [";
+		String res = tag + " [";
 		for (ResCloudlet c : list)
 			res += c.getCloudletId();
 		res += "]";
@@ -63,18 +64,32 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		return res;
 	}
 
-	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
-		if (!this.requiring.containsKey(to))
-			this.requiring.put(to, new ArrayList<Cloudlet>());
-		this.requiring.get(to).add(from);
+	private String printResCloudLetList(List<ResCloudlet> list) {
+		String res = " [";
+		for (ResCloudlet c : list)
+			res += c.getCloudletId();
+		res += "]";
+		// Log.printLine(res);
+		return res;
+	}
 
-		// if (!this.reversed_requiring.containsKey(to))
-		// this.reversed_requiring.put(to, new ArrayList<Cloudlet>());
-		// this.reversed_requiring.get(to).add(from);
+	private void p(Object s) {
+		System.out.println(s);
+		;
+	}
+
+	public void setCloudletPassport(CloudletPassport cp) {
+		this.cp = cp;
 	}
 
 	@Override
 	public double updateVmProcessing(double currentTime, List<Double> mipsShare) {
+		// if
+		// (this.printResCloudLetList(this.getCloudletWaitingList()).contains("1"))
+		// {
+		// p("1 is still in the waiting list. exec it?");
+		// }
+
 		setCurrentMipsShare(mipsShare);
 		double timeSpam = currentTime - getPreviousTime(); // time since last
 															// update
@@ -90,7 +105,6 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 		currentCpus = cpus;
 		capacity /= cpus; // average capacity of each cpu
-
 		// each machine in the exec list has the same amount of cpu
 		for (ResCloudlet rcl : getCloudletExecList()) {
 			rcl.updateCloudletFinishedSoFar((long) (capacity * timeSpam * rcl.getNumberOfPes() * Consts.MILLION));
@@ -105,6 +119,8 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		// update each cloudlet
 		int finished = 0;
 		List<ResCloudlet> toRemove = new ArrayList<ResCloudlet>();
+
+		int i = 0;
 		for (ResCloudlet rcl : getCloudletExecList()) {
 			// finished anyway, rounding issue...
 			if (rcl.getRemainingCloudletLength() == 0) {
@@ -118,10 +134,11 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 		// for each finished cloudlet, add a new one from the waiting list
 		if (!getCloudletWaitingList().isEmpty()) {
-			for (int i = 0; i < finished; i++) {
+			for (i = 0; i < finished; i++) {
 				toRemove.clear();
 				for (ResCloudlet rcl : getCloudletWaitingList()) {
-					if ((currentCpus - usedPes) >= rcl.getNumberOfPes() && this.isCloudletPrepared(rcl)) {
+					if ((currentCpus - usedPes) >= rcl.getNumberOfPes()
+							&& this.cp.isCloudletPrepared(rcl.getCloudlet())) {
 						rcl.setCloudletStatus(Cloudlet.INEXEC);
 						for (int k = 0; k < rcl.getNumberOfPes(); k++) {
 							rcl.setMachineAndPeId(0, i);
@@ -134,6 +151,33 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 				}
 				getCloudletWaitingList().removeAll(toRemove);
 			}
+		}
+
+		// handing the pending status
+		if (getCloudletExecList().size() == 0 && getCloudletWaitingList().size() > 0) {
+			toRemove.clear();
+			for (ResCloudlet rcl : getCloudletWaitingList()) {
+				if ((currentCpus - usedPes) >= rcl.getNumberOfPes() && this.cp.isCloudletPrepared(rcl.getCloudlet())) {
+					rcl.setCloudletStatus(Cloudlet.INEXEC);
+					for (int k = 0; k < rcl.getNumberOfPes(); k++) {
+						rcl.setMachineAndPeId(0, i++);
+					}
+					getCloudletExecList().add(rcl);
+					usedPes += rcl.getNumberOfPes();
+					toRemove.add(rcl);
+					break;
+				}
+			}
+
+			// Still need to wait for other requirements
+			if (this.printResCloudLetList(this.getCloudletWaitingList()).contains("1") && toRemove.size() == 0) {
+				// p("unfortunately, no");
+				setPreviousTime(currentTime);
+				// we don't know when the other requirements can finished, have
+				// to wait and re-check very frequently!
+				return currentTime + CloudSim.getMinTimeBetweenEvents();
+			}
+			getCloudletWaitingList().removeAll(toRemove);
 		}
 
 		// estimate finish time of cloudlets in the execution queue
@@ -149,7 +193,6 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			}
 		}
 		setPreviousTime(currentTime);
-
 		return nextEvent;
 	}
 
@@ -259,7 +302,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		rcl.finalizeCloudlet();
 		getCloudletFinishedList().add(rcl);
 		usedPes -= rcl.getNumberOfPes();
-		this.receivedCloudletIDs.add(rcl.getCloudletId());
+		this.cp.afterOneCloudletSuccess(rcl.getCloudlet());
 	}
 
 	@Override
@@ -328,28 +371,10 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 	}
 
-	private boolean isCloudletPrepared(ResCloudlet rcl) {
-		Cloudlet cloudlet = rcl.getCloudlet();
-		if (!this.requiring.containsKey(cloudlet) || this.requiring.get(cloudlet).size() == 0){
-//			Log.printLine("pass CHECKING " + cloudlet.getCloudletId());
-			return true;
-		}
-		
-//		this.printResCloudLetList(this.receivedCloudlet, "done at this time");
-//		Log.printLine("Done at this time " + this.receivedCloudletIDs);
-		for (Cloudlet requirement : this.requiring.get(cloudlet))
-			if (!this.receivedCloudletIDs.contains(requirement.getCloudletId())){
-//				Log.printLine("fail CHECKING " + cloudlet.getCloudletId());
-				return false;
-			}
-//		Log.printLine("pass CHECKING" + cloudlet.getCloudletId());
-		return true;
-	}
-
 	@Override
 	public double cloudletSubmit(Cloudlet cloudlet, double fileTransferTime) {
 		// it can go to the exec list
-		if ((currentCpus - usedPes) >= cloudlet.getNumberOfPes()) {
+		if ((currentCpus - usedPes) >= cloudlet.getNumberOfPes() && cp.isCloudletPrepared(cloudlet)) {
 			ResCloudlet rcl = new ResCloudlet(cloudlet);
 			rcl.setCloudletStatus(Cloudlet.INEXEC);
 			for (int i = 0; i < cloudlet.getNumberOfPes(); i++) {
