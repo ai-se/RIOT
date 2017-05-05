@@ -23,7 +23,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
  * 
  * The DAG is creating through method addCloudWorkflow
  * 
- * Scheduling the cloudlets INSIDE one VM
+ * Coordinating the cloudlets INSIDE one VM
  * 
  * @author Jianfeng Chen
  */

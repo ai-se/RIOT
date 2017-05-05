@@ -1,9 +1,16 @@
 package edu.ncsu.experiments;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
@@ -24,14 +31,11 @@ public class ExpRandomSchedule {
 	static List<MyCloudlet> cloudletList;
 	static CloudletPassport workflow;
 
-	public static double core(String[] args) {
-		// Initial the cloud simulator
+	public static Map<String, Object> core(String[] args) {
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
 		boolean trace_flag = false; // trace events
 		CloudSim.init(num_user, calendar, trace_flag);
-
-		// create the data center
 		Infrastructure.createDatacenter("ncsu");
 
 		// Create the broker
@@ -43,11 +47,10 @@ public class ExpRandomSchedule {
 		}
 
 		int dcBrokerId = broker.getId();
-		// Create the virtual machine
-		List<Vm> vmlist = new ArrayList<Vm>();
 
-		// vmlist = Infrastructure.createEqualVms(dcBrokerId, 2, 0);
+		List<Vm> vmlist = new ArrayList<Vm>();
 		vmlist = Infrastructure.createEC2Vms(dcBrokerId, 0);
+
 		broker.submitVmList(vmlist);
 
 		if (args.length > 0) {
@@ -68,34 +71,65 @@ public class ExpRandomSchedule {
 				break;
 			default:
 				System.out.println("Check the dataset name");
-				return -1;
+				return null;
 			}
 		} else {
 			cloudletList = Randomset.createCloudlet(broker.getId(), 10, 0);
 			workflow = new CloudletPassport();
 		}
-
 		for (Vm vm : vmlist)
 			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
 		Collections.shuffle(cloudletList);
 		broker.submitCloudletList(cloudletList);
 
-		Log.disable();
+		// Random Assign vms
+		for (MyCloudlet c : cloudletList) {
+			c.setVmId(vmlist.get(ThreadLocalRandom.current().nextInt(0, vmlist.size())).getId());
+		}
+
+		// Log.disable();
 		CloudSim.startSimulation();
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		CloudSim.stopSimulation();
-		// Log.enable();
+		Log.enable();
 		MyCloudSimHelper.printCloudletList(newList);
 
-		return newList.get(newList.size() - 1).getFinishTime();
+		// CHECK ERRORS!!
+		if (newList.size() != cloudletList.size()) {
+			System.err.println("Check errors");
+			return null;
+		}
+
+		// writing the record
+		int[] vmmap = new int[cloudletList.size()];
+		for (Cloudlet c : newList)
+			vmmap[c.getCloudletId()] = c.getVmId();
+		Map<String, Object> record = new HashMap<String, Object>();
+		record.put("makespan", (int) newList.get(newList.size() - 1).getFinishTime());
+		record.put("dataset", args.length > 0 ? args[0] : "random");
+		record.put("vmid", vmmap);
+		return record;
 	}
 
-	public static void main(String[] args) {
-		int repeat = 500;
-		int[] makespan = new int[repeat];
-		for (int i = 0; i < repeat; i++) {
-//			System.out.println(i);
-			makespan[i] = (int) core(args);
+	public static void main(String[] args) throws IOException {
+		File file = new File("lst.csv");
+		// file.createNewFile();
+		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+
+		int repeat = 1;
+		for (int i = 1; i <= repeat; i++) {
+			Map<String, Object> res = core(args);
+
+			out.write(res.get("dataset").toString());
+			out.write(",");
+			out.write(res.get("makespan").toString());
+			out.write(",");
+			for (Integer tmp : (int[]) res.get("vmid"))
+				out.write(tmp.toString() + "|");
+			out.write("\n");
 		}
+		out.flush();
+		out.close();
+
 	}
 }
