@@ -10,7 +10,7 @@ import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmSchedulerTimeShared;
+import org.cloudbus.cloudsim.VmSchedulerSpaceShared;
 import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
@@ -49,6 +49,7 @@ public class Infrastructure {
 		pesNumber = 1; // number of cpus
 		vmm = "m3.medium"; // VMM name
 		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
 
 		return list;
 	}
@@ -76,7 +77,7 @@ public class Infrastructure {
 		// each machine are n-core machine
 		List<Pe> peList = new ArrayList<Pe>();
 		peList.add(new Pe(0, new PeProvisionerSimple(1000)));
-		// peList.add(new Pe(1, new PeProvisionerSimple(1200)));
+		peList.add(new Pe(0, new PeProvisionerSimple(1000)));
 
 		// create (same configured) PMs in a datacenter
 		int hostId = 0;
@@ -85,13 +86,8 @@ public class Infrastructure {
 		int bw = 10000;
 
 		for (int i = 0; i < 5; ++i) {
-			// hostList.add(new PowerHost(hostId++, new
-			// RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage,
-			// peList, new VmSchedulerTimeShared(peList), new
-			// PowerModelCubic(1000, 1)));
-
 			hostList.add(new Host(++hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList,
-					new VmSchedulerTimeShared(peList))); // This is our
+					new VmSchedulerSpaceShared(peList))); // This is our
 															// machine
 		}
 

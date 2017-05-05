@@ -40,6 +40,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	protected int usedPes;
 
 	private CloudletPassport cp;
+	private int currentvmid = -1;
 
 	/**
 	 * ® Creates a new CloudletSchedulerSpaceShared object. This method must be
@@ -57,8 +58,10 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 	private String printResCloudLetList(List<ResCloudlet> list, String tag) {
 		String res = tag + " [";
-		for (ResCloudlet c : list)
+		for (ResCloudlet c : list) {
 			res += c.getCloudletId();
+			res += ",";
+		}
 		res += "]";
 		Log.printLine(res);
 		return res;
@@ -84,12 +87,6 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 	@Override
 	public double updateVmProcessing(double currentTime, List<Double> mipsShare) {
-		// if
-		// (this.printResCloudLetList(this.getCloudletWaitingList()).contains("1"))
-		// {
-		// p("1 is still in the waiting list. exec it?");
-		// }
-
 		setCurrentMipsShare(mipsShare);
 		double timeSpam = currentTime - getPreviousTime(); // time since last
 															// update
@@ -154,8 +151,8 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		}
 
 		// handing the pending status
-		if (getCloudletExecList().size() == 0 && getCloudletWaitingList().size() > 0) {
-			toRemove.clear();
+		toRemove.clear();
+		if (this.usedPes == 0 && getCloudletWaitingList().size() > 0) {
 			for (ResCloudlet rcl : getCloudletWaitingList()) {
 				if ((currentCpus - usedPes) >= rcl.getNumberOfPes() && this.cp.isCloudletPrepared(rcl.getCloudlet())) {
 					rcl.setCloudletStatus(Cloudlet.INEXEC);
@@ -170,8 +167,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			}
 
 			// Still need to wait for other requirements
-			if (this.printResCloudLetList(this.getCloudletWaitingList()).contains("1") && toRemove.size() == 0) {
-				// p("unfortunately, no");
+			if (toRemove.size() == 0) {
 				setPreviousTime(currentTime);
 				// we don't know when the other requirements can finished, have
 				// to wait and re-check very frequently!
@@ -373,6 +369,8 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 	@Override
 	public double cloudletSubmit(Cloudlet cloudlet, double fileTransferTime) {
+		if (this.currentvmid < 0)
+			this.currentvmid = cloudlet.getVmId();
 		// it can go to the exec list
 		if ((currentCpus - usedPes) >= cloudlet.getNumberOfPes() && cp.isCloudletPrepared(cloudlet)) {
 			ResCloudlet rcl = new ResCloudlet(cloudlet);

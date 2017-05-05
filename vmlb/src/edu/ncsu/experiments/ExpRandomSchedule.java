@@ -19,6 +19,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
 
 import edu.ncsu.datasets.Eprotein;
 import edu.ncsu.datasets.FMRI;
+import edu.ncsu.datasets.PSPLIB;
 import edu.ncsu.datasets.Randomset;
 import edu.ncsu.wls.CloudletPassport;
 import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
@@ -69,6 +70,21 @@ public class ExpRandomSchedule {
 				cloudletList = Randomset.createCloudlet(broker.getId(), 10, 0);
 				workflow = Randomset.getPassport(cloudletList);
 				break;
+			case "j30":
+				PSPLIB psp1 = new PSPLIB(broker.getId(), 0, "j301_1", 30);
+				cloudletList = psp1.getCloudletList();
+				workflow = psp1.getCloudletPassport();
+				break;
+			case "j60":
+				PSPLIB psp2 = new PSPLIB(broker.getId(), 0, "j601_1", 60);
+				cloudletList = psp2.getCloudletList();
+				workflow = psp2.getCloudletPassport();
+				break;
+			case "j90":
+				PSPLIB psp3 = new PSPLIB(broker.getId(), 0, "j901_1", 90);
+				cloudletList = psp3.getCloudletList();
+				workflow = psp3.getCloudletPassport();
+				break;
 			default:
 				System.out.println("Check the dataset name");
 				return null;
@@ -77,25 +93,34 @@ public class ExpRandomSchedule {
 			cloudletList = Randomset.createCloudlet(broker.getId(), 10, 0);
 			workflow = new CloudletPassport();
 		}
+
 		for (Vm vm : vmlist)
 			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
 		Collections.shuffle(cloudletList);
-		broker.submitCloudletList(cloudletList);
 
-		// Random Assign vms
+		// Random Assign cloudlet to vms
 		for (MyCloudlet c : cloudletList) {
 			c.setVmId(vmlist.get(ThreadLocalRandom.current().nextInt(0, vmlist.size())).getId());
 		}
 
-		// Log.disable();
+		broker.submitCloudletList(cloudletList);
+//		Log.disable();
 		CloudSim.startSimulation();
-		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		CloudSim.stopSimulation();
+		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		Log.enable();
 		MyCloudSimHelper.printCloudletList(newList);
 
 		// CHECK ERRORS!!
+		// System.err.println(newList.size());
 		if (newList.size() != cloudletList.size()) {
+			boolean[] tmp = new boolean[30];
+			for (Cloudlet c : newList) {
+				tmp[c.getCloudletId()] = true;
+			}
+			for (int i = 0; i < 30; i++)
+				if (!tmp[i])
+					System.err.println(i);
 			System.err.println("Check errors");
 			return null;
 		}

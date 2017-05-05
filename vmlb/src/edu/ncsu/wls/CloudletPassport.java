@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
+import org.cloudbus.cloudsim.Log;
 
 /**
  * 
@@ -29,14 +30,15 @@ public class CloudletPassport {
 	}
 
 	public boolean isCloudletPrepared(Cloudlet cloudlet) {
-		
+		// Log.printLine("checking passing? at" + cloudlet.getCloudletId());
 		if (!this.requiring.containsKey(cloudlet) || this.requiring.get(cloudlet).size() == 0) {
 			return true;
 		}
 
 		for (Cloudlet requirement : this.requiring.get(cloudlet))
 			if (!this.receivedCloudletIds.contains(requirement.getCloudletId())) {
-//				Log.printLine("We're checking cloudlet and found file at *** " + cloudlet.getCloudletId());
+				// Log.printLine("We're checking cloudlet and found fail at ***
+				// " + cloudlet.getCloudletId());
 				return false;
 			}
 		return true;
@@ -45,4 +47,5 @@ public class CloudletPassport {
 	public void afterOneCloudletSuccess(Cloudlet cloudlet) {
 		this.receivedCloudletIds.add(cloudlet.getCloudletId());
 	}
+
 }
