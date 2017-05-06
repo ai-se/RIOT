@@ -114,3 +114,5 @@ ENV/
 
 # mkdocs documentation
 /site
+
+.idea/
