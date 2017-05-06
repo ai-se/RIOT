@@ -49,7 +49,7 @@ public class Infrastructure {
 		pesNumber = 1; // number of cpus
 		vmm = "m3.medium"; // VMM name
 		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+//		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
 
 		return list;
 	}
@@ -70,14 +70,14 @@ public class Infrastructure {
 
 		return list;
 	}
-	
+
 	public static Datacenter createDatacenter(String name) {
 		List<Host> hostList = new ArrayList<Host>();
 
 		// each machine are n-core machine
 		List<Pe> peList = new ArrayList<Pe>();
-		peList.add(new Pe(0, new PeProvisionerSimple(1000)));
-		peList.add(new Pe(0, new PeProvisionerSimple(1000)));
+		peList.add(new Pe(0, new PeProvisionerSimple(500)));
+		peList.add(new Pe(0, new PeProvisionerSimple(500)));
 
 		// create (same configured) PMs in a datacenter
 		int hostId = 0;

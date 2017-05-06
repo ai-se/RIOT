@@ -104,7 +104,7 @@ public class ExpRandomSchedule {
 		}
 
 		broker.submitCloudletList(cloudletList);
-//		Log.disable();
+		// Log.disable();
 		CloudSim.startSimulation();
 		CloudSim.stopSimulation();
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
@@ -112,7 +112,6 @@ public class ExpRandomSchedule {
 		MyCloudSimHelper.printCloudletList(newList);
 
 		// CHECK ERRORS!!
-		// System.err.println(newList.size());
 		if (newList.size() != cloudletList.size()) {
 			boolean[] tmp = new boolean[30];
 			for (Cloudlet c : newList) {
@@ -140,21 +139,25 @@ public class ExpRandomSchedule {
 		File file = new File("lst.csv");
 		// file.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		String[] mockargs = new String[1];
+		String[] models = new String[] { "fmri", "eprotein", "j30", "j60", "j90" };
+		for (String s : models) {
+			mockargs[0] = s;
+			int repeat = 30;
+			for (int i = 1; i <= repeat; i++) {
+				Map<String, Object> res = core(mockargs);
 
-		int repeat = 1;
-		for (int i = 1; i <= repeat; i++) {
-			Map<String, Object> res = core(args);
-
-			out.write(res.get("dataset").toString());
-			out.write(",");
-			out.write(res.get("makespan").toString());
-			out.write(",");
-			for (Integer tmp : (int[]) res.get("vmid"))
-				out.write(tmp.toString() + "|");
-			out.write("\n");
+				out.write(res.get("dataset").toString());
+				out.write(",");
+				out.write(res.get("makespan").toString());
+				out.write(",");
+				for (Integer tmp : (int[]) res.get("vmid"))
+					out.write(tmp.toString() + "|");
+				out.write("\n");
+			}
+			out.flush();
 		}
-		out.flush();
 		out.close();
-
 	}
+
 }

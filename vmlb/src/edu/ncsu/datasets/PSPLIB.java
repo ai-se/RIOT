@@ -104,7 +104,7 @@ public class PSPLIB {
 		// Create cloudlets
 		for (String str : taskLoadInfo) {
 			String[] s = str.split("\\s+");
-			tasks.put(s[1], createCloudlet(Integer.parseInt(s[3])));
+			tasks.put(s[1], createCloudlet(Integer.parseInt(s[3]) * 10));
 		}
 
 		// Create workFlows

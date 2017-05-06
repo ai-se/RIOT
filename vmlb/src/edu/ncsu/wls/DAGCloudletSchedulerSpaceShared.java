@@ -72,13 +72,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		for (ResCloudlet c : list)
 			res += c.getCloudletId();
 		res += "]";
-		// Log.printLine(res);
 		return res;
-	}
-
-	private void p(Object s) {
-		System.out.println(s);
-		;
 	}
 
 	public void setCloudletPassport(CloudletPassport cp) {
