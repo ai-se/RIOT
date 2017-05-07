@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
+import edu.ncsu.strategies.MinMax;
 import edu.ncsu.wls.CloudletPassport;
 import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
 import edu.ncsu.wls.Infrastructure;
@@ -24,12 +26,13 @@ import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
 import edu.ncsu.wls.OnlineDatacenterBroker;
 
-public class ExpRandomSchedule {
+public class ExpMinmaxSchedule {
 	static List<MyCloudlet> cloudletList;
 	static CloudletPassport workflow;
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> core(String[] args) {
+	public static Map<String, Object> core(String dataset, Map<Integer, Integer> mapping) {
+		Log.disable();
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
 		boolean trace_flag = false; // trace events
@@ -46,38 +49,29 @@ public class ExpRandomSchedule {
 
 		int dcBrokerId = broker.getId();
 
-		List<Vm> vmlist = new ArrayList<Vm>();
-		vmlist = Infrastructure.createVms(dcBrokerId); // TODO CHANGE VM
-																// CONFIG HERE
-
-		broker.submitVmList(vmlist);
-
 		// Generate pre defined cloudletList and workflow
 		Object[] info;
-		if (args.length > 0) {
-			info = Infrastructure.getCaseCloudlets(args[0], broker.getId());
-
-		} else {
-			info = Infrastructure.getCaseCloudlets("random", broker.getId());
-		}
+		info = Infrastructure.getCaseCloudlets(dataset, broker.getId());
 		cloudletList = (List<MyCloudlet>) info[0];
 		workflow = (CloudletPassport) info[1];
 
+		List<Vm> vmlist = new ArrayList<Vm>();
+		vmlist = Infrastructure.createVms(dcBrokerId);
 		for (Vm vm : vmlist)
 			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
 		Collections.shuffle(cloudletList);
 
-		// Random Assign cloudlet to vms
+		// **** VM Assignment
 		for (MyCloudlet c : cloudletList) {
-			c.setVmId(vmlist.get(ThreadLocalRandom.current().nextInt(0, vmlist.size())).getId());
+			c.setVmId(mapping.get(c.getCloudletId()));
 		}
 
+		broker.submitVmList(vmlist);
 		broker.submitCloudletList(cloudletList);
-		// Log.disable();
+
 		CloudSim.startSimulation();
 		CloudSim.stopSimulation();
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
-		Log.enable();
 		MyCloudSimHelper.printCloudletList(newList);
 
 		// CHECK ERRORS!!
@@ -96,10 +90,11 @@ public class ExpRandomSchedule {
 		// writing the record
 		int[] vmmap = new int[cloudletList.size()];
 		for (Cloudlet c : newList)
-			vmmap[c.getCloudletId()] = c.getVmId();
+			vmmap[c.getCloudletId()-Infrastructure.CLOUDLET_ID_SHIFT] = c.getVmId();
+		
 		Map<String, Object> record = new HashMap<String, Object>();
 		record.put("makespan", (int) newList.get(newList.size() - 1).getFinishTime());
-		record.put("dataset", args.length > 0 ? args[0] : "random");
+		record.put("dataset", dataset);
 		record.put("vmid", vmmap);
 		return record;
 	}
@@ -108,22 +103,18 @@ public class ExpRandomSchedule {
 		File file = new File("lst.csv");
 		// file.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		String[] mockargs = new String[1];
 		String[] models = new String[] { "fmri", "eprotein", "j30", "j60", "j90" };
 		for (String s : models) {
-			mockargs[0] = s;
-			int repeat = 30;
-			for (int i = 1; i <= repeat; i++) {
-				Map<String, Object> res = core(mockargs);
+			Map<Integer, Integer> mapping = MinMax.minmax(MinMax.getEstTimeMatrix(s));
+			Map<String, Object> res = core(s, mapping);
 
-				out.write(res.get("dataset").toString());
-				out.write(",");
-				out.write(res.get("makespan").toString());
-				out.write(",");
-				for (Integer tmp : (int[]) res.get("vmid"))
-					out.write(tmp.toString() + "|");
-				out.write("\n");
-			}
+			out.write(res.get("dataset").toString());
+			out.write(",");
+			out.write(res.get("makespan").toString());
+			out.write(",");
+			for (Integer tmp : (int[]) res.get("vmid"))
+				out.write(tmp.toString() + "|");
+			out.write("\n");
 			out.flush();
 		}
 		out.close();

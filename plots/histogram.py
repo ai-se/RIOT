@@ -24,10 +24,12 @@
 
 from __future__ import division
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import pdb
 
 records = pd.read_csv('../results/exp1_random.csv', names=['dataset', 'makespan', 'configuration'])
+minminrec = pd.read_csv('../results/minmin.csv', names=['dataset', 'makespan', 'configuration'])
+minmaxrec = pd.read_csv('../results/minmax.csv', names=['dataset', 'makespan', 'configuration'])
 
 models = set(records['dataset'])
 
@@ -35,9 +37,16 @@ for model in models:
     plt.clf()
     filtered = records[(records['dataset'] == model)]
     makespans = filtered['makespan'].tolist()
-    # bins = np.arange(min(makespans), max(makespans), (max(makespans)-min(makespans))/10)
+    minmin = minminrec[(minminrec['dataset'] == model)]['makespan'].tolist()[0]
+    minmax = minmaxrec[(minmaxrec['dataset'] == model)]['makespan'].tolist()[0]
+
     plt.hist(makespans, bins=5, rwidth=0.8, color='black')
     plt.xlabel('makespan')
     plt.ylabel('frequency')
     plt.title(model + ' :: no optimization')
-    plt.savefig('../results/no_opt/'+model+'.png')
+    plt.axvline(x=minmin, color='skyblue', label='MIN_MIN', linewidth=3)
+    plt.axvline(x=minmax, color='tomato', label='MIN_MAX', linewidth=3)
+    plt.legend(loc=0)
+
+    plt.savefig('../results/static/'+model+'.png')
+    # plt.show()

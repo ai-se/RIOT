@@ -23,7 +23,7 @@ import edu.ncsu.wls.MyCloudlet;
  *
  */
 
-public class PSPLIB {
+public class PSPLIB implements Dataset {
 	private int idshift;
 	private int userid; // TODO assuming single user at this time
 	private double starttime = 0.1; // TODO Set start time?

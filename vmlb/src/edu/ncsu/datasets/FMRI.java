@@ -23,7 +23,7 @@ import edu.ncsu.wls.MyCloudlet;
  *         TODO Considering memory/bw/IO?
  */
 
-public class FMRI {
+public class FMRI implements Dataset {
 	private int idshift;
 	private int userid; // TODO assuming single user at this time
 	private double starttime = 0.1; // TODO Set start time?

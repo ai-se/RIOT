@@ -15,7 +15,15 @@ import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
+import edu.ncsu.datasets.Eprotein;
+import edu.ncsu.datasets.FMRI;
+import edu.ncsu.datasets.PSPLIB;
+import edu.ncsu.datasets.Randomset;
+
 public class Infrastructure {
+	public static final int VM_ID_SHIFT = 0;
+	public static final int CLOUDLET_ID_SHIFT = 0;
+
 	/**
 	 * Creating Amazon EC2 virtual machines
 	 * 
@@ -24,7 +32,8 @@ public class Infrastructure {
 	 * @param idShift
 	 * @return
 	 */
-	public static List<Vm> createEC2Vms(int userId, int idShift) {
+	private static List<Vm> createEC2Vms(int userId) {
+		int idShift = VM_ID_SHIFT;
 		long size, bw;
 		int ram, mips, pesNumber;
 		// Creates a container to store VMs. This list is passed to the broker
@@ -49,12 +58,14 @@ public class Infrastructure {
 		pesNumber = 1; // number of cpus
 		vmm = "m3.medium"; // VMM name
 		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
-//		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
+		// vmm, new DAGCloudletSchedulerSpaceShared()));
 
 		return list;
 	}
 
-	public static List<Vm> createEqualVms(int userId, int num, int idShift) {
+	private static List<Vm> createEqualVms(int userId, int num) {
+		int idShift = VM_ID_SHIFT;
 		long size = 10000; // image size(MB)
 		int ram = 1024; // vm memory (MB)
 		int mips = 250;
@@ -69,6 +80,10 @@ public class Infrastructure {
 		}
 
 		return list;
+	}
+
+	public static List<Vm> createVms(int userId) {
+		return createEC2Vms(userId);
 	}
 
 	public static Datacenter createDatacenter(String name) {
@@ -120,4 +135,57 @@ public class Infrastructure {
 
 		return datacenter;
 	}
+
+	/**
+	 * Generating the pre-defined study cases
+	 * 
+	 * @param dataset
+	 * @param brokerId
+	 * @param cloudleIdShift
+	 * @param preferCloudLetNum4Random
+	 *            useful ONLY when dataset="random"
+	 * @return List<MyCloudlet> cloudletList + CloudletPassport workflow
+	 */
+	public static Object[] getCaseCloudlets(String dataset, int brokerId) {
+		List<MyCloudlet> cloudletList = null;
+		CloudletPassport workflow = null;
+		switch (dataset) {
+		case "fmri":
+			FMRI fmri = new FMRI(brokerId, CLOUDLET_ID_SHIFT);
+			cloudletList = fmri.getCloudletList();
+			workflow = fmri.getCloudletPassport();
+			break;
+		case "eprotein":
+			Eprotein eprotein = new Eprotein(brokerId, CLOUDLET_ID_SHIFT);
+			cloudletList = eprotein.getCloudletList();
+			workflow = eprotein.getCloudletPassport();
+			break;
+		case "random":
+			Randomset rset = new Randomset(brokerId, CLOUDLET_ID_SHIFT, 10);
+			cloudletList = rset.getCloudletList();
+			workflow = rset.getCloudletPassport();
+			break;
+		case "j30":
+			PSPLIB psp1 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_1", 30);
+			cloudletList = psp1.getCloudletList();
+			workflow = psp1.getCloudletPassport();
+			break;
+		case "j60":
+			PSPLIB psp2 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_1", 60);
+			cloudletList = psp2.getCloudletList();
+			workflow = psp2.getCloudletPassport();
+			break;
+		case "j90":
+			PSPLIB psp3 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_1", 90);
+			cloudletList = psp3.getCloudletList();
+			workflow = psp3.getCloudletPassport();
+			break;
+		default:
+			System.err.println("Check the dataset name");
+			System.exit(-1);
+		}
+
+		return new Object[] { cloudletList, workflow };
+	}
+
 }
