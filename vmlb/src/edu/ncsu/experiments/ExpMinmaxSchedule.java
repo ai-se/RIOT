@@ -5,13 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
@@ -26,6 +24,12 @@ import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
 import edu.ncsu.wls.OnlineDatacenterBroker;
 
+/**
+ * For each dataset, run MIN_MAX scheduling strategy (no need to repeat for this algorithm)
+ * report the results into lst.csv
+ * @author jianfeng
+ *
+ */
 public class ExpMinmaxSchedule {
 	static List<MyCloudlet> cloudletList;
 	static CloudletPassport workflow;
@@ -37,7 +41,7 @@ public class ExpMinmaxSchedule {
 		Calendar calendar = Calendar.getInstance();
 		boolean trace_flag = false; // trace events
 		CloudSim.init(num_user, calendar, trace_flag);
-		Infrastructure.createDatacenter("ncsu");
+		Infrastructure.createDatacenter();
 
 		// Create the broker
 		OnlineDatacenterBroker broker = null;

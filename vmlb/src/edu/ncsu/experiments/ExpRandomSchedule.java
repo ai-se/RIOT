@@ -24,6 +24,12 @@ import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
 import edu.ncsu.wls.OnlineDatacenterBroker;
 
+/**
+ * Experiment 1: for all dataset, repeat 30 times. Randomly assign the task, return the makespan into lst.csv
+ * 
+ * @author jianfeng
+ *
+ */
 public class ExpRandomSchedule {
 	static List<MyCloudlet> cloudletList;
 	static CloudletPassport workflow;
@@ -34,7 +40,7 @@ public class ExpRandomSchedule {
 		Calendar calendar = Calendar.getInstance();
 		boolean trace_flag = false; // trace events
 		CloudSim.init(num_user, calendar, trace_flag);
-		Infrastructure.createDatacenter("ncsu");
+		Infrastructure.createDatacenter();
 
 		// Create the broker
 		OnlineDatacenterBroker broker = null;
@@ -47,9 +53,7 @@ public class ExpRandomSchedule {
 		int dcBrokerId = broker.getId();
 
 		List<Vm> vmlist = new ArrayList<Vm>();
-		vmlist = Infrastructure.createVms(dcBrokerId); // TODO CHANGE VM
-																// CONFIG HERE
-
+		vmlist = Infrastructure.createVms(dcBrokerId); 
 		broker.submitVmList(vmlist);
 
 		// Generate pre defined cloudletList and workflow

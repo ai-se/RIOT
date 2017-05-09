@@ -64,6 +64,7 @@ public class Infrastructure {
 		return list;
 	}
 
+	@SuppressWarnings("unused")
 	private static List<Vm> createEqualVms(int userId, int num) {
 		int idShift = VM_ID_SHIFT;
 		long size = 10000; // image size(MB)
@@ -86,7 +87,8 @@ public class Infrastructure {
 		return createEC2Vms(userId);
 	}
 
-	public static Datacenter createDatacenter(String name) {
+	public static Datacenter createDatacenter() {
+		String name = "ncsu";  // TODO Change Datacenter name here
 		List<Host> hostList = new ArrayList<Host>();
 
 		// each machine are n-core machine

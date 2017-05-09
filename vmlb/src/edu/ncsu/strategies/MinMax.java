@@ -15,7 +15,6 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import edu.ncsu.wls.CloudletPassport;
 import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
 import edu.ncsu.wls.Infrastructure;
-import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
 import edu.ncsu.wls.OnlineDatacenterBroker;
 
@@ -44,7 +43,7 @@ public class MinMax {
 			Calendar calendar = Calendar.getInstance();
 			boolean trace_flag = false; // trace events
 			CloudSim.init(num_user, calendar, trace_flag);
-			Infrastructure.createDatacenter("ncsu");
+			Infrastructure.createDatacenter();
 			OnlineDatacenterBroker broker = null;
 			try {
 				broker = new OnlineDatacenterBroker("dc_broker");
