@@ -23,6 +23,7 @@ import edu.ncsu.datasets.Randomset;
 public class Infrastructure {
 	public static final int VM_ID_SHIFT = 0;
 	public static final int CLOUDLET_ID_SHIFT = 0;
+	public static final String DATACENTER_NAME = "ncsu";
 
 	/**
 	 * Creating Amazon EC2 virtual machines
@@ -88,7 +89,7 @@ public class Infrastructure {
 	}
 
 	public static Datacenter createDatacenter() {
-		String name = "ncsu";  // TODO Change Datacenter name here
+		String name = DATACENTER_NAME;
 		List<Host> hostList = new ArrayList<Host>();
 
 		// each machine are n-core machine

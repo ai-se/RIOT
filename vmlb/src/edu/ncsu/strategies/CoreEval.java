@@ -30,10 +30,9 @@ public class CoreEval {
 	 * @param mapping
 	 *            The VM provision array. Ranked by clouldetId-shift. All values
 	 *            should be vm ID.
-	 * @return a hashmap. keyset = {dataset, makespan, configuration}
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> eval(String dataset, int[] mapping) {
+	public static void eval(String dataset, Chromosome config) {
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
@@ -64,6 +63,7 @@ public class CoreEval {
 		broker.submitCloudletList(cloudletList);
 		broker.submitVmList(vmlist);
 
+		int[] mapping = config.getMapping();
 		for (Cloudlet c : cloudletList) {
 			c.setVmId(mapping[c.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT]);
 		}
@@ -84,12 +84,6 @@ public class CoreEval {
 			makespan = Math.max(makespan, c.getFinishTime());
 		}
 
-		// Output results
-		Map<String, Object> res = new HashMap<String, Object>();
-
-		res.put("dataset", dataset);
-		res.put("makespan", makespan);
-		res.put("configuration", mapping);
-		return null;
+		config.setMakespan(makespan);
 	}
 }
