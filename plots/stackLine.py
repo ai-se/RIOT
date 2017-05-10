@@ -51,5 +51,5 @@ for model in models:
 
     plt.title(model + ' :: SA, MINMIN, MINMAX')
 
-    # plt.savefig('../results/sa/'+model+'.png')
-    plt.show()
+    plt.savefig('../results/sa/'+model+'.png')
+    # plt.show()

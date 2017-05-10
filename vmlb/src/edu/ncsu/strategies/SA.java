@@ -91,9 +91,9 @@ public class SA {
 		double[] res = new double[this.iterNum];
 		Chromosome best, neighbor, current;
 
-		int[] initm = new int[this.cloudletNum];
-		Arrays.fill(initm, vmid[0]);
-		current = new Chromosome(initm);
+//		int[] initm = new int[this.cloudletNum];
+//		Arrays.fill(initm, vmid[0]);
+		current = randChromosome();
 		best = current;
 
 		double eb, en, ec;
@@ -118,7 +118,7 @@ public class SA {
 				ec = en;
 			}
 			temp *= tempRR;
-			res[i] = best.getMakespan();
+			res[i] = current.getMakespan();
 		}
 		return res;
 	}
