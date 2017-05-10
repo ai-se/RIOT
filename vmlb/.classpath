@@ -7,5 +7,6 @@
 			<attribute name="javadoc_location" value="http://www.cloudbus.org/cloudsim/doc/api/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/jmetal-exec-5.2-jar-with-dependencies.jar" sourcepath="/Users/jianfeng/git/sway_vm_lb/jmetal-exec-5.2-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

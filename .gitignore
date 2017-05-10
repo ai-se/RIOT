@@ -116,3 +116,5 @@ ENV/
 /site
 
 .idea/
+lst.csv
+target/
