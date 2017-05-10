@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.cloudbus.cloudsim.Cloudlet;
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
@@ -33,6 +34,7 @@ public class CoreEval {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void eval(String dataset, Chromosome config) {
+		Log.disable();
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();

@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/flanagan.jar"/>
 	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/jdom-2.0.0.jar"/>
 	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/jmetal4.5.2.jar" sourcepath="/Users/jianfeng/git/sway_vm_lb/jmetal.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
