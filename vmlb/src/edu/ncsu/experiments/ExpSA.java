@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.cloudbus.cloudsim.Log;
 
-import edu.ncsu.strategies.SA;
+import edu.ncsu.algorithms.SA;
 
 /**
  * Experiment. for each model, run simulated algorithm algorithm. record the

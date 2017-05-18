@@ -1,4 +1,4 @@
-package edu.ncsu.strategies;
+package edu.ncsu.algorithms;
 
 public class Chromosome {
 	private int[] mapping;
@@ -34,3 +34,5 @@ public class Chromosome {
 		return isEval;
 	}
 }
+
+

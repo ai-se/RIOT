@@ -1,4 +1,4 @@
-package edu.ncsu.strategies;
+package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -16,7 +16,7 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
-import edu.ncsu.strategies.MinMax;
+import edu.ncsu.algorithms.MinMax;
 import edu.ncsu.wls.CloudletPassport;
 import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
 import edu.ncsu.wls.Infrastructure;

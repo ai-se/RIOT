@@ -84,10 +84,12 @@ public class Infrastructure {
 		return list;
 	}
 
+	// TODO entrance to modify VM configurations
 	public static List<Vm> createVms(int userId) {
 		return createEC2Vms(userId);
 	}
 
+	// TODO entrance to modify Data center configurations
 	public static Datacenter createDatacenter() {
 		String name = DATACENTER_NAME;
 		List<Host> hostList = new ArrayList<Host>();
