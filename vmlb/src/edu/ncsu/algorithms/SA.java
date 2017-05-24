@@ -23,7 +23,6 @@ public class SA {
 	private double fM = -Double.MAX_VALUE;
 	private VmsProblem problem_;
 
-	@SuppressWarnings("unchecked")
 	public SA(String dataset, int iterNum, int temperature, double temperatureReduceRate, long seed) {
 		this.problem_ = new VmsProblem(dataset, new Random(seed));
 		this.iterNum = iterNum;
@@ -80,11 +79,16 @@ public class SA {
 		return res;
 	}
 
-	public double[] execSA() throws ClassNotFoundException {
+	@SuppressWarnings("unused") // Solution best
+	public double[] execSA() {
 		double[] recorder = new double[this.iterNum];
-		Solution best, neighbor, current;
+		Solution best, neighbor, current = null;
 
-		current = new Solution(problem_);
+		try {
+			current = new Solution(problem_);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		best = current;
 
 		double eb, en, ec;
@@ -114,7 +118,7 @@ public class SA {
 		return recorder;
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException {
+	public static void main(String[] args) {
 		SA sarunner = new SA("eprotein", 1000, 10, 0.9, System.currentTimeMillis());
 		double[] res = sarunner.execSA();
 		System.out.println(Arrays.toString(res));

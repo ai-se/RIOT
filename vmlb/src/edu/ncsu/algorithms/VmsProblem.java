@@ -1,7 +1,6 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -21,8 +20,6 @@ import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionType;
 import jmetal.core.Variable;
-import jmetal.encodings.variable.Int;
-import jmetal.util.Configuration;
 import jmetal.util.JMException;
 
 /**
@@ -43,7 +40,12 @@ class VMLoc extends Variable {
 	public double getValue() {
 		return value_;
 	}
-
+	
+	public void setValue(int value) {
+		this.value_ = value;
+	}
+	
+	@Override
 	public String toString() {
 		return "" + value_;
 	}
@@ -116,8 +118,7 @@ public class VmsProblem extends Problem {
 	public void evaluate(Solution solution) throws JMException {
 		int[] mapping = new int[cloudletNum];
 		for (int var = 0; var < this.numberOfVariables_; var++)
-			mapping[var] = (int) solution.getDecisionVariables()[var].getValue(); // TODO
-																					// unchecked
+			mapping[var] = (int) solution.getDecisionVariables()[var].getValue();
 
 		// ****** starting cloudsim simulation
 		Log.disable();
