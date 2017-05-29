@@ -17,6 +17,7 @@ import org.cloudbus.cloudsim.Cloudlet;
 
 public class CloudletPassport {
 	private HashMap<Cloudlet, List<Cloudlet>> requiring = new HashMap<Cloudlet, List<Cloudlet>>();
+
 	private List<Integer> receivedCloudletIds = new ArrayList<Integer>();
 
 	public CloudletPassport() {
@@ -47,4 +48,7 @@ public class CloudletPassport {
 		this.receivedCloudletIds.add(cloudlet.getCloudletId());
 	}
 
+	public HashMap<Cloudlet, List<Cloudlet>> getRequiring() {
+		return requiring;
+	}
 }

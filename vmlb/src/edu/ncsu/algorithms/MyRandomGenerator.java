@@ -10,6 +10,11 @@ import jmetal.util.IRandomGenerator;
  *
  */
 
+/**
+ * Extended with an additional user-specific seed
+ * @author jianfeng
+ *
+ */
 public class MyRandomGenerator implements IRandomGenerator {
 
 	/* Definition of random number generation routines */

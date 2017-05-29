@@ -1,18 +1,25 @@
 package edu.ncsu.algorithms;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import jmetal.core.Algorithm;
 import jmetal.core.Operator;
+import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
-import jmetal.metaheuristics.singleObjective.geneticAlgorithm.gGA;
 import jmetal.operators.crossover.Crossover;
 import jmetal.operators.mutation.Mutation;
 import jmetal.operators.selection.SelectionFactory;
 import jmetal.util.JMException;
 import jmetal.util.PseudoRandom;
+import jmetal.util.comparators.ObjectiveComparator;
 
 class VmsTwoPointCrossover extends Crossover {
 	private static final long serialVersionUID = -7695502935986423562L;
@@ -97,21 +104,150 @@ class VmsMutation extends Mutation {
 
 }
 
+/**
+ * Class implementing a generational genetic algorithm
+ * 
+ * Copy and modify from
+ * jmetal.metaheuristics.singleObjective.geneticAlgorithm.gGA
+ */
+class gGA extends Algorithm {
+	private static final long serialVersionUID = -7337994929814606290L;
+
+	/**
+	 *
+	 * Constructor Create a new GGA instance.
+	 * 
+	 * @param problem
+	 *            Problem to solve.
+	 */
+	public gGA(Problem problem) {
+		super(problem);
+	} // GGA
+
+	/**
+	 * Execute the GGA algorithm
+	 * 
+	 * @throws JMException
+	 */
+	public SolutionSet execute() throws JMException, ClassNotFoundException {
+		int populationSize;
+		int maxEvaluations;
+		int maxIterations;
+
+		int evaluations;
+		int iterations;
+
+		SolutionSet population;
+		SolutionSet offspringPopulation;
+
+		Operator mutationOperator;
+		Operator crossoverOperator;
+		Operator selectionOperator;
+
+		Comparator comparator;
+		comparator = new ObjectiveComparator(0); // Single objective comparator
+
+		// Read the params
+		populationSize = ((Integer) this.getInputParameter("populationSize")).intValue();
+		if (populationSize % 2 != 0)
+			populationSize += 1; // fixing a bug
+		maxEvaluations = ((Integer) this.getInputParameter("maxEvaluations")).intValue();
+		maxIterations = ((Integer) this.getInputParameter("maxIterations")).intValue();
+		// Initialize the variables
+		population = new SolutionSet(populationSize);
+		offspringPopulation = new SolutionSet(populationSize);
+
+		evaluations = 0;
+		iterations = 0;
+
+		// Read the operators
+		mutationOperator = this.operators_.get("mutation");
+		crossoverOperator = this.operators_.get("crossover");
+		selectionOperator = this.operators_.get("selection");
+
+		// Create the initial population
+		Solution newIndividual;
+		for (int i = 0; i < populationSize; i++) {
+			newIndividual = new Solution(problem_);
+			problem_.evaluate(newIndividual);
+			evaluations++;
+			population.add(newIndividual);
+		} // for
+
+		// Sort population
+		population.sort(comparator);
+		while (evaluations < maxEvaluations && iterations < maxIterations) {
+			iterations++;
+			// if ((evaluations % 10) == 0) {
+			System.out.println(evaluations + ": " + population.get(0).getObjective(0));
+			// } //
+
+			// Copy the best two individuals to the offspring population
+			offspringPopulation.add(new Solution(population.get(0)));
+			offspringPopulation.add(new Solution(population.get(1)));
+
+			// Reproductive cycle
+			for (int i = 0; i < (populationSize / 2 - 1); i++) {
+				// Selection
+				Solution[] parents = new Solution[2];
+
+				parents[0] = (Solution) selectionOperator.execute(population);
+				parents[1] = (Solution) selectionOperator.execute(population);
+
+				// Crossover
+				Solution[] offspring = (Solution[]) crossoverOperator.execute(parents);
+
+				// Mutation
+				mutationOperator.execute(offspring[0]);
+				mutationOperator.execute(offspring[1]);
+
+				// Evaluation of the new individual
+				problem_.evaluate(offspring[0]);
+				problem_.evaluate(offspring[1]);
+
+				evaluations += 2;
+
+				// Replacement: the two new individuals are inserted in the
+				// offspring
+				// population
+				offspringPopulation.add(offspring[0]);
+				offspringPopulation.add(offspring[1]);
+			} // for
+
+			// The offspring population becomes the new current population
+			population.clear();
+			for (int i = 0; i < populationSize; i++) {
+				population.add(offspringPopulation.get(i));
+			}
+			offspringPopulation.clear();
+			population.sort(comparator);
+		} // while
+
+		// Return a population with the best individual
+		SolutionSet resultPopulation = new SolutionSet(1);
+		resultPopulation.add(population.get(0));
+
+		System.out.println("Evaluations: " + evaluations);
+		return resultPopulation;
+	} // execute
+} // gGA
+
 public class GA {
 	private VmsProblem problem;
-	private int popSize, maxEval;
+	private int popSize, maxEval, maxIterations;
 	private double cxRate, muRate;
 
-	public GA(String dataset, int popSize, int maxEval, double cxRate, double muRate, long seed) {
+	public GA(String dataset, int popSize, int maxIterations, int maxEval, double cxRate, double muRate, long seed) {
 		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
 		problem = new VmsProblem(dataset, new Random(seed));
 		this.popSize = popSize;
 		this.maxEval = maxEval;
 		this.cxRate = cxRate;
 		this.muRate = muRate;
+		this.maxIterations = maxIterations;
 	}
 
-	public void execGA() {
+	public double[] execGA() {
 		Algorithm algorithm;
 		Operator crossover;
 		Operator mutation;
@@ -123,6 +259,7 @@ public class GA {
 
 		algorithm.setInputParameter("populationSize", popSize);
 		algorithm.setInputParameter("maxEvaluations", maxEval);
+		algorithm.setInputParameter("maxIterations", maxIterations);
 
 		parameters = new HashMap<String, Object>();
 		parameters.put("probability", cxRate);
@@ -143,16 +280,44 @@ public class GA {
 		algorithm.addOperator("mutation", mutation);
 		algorithm.addOperator("selection", selection);
 		SolutionSet population = null;
+
+		// redirect system.out to save the process
+		System.out.println("Started...running...");
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		PrintStream old = System.out;
+		System.setOut(ps);
+
+		// Running...
 		try {
 			population = algorithm.execute();
+			System.out.flush();
 		} catch (ClassNotFoundException | JMException e) {
 			e.printStackTrace();
 		}
+		System.setOut(old);
+		System.out.println("Done!");
 
+		// Handling outputs
+		System.out.println(baos.toString());
+		List<Double> res = new ArrayList<Double>();
+		String R = baos.toString();
+		for (String s : R.split("\n")) {
+			if (s.matches("\\d+: .*")) {
+				double obj = Double.parseDouble(s.substring(s.indexOf(':') + 2));
+				res.add(obj);
+			}
+		}
+
+		double[] resarray = new double[res.size()];
+		for (int i = 0; i < res.size(); i++)
+			resarray[i] = res.get(i);
+		return resarray;
 	}
 
 	public static void main(String[] args) {
-		GA garunner = new GA("eprotein", 50, 1000, 0.95, 0.95, 12306L);
-		garunner.execGA();
+		GA garunner = new GA("j30", 50, 5, 50 * 1000, 0.95, 0.95, 10086L);
+		double[] res = garunner.execGA();
+		System.out.println(Arrays.toString(res));
 	}
 }

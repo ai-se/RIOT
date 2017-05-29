@@ -2,7 +2,9 @@ package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.cloudbus.cloudsim.Cloudlet;
@@ -40,11 +42,11 @@ class VMLoc extends Variable {
 	public double getValue() {
 		return value_;
 	}
-	
+
 	public void setValue(int value) {
 		this.value_ = value;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "" + value_;
@@ -93,6 +95,9 @@ public class VmsProblem extends Problem {
 	public Random rand;
 	private int[] vmid_;
 	private int cloudletNum;
+	private List<MyCloudlet> cloudletList;
+	private CloudletPassport workflow;
+
 	private String name;
 
 	@SuppressWarnings("unchecked")
@@ -105,7 +110,10 @@ public class VmsProblem extends Problem {
 		for (int i = 0; i < vms.size(); i++)
 			vmid_[i] = vms.get(i).getId();
 
-		cloudletNum = ((List<MyCloudlet>) (Infrastructure.getCaseCloudlets(this.name, -1)[0])).size();
+		Object[] tmpInfo = Infrastructure.getCaseCloudlets(this.name, -1);
+		cloudletList = (List<MyCloudlet>) tmpInfo[0];
+		cloudletNum = cloudletList.size();
+		workflow = (CloudletPassport) (tmpInfo[1]);
 
 		this.numberOfVariables_ = this.cloudletNum;
 		this.numberOfObjectives_ = 1; // TODO change this if needed
@@ -183,4 +191,29 @@ public class VmsProblem extends Problem {
 	public int randInt(int bound) {
 		return this.rand.nextInt(bound);
 	}
+
+	public CloudletPassport getWorkflow() {
+		return workflow;
+	}
+
+	// /**
+	// * Return back the DAG for workflow of current VmsProblem
+	// *
+	// * @return Key(int)- id of cloudlet vale(List) - containing list which the
+	// * key connect to.
+	// */
+	// @SuppressWarnings({ "rawtypes", "unchecked" })
+	// public Map<Integer, List> parseOutDAG() {
+	// Map<Integer, List> res = new HashMap<Integer, List>();
+	//
+	// HashMap<Cloudlet, List<Cloudlet>> graph = this.workflow.getRequiring();
+	//
+	// for (Cloudlet from : graph.keySet()) {
+	// int fromi = from.getCloudletId();
+	// res.put(fromi, new ArrayList<Integer>());
+	// for (Cloudlet to : graph.get(from))
+	// res.get(fromi).add(to.getCloudletId());
+	// }
+	// return res;
+	// }
 }
