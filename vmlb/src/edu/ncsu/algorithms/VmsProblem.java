@@ -33,7 +33,7 @@ import jmetal.util.JMException;
  */
 class VMLoc extends Variable {
 	private static final long serialVersionUID = -875003925545159630L;
-	private int value_;
+	private int value_; // store VM ID~
 
 	public VMLoc(int value) {
 		this.value_ = value;
