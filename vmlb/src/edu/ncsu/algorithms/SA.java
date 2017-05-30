@@ -1,6 +1,7 @@
 package edu.ncsu.algorithms;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 import edu.ncsu.datasets.Utils;
@@ -22,6 +23,14 @@ public class SA {
 	private double fm = Double.MAX_VALUE;
 	private double fM = -Double.MAX_VALUE;
 	private VmsProblem problem_;
+
+	public SA(HashMap<String, Object> para) {
+		this((String) para.get("dataset"), //
+				(int) para.get("maxIterations"), //
+				(int) para.get("temperature"), //
+				(double) para.get("temperatureReduceRate"), //
+				(long) para.get("seed"));
+	}
 
 	public SA(String dataset, int iterNum, int temperature, double temperatureReduceRate, long seed) {
 		this.problem_ = new VmsProblem(dataset, new Random(seed));

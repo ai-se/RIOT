@@ -235,6 +235,16 @@ public class GA {
 	private int popSize, maxEval, maxIterations;
 	private double cxRate, muRate;
 
+	public GA(HashMap<String, Object> para) {
+		this((String) para.get("dataset"), //
+				(int) para.get("popSize"), //
+				(int) para.get("maxIterations"), //
+				(int) para.get("maxEvaluations"), //
+				(double) para.get("cxRate"), //
+				(double) para.get("muRate"), //
+				(long) para.get("seed"));
+	}
+
 	public GA(String dataset, int popSize, int maxIterations, int maxEval, double cxRate, double muRate, long seed) {
 		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
 		problem = new VmsProblem(dataset, new Random(seed));
@@ -277,7 +287,7 @@ public class GA {
 		algorithm.addOperator("crossover", crossover);
 		algorithm.addOperator("mutation", mutation);
 		algorithm.addOperator("selection", selection);
-		
+
 		SolutionSet population = null;
 
 		// redirect system.out to save the process

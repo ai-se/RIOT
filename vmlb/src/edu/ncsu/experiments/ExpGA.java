@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.cloudbus.cloudsim.Log;
 
@@ -22,16 +23,27 @@ public class ExpGA {
 		File file = new File("lst.csv");
 		// file.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+		HashMap<String, Object> exp_para = new HashMap<String, Object>();
+		exp_para.put("seed", System.currentTimeMillis());
+		exp_para.put("popSize", 100);
+		exp_para.put("maxIterations", 1000);
+		exp_para.put("maxEvaluations", 100 * 1000);
+		exp_para.put("cxRate", 0.95);
+		exp_para.put("muRate", 0.95);
+
 		String[] models = new String[] { "fmri", "eprotein", "j30", "j60", "j90" };
 		for (String s : models) {
 			System.out.println("Running in " + s);
-			double[] res = new GA(s, 100, 1000, 100 * 1000, 0.95, 0.95, System.currentTimeMillis()).execGA();
+			exp_para.remove("dataset");
+			exp_para.put("dataset", s);
+
+			double[] res = new GA(exp_para).execGA();
 			for (int i = 0; i < res.length; i++) {
 				out.write(s + ","); // dataset name
 				out.write(i + ","); // iteration
 				out.write(res[i] + "\n"); // hall-of-fame makespan
 			}
-			out.flush();    
+			out.flush();
 		}
 		out.close();
 	}

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.cloudbus.cloudsim.Log;
 
@@ -22,10 +23,20 @@ public class ExpSA {
 		File file = new File("lst.csv");
 		// file.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
+
+		HashMap<String, Object> exp_para = new HashMap<String, Object>();
+		exp_para.put("seed", System.currentTimeMillis());
+		exp_para.put("maxIterations", 1000);
+		exp_para.put("temperature", 10);
+		exp_para.put("temperatureReduceRate", 0.9);
+
 		String[] models = new String[] { "fmri", "eprotein", "j30", "j60", "j90" };
 		for (String s : models) {
 			System.out.println("Running in " + s);
-			double[] res = new SA(s, 1000, 10, 0.9, System.currentTimeMillis()).execSA();
+			exp_para.remove("dataset");
+			exp_para.put("dataset", s);
+
+			double[] res = new SA(exp_para).execSA();
 			for (int i = 0; i < res.length; i++) {
 				out.write(s + ","); // dataset name
 				out.write(i + ","); // iteration
