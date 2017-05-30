@@ -8,5 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/jmetal4.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jianfeng/git/sway_vm_lb/vmlb/lib/guava-22.0.jar" sourcepath="/Users/jianfeng/git/sway_vm_lb/guava-22.0-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

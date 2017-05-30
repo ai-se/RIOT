@@ -176,11 +176,9 @@ class gGA extends Algorithm {
 
 		// Sort population
 		population.sort(comparator);
-		while (evaluations < maxEvaluations && iterations < maxIterations) {
+		while (evaluations < maxEvaluations && iterations <= maxIterations) {
 			iterations++;
-			// if ((evaluations % 10) == 0) {
 			System.out.println(evaluations + ": " + population.get(0).getObjective(0));
-			// } //
 
 			// Copy the best two individuals to the offspring population
 			offspringPopulation.add(new Solution(population.get(0)));
@@ -279,6 +277,7 @@ public class GA {
 		algorithm.addOperator("crossover", crossover);
 		algorithm.addOperator("mutation", mutation);
 		algorithm.addOperator("selection", selection);
+		
 		SolutionSet population = null;
 
 		// redirect system.out to save the process
