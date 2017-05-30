@@ -118,3 +118,5 @@ ENV/
 .idea/
 lst.csv
 target/
+
+.swp
