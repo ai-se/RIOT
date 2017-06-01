@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import edu.ncsu.algorithms.RandomSchedule;
+import edu.ncsu.wls.Infrastructure;
 
 /**
  * Experiment 1: for all dataset, repeat 30 times. Randomly assign the task,
@@ -17,17 +18,16 @@ import edu.ncsu.algorithms.RandomSchedule;
  */
 public class ExpRandomSchedule {
 	public static void main(String[] args) throws IOException {
-		File file = new File("lst.csv");
+		File file = new File("exp1_random.csv");
 		// file.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
 		String[] mockargs = new String[1];
-		String[] models = new String[] { "fmri", "eprotein", "j30", "j60", "j90" };
+		String[] models = Infrastructure.models;
 		for (String s : models) {
 			mockargs[0] = s;
 			int repeat = 30;
 			for (int i = 1; i <= repeat; i++) {
 				Map<String, Object> res = RandomSchedule.core(mockargs);
-
 				out.write(res.get("dataset").toString());
 				out.write(",");
 				out.write(res.get("makespan").toString());
@@ -40,5 +40,4 @@ public class ExpRandomSchedule {
 		}
 		out.close();
 	}
-
 }

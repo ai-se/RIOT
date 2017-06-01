@@ -25,8 +25,9 @@ import edu.ncsu.wls.MyCloudlet;
 import edu.ncsu.wls.OnlineDatacenterBroker;
 
 /**
- * For each dataset, run MIN_MAX scheduling strategy (no need to repeat for this algorithm)
- * report the results into lst.csv
+ * For each dataset, run MIN_MAX scheduling strategy (no need to repeat for this
+ * algorithm) report the results into lst.csv
+ * 
  * @author jianfeng
  *
  */
@@ -94,8 +95,8 @@ public class ExpMinmaxSchedule {
 		// writing the record
 		int[] vmmap = new int[cloudletList.size()];
 		for (Cloudlet c : newList)
-			vmmap[c.getCloudletId()-Infrastructure.CLOUDLET_ID_SHIFT] = c.getVmId();
-		
+			vmmap[c.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT] = c.getVmId();
+
 		Map<String, Object> record = new HashMap<String, Object>();
 		record.put("makespan", (int) newList.get(newList.size() - 1).getFinishTime());
 		record.put("dataset", dataset);
@@ -104,23 +105,25 @@ public class ExpMinmaxSchedule {
 	}
 
 	public static void main(String[] args) throws IOException {
-		File file = new File("lst.csv");
+		File file = new File("minmax.csv");
 		// file.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(file));
-		String[] models = new String[] { "fmri", "eprotein", "j30", "j60", "j90" };
-		for (String s : models) {
-			Map<Integer, Integer> mapping = MinMax.minmax(MinMax.getEstTimeMatrix(s));
-			Map<String, Object> res = core(s, mapping);
+		String[] models = Infrastructure.models;
+		for (int repeat = 0; repeat < 30; repeat++) {
+			for (String s : models) {
+				Map<Integer, Integer> mapping = MinMax.minmax(MinMax.getEstTimeMatrix(s));
+				Map<String, Object> res = core(s, mapping);
 
-			out.write(res.get("dataset").toString());
-			out.write(",");
-			out.write(res.get("makespan").toString());
-			out.write(",");
-			for (Integer tmp : (int[]) res.get("vmid"))
-				out.write(tmp.toString() + "|");
-			out.write("\n");
-			out.flush();
-		}
+				out.write(res.get("dataset").toString());
+				out.write(",");
+				out.write(res.get("makespan").toString());
+				out.write(",");
+				for (Integer tmp : (int[]) res.get("vmid"))
+					out.write(tmp.toString() + "|");
+				out.write("\n");
+				out.flush();
+			} // for s
+		} // for repeat
 		out.close();
 	}
 

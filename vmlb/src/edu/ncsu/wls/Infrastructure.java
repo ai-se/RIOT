@@ -24,6 +24,7 @@ public class Infrastructure {
 	public static final int VM_ID_SHIFT = 0;
 	public static final int CLOUDLET_ID_SHIFT = 0;
 	public static final String DATACENTER_NAME = "ncsu";
+	public static final String[] models = new String[] { "fmri", "eprotein", "j30", "j60", "j90" };
 
 	/**
 	 * Creating Amazon EC2 virtual machines
