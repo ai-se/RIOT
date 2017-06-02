@@ -407,11 +407,11 @@ public class ACO {
 
 	public static void main(String[] args) {
 		HashMap<String, Object> exp1_para = new HashMap<String, Object>();
-		exp1_para.put("dataset", "fmri");
+		exp1_para.put("dataset", "j60");
 		exp1_para.put("seed", 18769787387L);
-		exp1_para.put("seed", System.currentTimeMillis());
+		// exp1_para.put("seed", System.currentTimeMillis());
 		exp1_para.put("antSize", 50);
-		exp1_para.put("maxIterations", 500);
+		exp1_para.put("maxIterations", 50);
 		exp1_para.put("maxEvaluations", 5000);
 		exp1_para.put("q0", 0.9);
 		exp1_para.put("rho", 0.1);

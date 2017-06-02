@@ -28,7 +28,7 @@ public class ExpSA {
 		File file = new File("sa.csv");
 
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
-		exp_para.put("maxIterations", 1000);
+		exp_para.put("maxIterations", 500);
 		exp_para.put("temperature", 10);
 		exp_para.put("temperatureReduceRate", 0.9);
 

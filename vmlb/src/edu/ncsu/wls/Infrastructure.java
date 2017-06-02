@@ -39,6 +39,7 @@ public class Infrastructure {
 		int idShift = VM_ID_SHIFT;
 		long size, bw;
 		int ram, mips, pesNumber;
+		String vmm;
 		// Creates a container to store VMs. This list is passed to the broker
 		// later
 		LinkedList<Vm> list = new LinkedList<Vm>();
@@ -47,10 +48,28 @@ public class Infrastructure {
 		// VM Parameters
 		size = 10000; // image size (MB)
 		ram = 4096; // vm memory (MB)
-		mips = 250;
+		mips = 225;
 		bw = 1000;
 		pesNumber = 2; // number of cpus
-		String vmm = "t2.medium"; // VMM name
+		vmm = "t2.medium"; // VMM name
+		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+
+		// =========================
+		size = 8000; // image size (MB)
+		ram = 4096; // vm memory (MB)
+		mips = 150;
+		bw = 1000;
+		pesNumber = 1; // number of cpus
+		vmm = "t2.small"; // VMM name
+		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+
+		// =========================
+		size = 8000; // image size (MB)
+		ram = 4096; // vm memory (MB)
+		mips = 150;
+		bw = 1000;
+		pesNumber = 1; // number of cpus
+		vmm = "t2.small"; // VMM name
 		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
 
 		// =============
@@ -88,8 +107,8 @@ public class Infrastructure {
 
 	// TODO entrance to modify VM configurations
 	public static List<Vm> createVms(int userId) {
-//		return createEC2Vms(userId);
-		return createEqualVms(userId, 4);
+		return createEC2Vms(userId);
+		// return createEqualVms(userId, 4);
 	}
 
 	// TODO entrance to modify Data center configurations
