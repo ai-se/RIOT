@@ -173,13 +173,11 @@ class gGA extends Algorithm {
 			evaluations++;
 			population.add(newIndividual);
 		} // for
-
+		System.out.println(evaluations + ": " + population.get(0).getObjective(0));
 		// Sort population
 		population.sort(comparator);
 		while (evaluations < maxEvaluations && iterations <= maxIterations) {
 			iterations++;
-			System.out.println(evaluations + ": " + population.get(0).getObjective(0));
-
 			// Copy the best two individuals to the offspring population
 			offspringPopulation.add(new Solution(population.get(0)));
 			offspringPopulation.add(new Solution(population.get(1)));
@@ -219,6 +217,7 @@ class gGA extends Algorithm {
 			}
 			offspringPopulation.clear();
 			population.sort(comparator);
+			System.out.println(evaluations + ": " + population.get(0).getObjective(0));
 		} // while
 
 		// Return a population with the best individual
