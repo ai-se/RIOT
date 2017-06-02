@@ -25,7 +25,7 @@ public class Infrastructure {
 	public static final int CLOUDLET_ID_SHIFT = 0;
 	public static final String DATACENTER_NAME = "ncsu";
 	public static final String[] models = new String[] { "fmri", "eprotein", "j30_1", "j30_2", "j60_1", "j60_2",
-			"j90_1", "j90_2", "j120_1", "j120_2"};
+			"j90_1", "j90_2", "j120_1", "j120_2" };
 
 	/**
 	 * Creating Amazon EC2 virtual machines
@@ -206,7 +206,7 @@ public class Infrastructure {
 			workflow = psp32.getCloudletPassport();
 			break;
 		case "j120_1":
-			PSPLIB psp4 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j12001_1", 120);
+			PSPLIB psp4 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_1", 120);
 			cloudletList = psp4.getCloudletList();
 			workflow = psp4.getCloudletPassport();
 			break;

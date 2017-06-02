@@ -2,6 +2,7 @@ package edu.ncsu.datasets;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,6 @@ public class PSPLIB implements Dataset {
 
 		for (String name : this.tasks.keySet())
 			cloudletList.add(tasks.get(name));
-
 		return cloudletList;
 	}
 
@@ -104,9 +104,10 @@ public class PSPLIB implements Dataset {
 		// Create cloudlets
 		for (String str : taskLoadInfo) {
 			String[] s = str.split("\\s+");
-			tasks.put(s[1], createCloudlet(Integer.parseInt(s[3]) * 10));
+			tasks.put(s[s.length-7], createCloudlet(Integer.parseInt(s[s.length-5]) * 10));
 		}
-
+		
+		
 		// Create workFlows
 		for (String str : taskFlowInfo) {
 			String[] s = str.split("\\s+");
@@ -131,6 +132,7 @@ public class PSPLIB implements Dataset {
 	}
 
 	public static void main(String[] args) {
-		PSPLIB x = new PSPLIB(0, 0, "j301_1", 30);
+		PSPLIB x = new PSPLIB(0, 0, "j1201_1", 120);
+		System.out.println(x.getCloudletList().size());
 	}
 }
