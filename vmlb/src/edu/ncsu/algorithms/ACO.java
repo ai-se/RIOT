@@ -14,6 +14,10 @@ import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
 
+import com.google.common.collect.ContiguousSet;
+import com.google.common.collect.DiscreteDomain;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Range;
 import com.google.common.primitives.Doubles;
 
 import edu.ncsu.wls.Infrastructure;
@@ -61,6 +65,22 @@ class AlgACO extends Algorithm {
 	}
 
 	/**
+	 * Randomly select one item which value is 0. Returning the index
+	 * 
+	 * @param list
+	 * @param rand
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	private int randomSampleZero(int[] list, List N, Random rnd) {
+		Collections.shuffle(N, rnd);
+		for (int i = 0; i < N.size(); i++)
+			if (list[i] == 0)
+				return i;
+		return -1;
+	}
+
+	/**
 	 * 
 	 * @param DAG
 	 * @param rDAG
@@ -70,43 +90,65 @@ class AlgACO extends Algorithm {
 	 *            Controlling random process
 	 * @return *number*s List. Each one contains a topo sorting
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("unchecked")
 	private List<Integer>[] batchRandomTopo(int[][] DAG, int[][] rDAG, int number, long seed) {
 		Random rnd = new Random(seed);
 		int n = DAG.length;
 
-		List<Integer>[] res = new List[number];
+		List<Integer>[] res = new ArrayList[number];
 		for (int i = 0; i < number; i++)
 			res[i] = new ArrayList<Integer>();
 
-		int[] outDegree = new int[n];
-		int[] inDegree = new int[n];
-		for (int i = 0; i < n; i++) {
-			outDegree[i] = IntStream.of(DAG[i]).sum();
-			inDegree[i] = IntStream.of(rDAG[i]).sum();
-		}
-		List<Integer> currentGroup = new ArrayList<Integer>();
-		int checked = 0;
-		while (checked < n) {
-			currentGroup.clear();
-			for (int i = 0; i < n; i++) {
-				if (inDegree[i] == 0) {
-					currentGroup.add(i);
-					inDegree[i] = -1;
-				}
-			}
+		// enumerations {0..n-1}
+		ArrayList<Integer> N = new ArrayList<Integer>();
+		for (int i = 0; i < n; i++)
+			N.add(i);
 
-			for (int c = 0; c < number; c++) {
-				Collections.shuffle(currentGroup, rnd);
-				res[c].addAll(currentGroup);
-			}
-			for (int from : currentGroup) {
+		for (int x = 0; x < number; x++) {
+			int[] outDegree = new int[n];
+			int[] inDegree = new int[n];
+			for (int i = 0; i < n; i++) {
+				outDegree[i] = IntStream.of(DAG[i]).sum();
+				inDegree[i] = IntStream.of(rDAG[i]).sum();
+			} // for i in n
+
+			for (int nodes = 0; nodes < n; nodes++) {
+				int toadd = randomSampleZero(inDegree, N, rnd);
+				res[x].add(toadd);
+				inDegree[toadd] = -1;
 				for (int to = 0; to < n; to++)
-					if (DAG[from][to] == 1)
+					if (DAG[toadd][to] == 1)
 						inDegree[to] -= 1;
-			}
-			checked += currentGroup.size();
-		}
+			} // for adding a node
+		} // create one res instance
+
+		/*
+		 * The following algorithm is buggy 06-01-2017 (all previous results
+		 * removed)
+		 */
+		// List<Integer> currentGroup = new ArrayList<Integer>();
+		// int checked = 0;
+		// while (checked < n) {
+		// currentGroup.clear();
+		// for (int i = 0; i < n; i++) {
+		// if (inDegree[i] == 0) {
+		// currentGroup.add(i);
+		// inDegree[i] = -1;
+		// }
+		// }
+		//
+		// for (int c = 0; c < number; c++) {
+		// Collections.shuffle(currentGroup, rnd);
+		// res[c].addAll(currentGroup);
+		// }
+		// for (int from : currentGroup) {
+		// for (int to = 0; to < n; to++)
+		// if (DAG[from][to] == 1)
+		// inDegree[to] -= 1;
+		// }
+		// checked += currentGroup.size();
+		// }
+
 		return res;
 	}
 
@@ -134,7 +176,7 @@ class AlgACO extends Algorithm {
 		double[][] tauMatrix;
 		Random rnd;
 
-		Comparator comparator;
+		Comparator<Solution> comparator;
 		comparator = new ObjectiveComparator(0); // single objective comparator
 
 		Operator heuristicOperator;
@@ -366,10 +408,10 @@ public class ACO {
 	public static void main(String[] args) {
 		HashMap<String, Object> exp1_para = new HashMap<String, Object>();
 		exp1_para.put("dataset", "fmri");
-		// exp1_para.put("seed", 18769787387L);
+		exp1_para.put("seed", 18769787387L);
 		exp1_para.put("seed", System.currentTimeMillis());
 		exp1_para.put("antSize", 50);
-		exp1_para.put("maxIterations", 5);
+		exp1_para.put("maxIterations", 500);
 		exp1_para.put("maxEvaluations", 5000);
 		exp1_para.put("q0", 0.9);
 		exp1_para.put("rho", 0.1);

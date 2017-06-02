@@ -88,7 +88,8 @@ public class Infrastructure {
 
 	// TODO entrance to modify VM configurations
 	public static List<Vm> createVms(int userId) {
-		return createEC2Vms(userId);
+//		return createEC2Vms(userId);
+		return createEqualVms(userId, 4);
 	}
 
 	// TODO entrance to modify Data center configurations
