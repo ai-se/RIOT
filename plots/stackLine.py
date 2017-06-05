@@ -41,7 +41,8 @@ def loadCSV(filename):
 
 minminrec = pd.read_csv('../results/minmin.csv', names=['dataset', 'makespan', 'configuration'])
 minmaxrec = pd.read_csv('../results/minmax.csv', names=['dataset', 'makespan', 'configuration'])
-models = ["fmri", "eprotein", "j30", "j60", "j90"]
+models = ["fmri", "eprotein", "j30_1", "j30_2", "j60_1", "j60_2",
+          "j90_1", "j90_2", "j120_1", "j120_2"]
 # models = ['fmri']
 alg_name = ['SA', 'GA', 'ACO']
 colors = ['green', 'blue', 'red']
@@ -65,13 +66,13 @@ for model in models:
     INIT = list()
     FINAL = list()
 
-    for i, name, col, alg in zip(range(3), alg_name, colors,  [SA, GA, ACO]):
+    for i, name, col, alg in zip(range(3), alg_name, colors, [SA, GA, ACO]):
         inits = [c[0] for c in alg[model]]
         finals = [c[-1] for c in alg[model]]
         INIT.append(inits)
         FINAL.append(finals)
 
-        medi = np.argsort(finals)[len(finals)//2]
+        medi = np.argsort(finals)[len(finals) // 2]
         makespans = alg[model][medi]
         iters = range(len(makespans))
 
@@ -92,7 +93,7 @@ for model in models:
             patch.set_facecolor(color)
 
     for ax in axes:
-        ax.set_ylim([min(flatten(FINAL))*0.9, max(flatten(INIT))*1.0])
+        ax.set_ylim([min(flatten(FINAL)) * 0.9, max(flatten(INIT)) * 1.0])
         ax.yaxis.grid(True)
     axes[1].set_yticklabels([])
     axes[2].yaxis.tick_right()
@@ -107,5 +108,5 @@ for model in models:
 
     gs.tight_layout(fig)
     # plt.show()
-    plt.savefig('../results/summary/'+model+'.png')
+    plt.savefig('../results/summary/' + model + '.png')
     plt.savefig('../results/summary/' + model + '.eps')
