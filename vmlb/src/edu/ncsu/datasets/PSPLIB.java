@@ -46,7 +46,7 @@ public class PSPLIB implements Dataset {
 	}
 
 	public List<MyCloudlet> getCloudletList() {
-		Log.printLine("RUNNING at " + this.version + " getcloudlist...");
+		Log.printLine("RUNNING at PSPLIB " + this.version + " getcloudlist...");
 		List<MyCloudlet> cloudletList = new ArrayList<MyCloudlet>();
 
 		for (String name : this.tasks.keySet())

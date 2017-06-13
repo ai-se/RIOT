@@ -34,4 +34,8 @@ public class MyCloudlet extends Cloudlet {
 	public void setStartTime(double startTime) {
 		this.startTime = startTime;
 	}
+	
+	public String toString(){
+		return "task@" + this.getCloudletId();
+	}
 }
