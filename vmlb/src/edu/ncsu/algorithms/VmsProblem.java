@@ -2,20 +2,18 @@ package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
-import edu.ncsu.datasets.Utils;
 import edu.ncsu.wls.CloudletPassport;
 import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
 import edu.ncsu.wls.Infrastructure;
+import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
 import edu.ncsu.wls.OnlineDatacenterBroker;
 import jmetal.core.Problem;
@@ -31,31 +29,52 @@ import jmetal.util.JMException;
  * @author jianfeng
  *
  */
-class VMLoc extends Variable {
-	private static final long serialVersionUID = -875003925545159630L;
-	private int value_; // store VM ID~
+class VmEncoding extends Variable {
+	private static final long serialVersionUID = 7889788136550407561L;
+	private int task2ins;
+	private int ins2type;
+	private int taskInOrder;
 
-	public VMLoc(int value) {
-		this.value_ = value;
+	public VmEncoding(int taskInOrder, int task2ins, int ins2type) {
+		this.taskInOrder = taskInOrder;
+		this.task2ins = task2ins;
+		this.ins2type = ins2type;
 	}
 
-	public double getValue() {
-		return value_;
+	public void setTask2ins(int ins) {
+		this.task2ins = ins;
 	}
 
-	public void setValue(int value) {
-		this.value_ = value;
+	public void setIns2Type(int type) {
+		this.ins2type = type;
+	}
+
+	public void setOrder(int order) {
+		this.taskInOrder = order;
+	}
+
+	public int getTask2ins() {
+		return task2ins;
+	}
+
+	public int getIns2type() {
+		return ins2type;
+	}
+
+	public int getOrder() {
+		return taskInOrder;
 	}
 
 	@Override
 	public String toString() {
-		return "" + value_;
+		return this.task2ins + "";
 	}
 
 	@Override
 	public Variable deepCopy() {
-		return new VMLoc(value_);
+		return new VmEncoding(task2ins, ins2type, taskInOrder);
 	}
+
 }
 
 /**
@@ -78,8 +97,12 @@ class VMScheduleSolutionType extends SolutionType {
 	@Override
 	public Variable[] createVariables() {
 		Variable[] variables = new Variable[problem_.getNumberOfVariables()];
-		for (int var = 0; var < problem_.getNumberOfVariables(); var++)
-			variables[var] = new VMLoc(Utils.sampleOne(problem_.getVmids(), rand));
+		for (int var = 0; var < problem_.getNumberOfVariables(); var++) {
+			int order = var;
+			int task2ins = rand.nextInt(problem_.getNumberOfVariables() - 1);
+			int ins2type = rand.nextInt(Infrastructure.getAvailableVmTypes());
+			variables[var] = new VmEncoding(order, task2ins, ins2type);
+		}
 		return variables;
 	}
 }
@@ -93,7 +116,6 @@ class VMScheduleSolutionType extends SolutionType {
 public class VmsProblem extends Problem {
 	private static final long serialVersionUID = 6371615104008697832L;
 	public Random rand;
-	private int[] vmid_;
 	private int cloudletNum;
 	private List<MyCloudlet> cloudletList;
 	private CloudletPassport workflow;
@@ -105,37 +127,43 @@ public class VmsProblem extends Problem {
 		this.rand = rand;
 		this.name = dataset;
 
-		List<Vm> vms = Infrastructure.createVms(-1);
-		vmid_ = new int[vms.size()];
-		for (int i = 0; i < vms.size(); i++)
-			vmid_[i] = vms.get(i).getId();
-
 		Object[] tmpInfo = Infrastructure.getCaseCloudlets(this.name, -1);
 		cloudletList = (List<MyCloudlet>) tmpInfo[0];
 		cloudletNum = cloudletList.size();
 		workflow = (CloudletPassport) (tmpInfo[1]);
 
 		this.numberOfVariables_ = this.cloudletNum;
-		this.numberOfObjectives_ = 1; // TODO change this if needed
+		this.numberOfObjectives_ = 2; // TODO change this if needed
 
 		this.solutionType_ = new VMScheduleSolutionType(this, rand);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void evaluate(Solution solution) throws JMException {
-		int[] mapping = new int[cloudletNum];
-		for (int var = 0; var < this.numberOfVariables_; var++)
-			mapping[var] = (int) solution.getDecisionVariables()[var].getValue();
+		Variable[] decs = solution.getDecisionVariables();
+		int[] order = new int[getNumberOfVariables()];
+		int[] task2ins = new int[getNumberOfVariables()];
+		int[] ins2type = new int[getNumberOfVariables()];
+
+		for (int var = 0; var < getNumberOfVariables(); var++) {
+			order[var] = ((VmEncoding) decs[var]).getOrder();
+			task2ins[var] = ((VmEncoding) decs[var]).getTask2ins();
+			ins2type[var] = ((VmEncoding) decs[var]).getIns2type();
+		}
+
+		// System.out.println(Arrays.toString(order));
+		// System.out.println(Arrays.toString(task2ins));
+		// System.out.println(Arrays.toString(ins2type));
 
 		// ****** starting cloudsim simulation
-		Log.disable();
+		// Log.disable();
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
 		boolean trace_flag = false; // trace events
+
 		CloudSim.init(num_user, calendar, trace_flag);
-		Infrastructure.createDatacenter();
+		Infrastructure.createDatacenter(this.cloudletNum);
 		OnlineDatacenterBroker broker = null;
 		try {
 			broker = new OnlineDatacenterBroker("dc_broker");
@@ -147,28 +175,32 @@ public class VmsProblem extends Problem {
 
 		// Get dataset
 		Object[] info = Infrastructure.getCaseCloudlets(this.name, broker.getId());
+		@SuppressWarnings("unchecked")
 		List<MyCloudlet> cloudletList = (List<MyCloudlet>) info[0];
 		CloudletPassport workflow = (CloudletPassport) info[1];
 
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
-		vmlist = Infrastructure.createVms(dcBrokerId);
-
-		for (Vm vm : vmlist)
+		vmlist = Infrastructure.createVms(dcBrokerId, task2ins, ins2type);
+		for (Vm vm : vmlist) {
+			if (vm == null)
+				continue;
 			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
+		}
+
+		// map task to vm
+		for (int var = 0; var < cloudletNum; var++)
+			cloudletList.get(var).setVmId(vmlist.get(task2ins[var]).getId());
+		vmlist.removeAll(Collections.singleton(null)); // remove null in vmlist
 
 		broker.submitCloudletList(cloudletList);
 		broker.submitVmList(vmlist);
-
-		for (Cloudlet c : cloudletList) {
-			c.setVmId(mapping[c.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT]);
-		}
-
+		
 		CloudSim.startSimulation();
 		CloudSim.stopSimulation();
-
+		
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
-		// MyCloudSimHelper.printCloudletList(newList);
+		MyCloudSimHelper.printCloudletList(newList);
 
 		if (newList.size() != cloudletList.size()) {
 			System.err.println("can not simulating all cloudlets!");
@@ -179,13 +211,9 @@ public class VmsProblem extends Problem {
 		for (Cloudlet c : newList) {
 			makespan = Math.max(makespan, c.getFinishTime());
 		}
-
+		System.out.println(makespan);
 		// ***** end of cloudsim simulation
-		solution.setObjective(0, makespan);
-	}
-
-	public int[] getVmids() {
-		return this.vmid_;
+		 solution.setObjective(0, makespan);
 	}
 
 	public int randInt(int bound) {
@@ -196,24 +224,11 @@ public class VmsProblem extends Problem {
 		return workflow;
 	}
 
-	// /**
-	// * Return back the DAG for workflow of current VmsProblem
-	// *
-	// * @return Key(int)- id of cloudlet vale(List) - containing list which the
-	// * key connect to.
-	// */
-	// @SuppressWarnings({ "rawtypes", "unchecked" })
-	// public Map<Integer, List> parseOutDAG() {
-	// Map<Integer, List> res = new HashMap<Integer, List>();
-	//
-	// HashMap<Cloudlet, List<Cloudlet>> graph = this.workflow.getRequiring();
-	//
-	// for (Cloudlet from : graph.keySet()) {
-	// int fromi = from.getCloudletId();
-	// res.put(fromi, new ArrayList<Integer>());
-	// for (Cloudlet to : graph.get(from))
-	// res.get(fromi).add(to.getCloudletId());
-	// }
-	// return res;
-	// }
+	public static void main(String[] args) throws ClassNotFoundException, JMException {
+		VmsProblem p = new VmsProblem("sci_Epigenomics_24", new Random());
+		for (int i = 0; i < 1; i++) {
+			Solution randS = new Solution(p);
+			p.evaluate(randS);
+		}
+	}
 }

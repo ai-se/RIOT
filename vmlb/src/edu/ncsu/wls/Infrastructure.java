@@ -1,6 +1,7 @@
 package edu.ncsu.wls;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,8 +16,11 @@ import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
+import com.google.common.primitives.Ints;
+
 import edu.ncsu.datasets.Eprotein;
 import edu.ncsu.datasets.FMRI;
+import edu.ncsu.datasets.PEGASUS;
 import edu.ncsu.datasets.PSPLIB;
 import edu.ncsu.datasets.Randomset;
 
@@ -24,8 +28,22 @@ public class Infrastructure {
 	public static final int VM_ID_SHIFT = 0;
 	public static final int CLOUDLET_ID_SHIFT = 0;
 	public static final String DATACENTER_NAME = "ncsu";
-	public static final String[] models = new String[] { "fmri", "eprotein", "j30_1", "j30_2", "j60_1", "j60_2",
-			"j90_1", "j90_2", "j120_1", "j120_2" };
+	// public static final String[] models = new String[] { "fmri", "eprotein",
+	// "j30_1", "j30_2", "j60_1", "j60_2",
+	// "j90_1", "j90_2", "j120_1", "j120_2" };
+
+	// public static final String[] models = new String[] { "sci_Montage_25",
+	// "sci_Montage_50", "sci_Montage_100",
+	// "sci_Montage_1000", "sci_Epigenomics_24", "sci_Epigenomics_46",
+	// "sci_Epigenomics_100",
+	// "sci_Epigenomics_997", "sci_CyberShake_30", "sci_CyberShake_50",
+	// "sci_CyberShake_100",
+	// "sci_CyberShake_1000", "sci_Sipht_30", "sci_Sipht_60", "sci_Sipht_100",
+	// "sci_Sipht_1000", "sci_Inspiral_30",
+	// "sci_Inspiral_50", "sci_Inspiral_100", "sci_Inspiral_1000" };
+
+	public static final String[] models = new String[] { "sci_Montage_25", "sci_Epigenomics_24", "sci_CyberShake_30",
+			"sci_Sipht_30", "sci_Inspiral_30", "sci_Inspiral_50" };
 
 	/**
 	 * Creating Amazon EC2 virtual machines
@@ -86,6 +104,75 @@ public class Infrastructure {
 		return list;
 	}
 
+	/**
+	 * 
+	 * @param userId
+	 * @param ins
+	 * @param ins2type
+	 * @return
+	 */
+	private static List<Vm> createAWSVms(int userId, int[] ins, int[] ins2type) {
+		int idShift = VM_ID_SHIFT;
+		long size;
+		int ram, pesNumber;
+
+		LinkedList<Vm> list = new LinkedList<Vm>();
+
+		// "irrelevant" parameters
+		size = 10000;
+		ram = 4096;
+		pesNumber = 1;
+
+		double sdm = 1;
+
+		for (int i = 0; i <= Ints.max(ins); i++)
+			list.add(null);
+
+		for (int index : ins) {
+			if (list.get(index) != null)
+				continue;
+			switch (ins2type[index]) {
+			case 0:
+				list.set(index, new Vm(idShift++, userId, 1.7 * sdm, pesNumber, ram, 39321600, size, "m1.small",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 1:
+				list.set(index, new Vm(idShift++, userId, 1.7 * sdm, pesNumber, ram, 39321600, size, "m1.small",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 2:
+				list.set(index, new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m1.medium",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 3:
+				list.set(index, new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 4:
+				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m1.large",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 5:
+				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 6:
+				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m1.xlarge",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 7:
+				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 8:
+				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			}
+		}
+		return list;
+	}
+
 	@SuppressWarnings("unused")
 	private static List<Vm> createEqualVms(int userId, int num) {
 		int idShift = VM_ID_SHIFT;
@@ -107,27 +194,42 @@ public class Infrastructure {
 
 	// TODO entrance to modify VM configurations
 	public static List<Vm> createVms(int userId) {
+		// return createAWSVms(userId);
 		return createEC2Vms(userId);
 		// return createEqualVms(userId, 4);
 	}
 
-	// TODO entrance to modify Data center configurations
+	public static List<Vm> createVms(int userId, int[] ins, int[] ins2type) {
+		return createAWSVms(userId, ins, ins2type);
+	}
+
+	public static int getAvailableVmTypes() {
+		return 8; // in aws EC2
+	}
+
+	/**
+	 * Creating data centers
+	 * @return
+	 */
 	public static Datacenter createDatacenter() {
+		return Infrastructure.createDatacenter(10);
+	}
+	// TODO entrance to modify Data center configurations
+	public static Datacenter createDatacenter(int reqVmNum) {
 		String name = DATACENTER_NAME;
 		List<Host> hostList = new ArrayList<Host>();
 
 		// each machine are n-core machine
 		List<Pe> peList = new ArrayList<Pe>();
-		peList.add(new Pe(0, new PeProvisionerSimple(500)));
-		peList.add(new Pe(0, new PeProvisionerSimple(500)));
+		peList.add(new Pe(0, new PeProvisionerSimple(10000)));
 
 		// create (same configured) PMs in a datacenter
 		int hostId = 0;
-		int ram = 100000; // host memory (MB)
-		long storage = 1000000; // host storage
-		int bw = 10000;
+		int ram = Integer.MAX_VALUE; // host memory (MB)
+		long storage = Integer.MAX_VALUE; // host storage
+		int bw = Integer.MAX_VALUE;
 
-		for (int i = 0; i < 5; ++i) {
+		for (int i = 0; i < reqVmNum; i++) {
 			hostList.add(new Host(++hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList,
 					new VmSchedulerSpaceShared(peList))); // This is our
 															// machine
@@ -164,7 +266,7 @@ public class Infrastructure {
 	}
 
 	/**
-	 * Generating the pre-defined study cases
+	 * Generating the pre-defined study cases Using memo decorator pattern
 	 * 
 	 * @param dataset
 	 * @param brokerId
@@ -173,9 +275,16 @@ public class Infrastructure {
 	 *            useful ONLY when dataset="random"
 	 * @return List<MyCloudlet> cloudletList + CloudletPassport workflow
 	 */
+	private static HashMap<Integer, Object[]> archieveCloudLets = new HashMap<Integer, Object[]>();
+
 	public static Object[] getCaseCloudlets(String dataset, int brokerId) {
+		int ID = dataset.hashCode() + brokerId;
+		if (archieveCloudLets.containsKey(ID))
+			return archieveCloudLets.get(ID);
+
 		List<MyCloudlet> cloudletList = null;
 		CloudletPassport workflow = null;
+
 		switch (dataset) {
 		case "fmri":
 			FMRI fmri = new FMRI(brokerId, CLOUDLET_ID_SHIFT);
@@ -236,11 +345,19 @@ public class Infrastructure {
 			workflow = psp42.getCloudletPassport();
 			break;
 		default:
-			System.err.println("Check the dataset name");
-			System.exit(-1);
+			if (dataset.startsWith("sci_")) { // case Scientific Workflow
+				PEGASUS sciF = new PEGASUS(brokerId, CLOUDLET_ID_SHIFT, dataset.substring(4));
+				cloudletList = sciF.getCloudletList();
+				workflow = sciF.getCloudletPassport();
+			} else {
+				System.err.println("Check the dataset name");
+				System.exit(-1);
+			}
 		}
 
-		return new Object[] { cloudletList, workflow };
+		Object[] res = new Object[] { cloudletList, workflow };
+		archieveCloudLets.put(ID, res);
+		return res;
 	}
 
 }
