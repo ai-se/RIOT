@@ -3,6 +3,8 @@ package edu.ncsu.wls;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.midi.ControllerEventListener;
+
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.Consts;
@@ -12,11 +14,11 @@ import org.cloudbus.cloudsim.core.CloudSim;
 
 /**
  * DAGCloudletSchedulerSpaceShared implements a policy of scheduling performed
- * by a virtual machine to run its {@link Cloudlet Cloudlets}. It consider there
- * will be only one cloudlet per VM. Other cloudlets will be in a waiting list.
- * We consider that file transfer from cloudlets waiting happens before cloudlet
- * execution. I.e., even though cloudlets must wait for CPU, data transfer
- * happens as soon as cloudlets are submitted.
+ * by a virtual machine to run its {@link Cloudlet Cloudlets}. It considers
+ * there will be only one cloudlet per VM. Other cloudlets will be in a waiting
+ * list. We consider that file transfer from cloudlets waiting happens before
+ * cloudlet execution. I.e., even though cloudlets must wait for CPU, data
+ * transfer happens as soon as cloudlets are submitted.
  * 
  * DAG - the cloudlet is organized as the DAG. If one cloudlet is not ready, it
  * will process the next available cloudlet
@@ -53,7 +55,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		super();
 		usedPes = 0;
 		currentCpus = 0;
-		cp = new CloudletPassport();
+		cp = null;
 	}
 
 	private String printResCloudLetList(List<ResCloudlet> list, String tag) {
@@ -77,6 +79,11 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 	public void setCloudletPassport(CloudletPassport cp) {
 		this.cp = cp;
+	}
+
+	public void controlPrint(Object x) {
+		if (this.currentvmid == 0)
+			System.err.println(x);
 	}
 
 	@Override
@@ -139,10 +146,10 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 						toRemove.add(rcl);
 						break;
 					}
-				}
+				} // for rcl in waitingList
 				getCloudletWaitingList().removeAll(toRemove);
-			}
-		}
+			} // for finish
+		} // if
 
 		// handing the pending status
 		toRemove.clear();
@@ -299,7 +306,6 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	public double cloudletResume(int cloudletId) {
 		boolean found = false;
 		int position = 0;
-
 		// look for the cloudlet in the paused list
 		for (ResCloudlet rcl : getCloudletPausedList()) {
 			if (rcl.getCloudletId() == cloudletId) {
@@ -362,9 +368,28 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	}
 
 	@Override
+	// NOTE: parameter fileTransferTime will be ignored here
 	public double cloudletSubmit(Cloudlet cloudlet, double fileTransferTime) {
 		if (this.currentvmid < 0)
 			this.currentvmid = cloudlet.getVmId();
+
+		// updating the file transfile time
+		// calculate the expected time for cloudlet completion
+		double capacity = 0.0;
+		int cpus = 0;
+		for (Double mips : getCurrentMipsShare()) {
+			capacity += mips;
+			if (mips > 0) {
+				cpus++;
+			}
+		}
+
+		fileTransferTime = cp.getFileTransferTime(cloudlet);
+		double extraSize = capacity * fileTransferTime;
+		long length = cloudlet.getCloudletLength();
+		length += extraSize;
+		cloudlet.setCloudletLength(length);
+
 		// it can go to the exec list
 		if ((currentCpus - usedPes) >= cloudlet.getNumberOfPes() && cp.isCloudletPrepared(cloudlet)) {
 			ResCloudlet rcl = new ResCloudlet(cloudlet);
@@ -381,25 +406,9 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			return 0.0;
 		}
 
-		// calculate the expected time for cloudlet completion
-		double capacity = 0.0;
-		int cpus = 0;
-		for (Double mips : getCurrentMipsShare()) {
-			capacity += mips;
-			if (mips > 0) {
-				cpus++;
-			}
-		}
-
 		currentCpus = cpus;
 		capacity /= cpus;
 
-		// use the current capacity to estimate the extra amount of
-		// time to file transferring. It must be added to the cloudlet length
-		double extraSize = capacity * fileTransferTime;
-		long length = cloudlet.getCloudletLength();
-		length += extraSize;
-		cloudlet.setCloudletLength(length);
 		return cloudlet.getCloudletLength() / capacity;
 	}
 
@@ -535,5 +544,4 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }

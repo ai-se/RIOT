@@ -1,6 +1,7 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -151,6 +152,12 @@ public class VmsProblem extends Problem {
 			ins2type[var] = ((VmEncoding) decs[var]).getIns2type();
 		}
 
+		task2ins = new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 3, 3, 4, 4, 4 }; // TODO
+																				// DELETE
+																				// THIS
+																				// LINE
+		ins2type = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 4, 2, 2, 2, 2, 2, 2 };
+
 		// System.out.println(Arrays.toString(order));
 		// System.out.println(Arrays.toString(task2ins));
 		// System.out.println(Arrays.toString(ins2type));
@@ -191,14 +198,15 @@ public class VmsProblem extends Problem {
 		// map task to vm
 		for (int var = 0; var < cloudletNum; var++)
 			cloudletList.get(var).setVmId(vmlist.get(task2ins[var]).getId());
+		workflow.calcFileTransferTimes(task2ins, ins2type, vmlist, cloudletList);
 		vmlist.removeAll(Collections.singleton(null)); // remove null in vmlist
 
 		broker.submitCloudletList(cloudletList);
 		broker.submitVmList(vmlist);
-		
+
 		CloudSim.startSimulation();
 		CloudSim.stopSimulation();
-		
+
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		MyCloudSimHelper.printCloudletList(newList);
 
@@ -213,7 +221,7 @@ public class VmsProblem extends Problem {
 		}
 		System.out.println(makespan);
 		// ***** end of cloudsim simulation
-		 solution.setObjective(0, makespan);
+		solution.setObjective(0, makespan);
 	}
 
 	public int randInt(int bound) {
@@ -225,10 +233,13 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_Epigenomics_24", new Random());
-		for (int i = 0; i < 1; i++) {
-			Solution randS = new Solution(p);
-			p.evaluate(randS);
-		}
+		VmsProblem p = new VmsProblem("fmri", new Random());
+		// System.out.println(p.workflow);
+		Solution randS = new Solution(p);
+		p.evaluate(randS);
+		// for (int i = 0; i < 1; i++) {
+		// Solution randS = new Solution(p);
+		// p.evaluate(randS);
+		// }
 	}
 }

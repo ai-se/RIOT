@@ -27,7 +27,7 @@ import edu.ncsu.datasets.Randomset;
 public class Infrastructure {
 	public static final int VM_ID_SHIFT = 0;
 	public static final int CLOUDLET_ID_SHIFT = 0;
-	public static final String DATACENTER_NAME = "ncsu";
+	public static final String DATACENTER_NAME = "AWS_EC2";
 	// public static final String[] models = new String[] { "fmri", "eprotein",
 	// "j30_1", "j30_2", "j60_1", "j60_2",
 	// "j90_1", "j90_2", "j120_1", "j120_2" };
@@ -123,7 +123,7 @@ public class Infrastructure {
 		ram = 4096;
 		pesNumber = 1;
 
-		double sdm = 1;
+		double sdm = 1000;
 
 		for (int i = 0; i <= Ints.max(ins); i++)
 			list.add(null);
@@ -221,7 +221,7 @@ public class Infrastructure {
 
 		// each machine are n-core machine
 		List<Pe> peList = new ArrayList<Pe>();
-		peList.add(new Pe(0, new PeProvisionerSimple(10000)));
+		peList.add(new Pe(0, new PeProvisionerSimple(Integer.MAX_VALUE)));
 
 		// create (same configured) PMs in a datacenter
 		int hostId = 0;

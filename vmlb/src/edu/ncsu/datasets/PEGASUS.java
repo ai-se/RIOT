@@ -119,7 +119,7 @@ public class PEGASUS implements Dataset {
 		// step 3 updating the files transferred between tasks
 		HashMap<String, String> useAsInput = new HashMap<String, String>(); // fileName-taskName
 		HashMap<String, String> outputTo = new HashMap<String, String>();
-		HashMap<String, Integer> fileSize = new HashMap<String, Integer>(); // fileName-task
+		HashMap<String, Long> fileSize = new HashMap<String, Long>(); // fileName-task
 
 		for (int i = 0; i < jobNodes.getLength(); i++) {
 			Element jobInfo = (Element) jobNodes.item(i);
@@ -134,7 +134,7 @@ public class PEGASUS implements Dataset {
 				if (fileInfo.getAttribute("link").equals("output"))
 					outputTo.put(fileInfo.getAttribute("file"), myid);
 
-				fileSize.put(fileInfo.getAttribute("file"), Integer.parseInt(fileInfo.getAttribute("size")));
+				fileSize.put(fileInfo.getAttribute("file"), Long.parseLong(fileInfo.getAttribute("size")));
 			}
 		}
 
@@ -171,7 +171,7 @@ public class PEGASUS implements Dataset {
 	}
 
 	public static void main(String[] args) {
-		PEGASUS test = new PEGASUS(0, 0, "Montage_25");
+		PEGASUS test = new PEGASUS(0, 0, "j30");
 		 System.out.println(test.getCloudletList());
 		 System.out.println(test.getCloudletPassport());
 	}
