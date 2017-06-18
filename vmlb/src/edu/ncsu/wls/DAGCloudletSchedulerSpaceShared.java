@@ -3,8 +3,6 @@ package edu.ncsu.wls;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.midi.ControllerEventListener;
-
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.Consts;

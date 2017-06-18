@@ -1,6 +1,7 @@
 package edu.ncsu.wls;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -65,7 +66,7 @@ public class CloudletPassport {
 	 * @param ins2type
 	 * @param vmlist
 	 */
-	public void calcFileTransferTimes(int[] task2ins, int[] ins2type, List<Vm> vmlist, List<MyCloudlet> cList) {
+	public void calcFileTransferTimes(int[] task2ins, List<Vm> vmlist, List<MyCloudlet> cList) {
 		this.fileTransferTime.clear();
 		for (Cloudlet c : cList)
 			fileTransferTime.put(c, 0.0);
@@ -75,8 +76,8 @@ public class CloudletPassport {
 				int s = cList.indexOf(src);
 				int t = cList.indexOf(target);
 				if (task2ins[s] != task2ins[t]) {
-					long bw = Long.min(vmlist.get(ins2type[task2ins[s]]).getBw(),
-							vmlist.get(ins2type[task2ins[t]]).getBw());
+					long bw = Long.min(vmlist.get(task2ins[s]).getBw(),
+							vmlist.get(task2ins[t]).getBw());
 					double time = fileTransferTime.get(src) + this.getFileTransferSize(src, target) / bw;
 					fileTransferTime.put(src, time);
 				} // if type not equal

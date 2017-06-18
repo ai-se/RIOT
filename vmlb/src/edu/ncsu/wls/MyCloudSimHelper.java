@@ -31,7 +31,7 @@ public class MyCloudSimHelper {
 		DecimalFormat dft = new DecimalFormat("###.##");
 		for (int i = 0; i < size; i++) {
 			cloudlet = list.get(i);
-			Log.print(str(cloudlet.getCloudletId(), 15));
+			Log.print(str("(#" + cloudlet.getCloudletId() + ")  " + cloudlet, 15));
 
 			if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS) {
 				Log.printLine("SUCCESS" + indent + cloudlet.getAllResourceName()[0] + indent + indent + indent

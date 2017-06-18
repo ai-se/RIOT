@@ -1,13 +1,13 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import org.cloudbus.cloudsim.Cloudlet;
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
@@ -152,16 +152,6 @@ public class VmsProblem extends Problem {
 			ins2type[var] = ((VmEncoding) decs[var]).getIns2type();
 		}
 
-		task2ins = new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 3, 3, 4, 4, 4 }; // TODO
-																				// DELETE
-																				// THIS
-																				// LINE
-		ins2type = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 4, 2, 2, 2, 2, 2, 2 };
-
-		// System.out.println(Arrays.toString(order));
-		// System.out.println(Arrays.toString(task2ins));
-		// System.out.println(Arrays.toString(ins2type));
-
 		// ****** starting cloudsim simulation
 		// Log.disable();
 		// Create Cloudsim server
@@ -198,10 +188,15 @@ public class VmsProblem extends Problem {
 		// map task to vm
 		for (int var = 0; var < cloudletNum; var++)
 			cloudletList.get(var).setVmId(vmlist.get(task2ins[var]).getId());
-		workflow.calcFileTransferTimes(task2ins, ins2type, vmlist, cloudletList);
+		workflow.calcFileTransferTimes(task2ins, vmlist, cloudletList);
 		vmlist.removeAll(Collections.singleton(null)); // remove null in vmlist
 
-		broker.submitCloudletList(cloudletList);
+		// re-range cloudletList according to order
+		List<MyCloudlet> tmp = new ArrayList<MyCloudlet>();
+		for (int i : order)
+			tmp.add(cloudletList.get(i));
+		broker.submitCloudletList(tmp);
+
 		broker.submitVmList(vmlist);
 
 		CloudSim.startSimulation();
