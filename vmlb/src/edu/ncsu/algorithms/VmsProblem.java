@@ -154,7 +154,7 @@ public class VmsProblem extends Problem {
 		}
 
 		// ****** starting cloudsim simulation
-		// Log.disable();
+		Log.disable();
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
@@ -213,19 +213,20 @@ public class VmsProblem extends Problem {
 
 		if (newList.size() != cloudletList.size()) {
 			System.err.println("can not simulating all cloudlets!");
-			// System.out.println(Arrays.toString(order));
-			// System.out.println(Arrays.toString(task2ins));
-			// System.out.println(Arrays.toString(ins2type));
 			System.exit(-1);
 		}
 
+		// calculating objectives
 		double makespan = 0;
 		for (Cloudlet c : newList) {
 			makespan = Math.max(makespan, c.getFinishTime());
 		}
-		System.out.println(makespan);
-		// ***** end of cloudsim simulation
+
+		double cost = Infrastructure.getUnitPrice(vmlist) * makespan / 3600;
+		
+		System.out.println(makespan + " $" + cost);
 		solution.setObjective(0, makespan);
+		solution.setObjective(1, cost);
 	}
 
 	public int randInt(int bound) {
@@ -237,8 +238,8 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_Inspiral_100", new Random());
-		for (int i = 0; i < 20; i++) {
+		VmsProblem p = new VmsProblem("sci_Epigenomics_100", new Random());
+		for (int i = 0; i < 30; i++) {
 			Solution randS = new Solution(p);
 			p.evaluate(randS);
 		}

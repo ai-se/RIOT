@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
@@ -17,6 +17,7 @@ import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Ints;
 
 import edu.ncsu.datasets.Eprotein;
@@ -134,39 +135,35 @@ public class Infrastructure {
 				continue;
 			switch (ins2type[index]) {
 			case 0:
-				list.set(index, new Vm(idShift++, userId, 1.7 * sdm, pesNumber, ram, 39321600, size, "m1.small",
-						new DAGCloudletSchedulerSpaceShared()));
-				break;
-			case 1:
-				list.set(index, new Vm(idShift++, userId, 1.7 * sdm, pesNumber, ram, 39321600, size, "m1.small",
-						new DAGCloudletSchedulerSpaceShared()));
-				break;
-			case 2:
-				list.set(index, new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m1.medium",
-						new DAGCloudletSchedulerSpaceShared()));
-				break;
-			case 3:
 				list.set(index, new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium",
 						new DAGCloudletSchedulerSpaceShared()));
 				break;
-			case 4:
-				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m1.large",
-						new DAGCloudletSchedulerSpaceShared()));
-				break;
-			case 5:
+			case 1:
 				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large",
 						new DAGCloudletSchedulerSpaceShared()));
 				break;
-			case 6:
-				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m1.xlarge",
-						new DAGCloudletSchedulerSpaceShared()));
-				break;
-			case 7:
+			case 2:
 				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge",
 						new DAGCloudletSchedulerSpaceShared()));
 				break;
-			case 8:
+			case 3:
 				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 4:
+				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 5:
+				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 6:
+				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge",
+						new DAGCloudletSchedulerSpaceShared()));
+				break;
+			case 7:
+				list.set(index, new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge",
 						new DAGCloudletSchedulerSpaceShared()));
 				break;
 			}
@@ -202,6 +199,36 @@ public class Infrastructure {
 
 	public static List<Vm> createVms(int userId, int[] ins, int[] ins2type) {
 		return createAWSVms(userId, ins, ins2type);
+	}
+
+	/**
+	 * In this pricing model, we assume that the vm is booted as the workflow
+	 * starts, and terminates after workflow terminates. TODO 1. vm provision
+	 * time? 2. boot only when needed?
+	 * 
+	 * @return
+	 */
+	public static double getUnitPrice(List<Vm> vmlist) {
+		// TODO add more prices
+		ImmutableMap<String, Double> unit_price = ImmutableMap.<String, Double> builder().put("m1.small", 0.06) //
+				.put("m3.medium", 0.067) //
+				.put("m3.large", 0.133) //
+				.put("m3.xlarge", 0.266) //
+				.put("m3.2xlarge", 0.532) //
+				.put("m4.large", 0.1) //
+				.put("m4.xlarge", 0.2) //
+				.put("m4.2xlarge", 0.4) //
+				.put("m4.4xlarge", 0.8) //
+				.build();
+
+		double res = 0;
+		for (Vm v : vmlist) {
+			res += unit_price.get(v.getVmm());
+			// System.out.println(v.getVmm());
+		}
+		// System.out.println(res);
+		return res;
+
 	}
 
 	public static int getAvailableVmTypes() {
@@ -356,7 +383,7 @@ public class Infrastructure {
 					System.exit(-1);
 				}
 			}
-			
+
 			workflow.setCloudletNum(cloudletList.size());
 			Object[] res = new Object[] { cloudletList, workflow };
 			archieveCloudLets.put(ID, res);
