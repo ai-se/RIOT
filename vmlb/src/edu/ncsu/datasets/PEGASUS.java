@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class PEGASUS implements Dataset {
 	private CloudletPassport workflow;
 
 	public PEGASUS(int userid, int idshift, String problemName) {
-		tasks = new HashMap<String, MyCloudlet>();
+		tasks = new LinkedHashMap<String, MyCloudlet>();
 		workflow = new CloudletPassport();
 		this.userid = userid;
 		this.idshift = idshift;
@@ -86,7 +87,9 @@ public class PEGASUS implements Dataset {
 			String id = jobInfo.getAttribute("id");
 			tasks.put(id, createCloudlet(runtime));
 		}
-		tasks.put("entry", createCloudlet(1));
+		
+		// ATTENTION HERE!! must make sure the exec time for entry > minSimTime (0.1)
+		tasks.put("entry", createCloudlet(10)); 
 		tasks.put("exit", createCloudlet(1));
 
 		// step 2 create workflows
@@ -171,7 +174,7 @@ public class PEGASUS implements Dataset {
 	}
 
 	public static void main(String[] args) {
-		PEGASUS test = new PEGASUS(0, 0, "j30");
+		PEGASUS test = new PEGASUS(0, 0, "Inspiral_100");
 		 System.out.println(test.getCloudletList());
 		 System.out.println(test.getCloudletPassport());
 	}

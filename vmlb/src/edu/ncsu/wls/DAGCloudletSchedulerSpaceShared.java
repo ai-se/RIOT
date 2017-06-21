@@ -41,6 +41,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 	private CloudletPassport cp;
 	private int currentvmid = -1;
+	private int controlvmid = -2;
 
 	/**
 	 * ® Creates a new CloudletSchedulerSpaceShared object. This method must be
@@ -72,6 +73,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		for (ResCloudlet c : list)
 			res += c.getCloudletId();
 		res += "]";
+		Log.printLine(res);
 		return res;
 	}
 
@@ -80,7 +82,9 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	}
 
 	public void controlPrint(Object x) {
-		if (this.currentvmid == 0)
+		if (controlvmid == -2)
+			controlvmid = currentvmid;
+		if (currentvmid == controlvmid)
 			System.err.println(x);
 	}
 
@@ -107,7 +111,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		}
 
 		// no more cloudlets in this scheduler
-		if (getCloudletExecList().size() == 0 && getCloudletWaitingList().size() == 0) {
+		if (cp.isAllDone()) {
 			setPreviousTime(currentTime);
 			return 0.0;
 		}
@@ -368,6 +372,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	@Override
 	// NOTE: parameter fileTransferTime will be ignored here
 	public double cloudletSubmit(Cloudlet cloudlet, double fileTransferTime) {
+		// System.out.print(cloudlet);
 		if (this.currentvmid < 0)
 			this.currentvmid = cloudlet.getVmId();
 
@@ -406,7 +411,6 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 
 		currentCpus = cpus;
 		capacity /= cpus;
-
 		return cloudlet.getCloudletLength() / capacity;
 	}
 

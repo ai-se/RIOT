@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
@@ -209,11 +210,13 @@ public class Infrastructure {
 
 	/**
 	 * Creating data centers
+	 * 
 	 * @return
 	 */
 	public static Datacenter createDatacenter() {
 		return Infrastructure.createDatacenter(10);
 	}
+
 	// TODO entrance to modify Data center configurations
 	public static Datacenter createDatacenter(int reqVmNum) {
 		String name = DATACENTER_NAME;
@@ -279,85 +282,86 @@ public class Infrastructure {
 
 	public static Object[] getCaseCloudlets(String dataset, int brokerId) {
 		int ID = dataset.hashCode() + brokerId;
-		if (archieveCloudLets.containsKey(ID))
-			return archieveCloudLets.get(ID);
 
-		List<MyCloudlet> cloudletList = null;
-		CloudletPassport workflow = null;
+		if (!archieveCloudLets.containsKey(ID)) {
+			List<MyCloudlet> cloudletList = null;
+			CloudletPassport workflow = null;
 
-		switch (dataset) {
-		case "fmri":
-			FMRI fmri = new FMRI(brokerId, CLOUDLET_ID_SHIFT);
-			cloudletList = fmri.getCloudletList();
-			workflow = fmri.getCloudletPassport();
-			break;
-		case "eprotein":
-			Eprotein eprotein = new Eprotein(brokerId, CLOUDLET_ID_SHIFT);
-			cloudletList = eprotein.getCloudletList();
-			workflow = eprotein.getCloudletPassport();
-			break;
-		case "random":
-			Randomset rset = new Randomset(brokerId, CLOUDLET_ID_SHIFT, 10);
-			cloudletList = rset.getCloudletList();
-			workflow = rset.getCloudletPassport();
-			break;
-		case "j30_1":
-		case "j30":
-			PSPLIB psp1 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_1", 30);
-			cloudletList = psp1.getCloudletList();
-			workflow = psp1.getCloudletPassport();
-			break;
-		case "j30_2":
-			PSPLIB psp11 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_2", 30);
-			cloudletList = psp11.getCloudletList();
-			workflow = psp11.getCloudletPassport();
-			break;
-		case "j60_1":
-		case "j60":
-			PSPLIB psp2 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_1", 60);
-			cloudletList = psp2.getCloudletList();
-			workflow = psp2.getCloudletPassport();
-			break;
-		case "j60_2":
-			PSPLIB psp22 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_2", 60);
-			cloudletList = psp22.getCloudletList();
-			workflow = psp22.getCloudletPassport();
-			break;
-		case "j90_1":
-		case "j90":
-			PSPLIB psp3 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_1", 90);
-			cloudletList = psp3.getCloudletList();
-			workflow = psp3.getCloudletPassport();
-			break;
-		case "j90_2":
-			PSPLIB psp32 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_2", 90);
-			cloudletList = psp32.getCloudletList();
-			workflow = psp32.getCloudletPassport();
-			break;
-		case "j120_1":
-			PSPLIB psp4 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_1", 120);
-			cloudletList = psp4.getCloudletList();
-			workflow = psp4.getCloudletPassport();
-			break;
-		case "j120_2":
-			PSPLIB psp42 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_2", 120);
-			cloudletList = psp42.getCloudletList();
-			workflow = psp42.getCloudletPassport();
-			break;
-		default:
-			if (dataset.startsWith("sci_")) { // case Scientific Workflow
-				PEGASUS sciF = new PEGASUS(brokerId, CLOUDLET_ID_SHIFT, dataset.substring(4));
-				cloudletList = sciF.getCloudletList();
-				workflow = sciF.getCloudletPassport();
-			} else {
-				System.err.println("Check the dataset name");
-				System.exit(-1);
+			switch (dataset) {
+			case "fmri":
+				FMRI fmri = new FMRI(brokerId, CLOUDLET_ID_SHIFT);
+				cloudletList = fmri.getCloudletList();
+				workflow = fmri.getCloudletPassport();
+				break;
+			case "eprotein":
+				Eprotein eprotein = new Eprotein(brokerId, CLOUDLET_ID_SHIFT);
+				cloudletList = eprotein.getCloudletList();
+				workflow = eprotein.getCloudletPassport();
+				break;
+			case "random":
+				Randomset rset = new Randomset(brokerId, CLOUDLET_ID_SHIFT, 10);
+				cloudletList = rset.getCloudletList();
+				workflow = rset.getCloudletPassport();
+				break;
+			case "j30_1":
+			case "j30":
+				PSPLIB psp1 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_1", 30);
+				cloudletList = psp1.getCloudletList();
+				workflow = psp1.getCloudletPassport();
+				break;
+			case "j30_2":
+				PSPLIB psp11 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_2", 30);
+				cloudletList = psp11.getCloudletList();
+				workflow = psp11.getCloudletPassport();
+				break;
+			case "j60_1":
+			case "j60":
+				PSPLIB psp2 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_1", 60);
+				cloudletList = psp2.getCloudletList();
+				workflow = psp2.getCloudletPassport();
+				break;
+			case "j60_2":
+				PSPLIB psp22 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_2", 60);
+				cloudletList = psp22.getCloudletList();
+				workflow = psp22.getCloudletPassport();
+				break;
+			case "j90_1":
+			case "j90":
+				PSPLIB psp3 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_1", 90);
+				cloudletList = psp3.getCloudletList();
+				workflow = psp3.getCloudletPassport();
+				break;
+			case "j90_2":
+				PSPLIB psp32 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_2", 90);
+				cloudletList = psp32.getCloudletList();
+				workflow = psp32.getCloudletPassport();
+				break;
+			case "j120_1":
+				PSPLIB psp4 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_1", 120);
+				cloudletList = psp4.getCloudletList();
+				workflow = psp4.getCloudletPassport();
+				break;
+			case "j120_2":
+				PSPLIB psp42 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_2", 120);
+				cloudletList = psp42.getCloudletList();
+				workflow = psp42.getCloudletPassport();
+				break;
+			default:
+				if (dataset.startsWith("sci_")) { // case Scientific Workflow
+					PEGASUS sciF = new PEGASUS(brokerId, CLOUDLET_ID_SHIFT, dataset.substring(4));
+					cloudletList = sciF.getCloudletList();
+					workflow = sciF.getCloudletPassport();
+				} else {
+					System.err.println("Check the dataset name");
+					System.exit(-1);
+				}
 			}
+			
+			workflow.setCloudletNum(cloudletList.size());
+			Object[] res = new Object[] { cloudletList, workflow };
+			archieveCloudLets.put(ID, res);
 		}
-
-		Object[] res = new Object[] { cloudletList, workflow };
-		archieveCloudLets.put(ID, res);
-		return res;
+		return archieveCloudLets.get(ID);
 	}
 
 }

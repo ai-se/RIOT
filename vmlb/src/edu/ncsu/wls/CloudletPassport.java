@@ -23,7 +23,8 @@ public class CloudletPassport {
 	private List<Integer> receivedCloudletIds = new ArrayList<Integer>();
 	private HashMap<Cloudlet, HashMap<Cloudlet, Long>> files = new HashMap<Cloudlet, HashMap<Cloudlet, Long>>();
 	private HashMap<Cloudlet, Double> fileTransferTime = new HashMap<Cloudlet, Double>();
-
+	private int totalCloudletNum = 0;
+	
 	public CloudletPassport() {
 	}
 
@@ -57,6 +58,18 @@ public class CloudletPassport {
 	public void afterOneCloudletSuccess(Cloudlet cloudlet) {
 		this.receivedCloudletIds.add(cloudlet.getCloudletId());
 	}
+	
+	public void setCloudletNum(int totalCloudletNum){
+		this.totalCloudletNum = totalCloudletNum;
+	}
+	
+	public boolean isAllDone() {
+		if (totalCloudletNum == 0){
+			System.err.println("CHECK HERE"); // please setCloudletNum
+			System.exit(-1);
+		}
+		return receivedCloudletIds.size() == totalCloudletNum;
+	}
 
 	/**
 	 * Calculating/ pre-calc the required file-transfer times for each cloudlet
@@ -76,8 +89,7 @@ public class CloudletPassport {
 				int s = cList.indexOf(src);
 				int t = cList.indexOf(target);
 				if (task2ins[s] != task2ins[t]) {
-					long bw = Long.min(vmlist.get(task2ins[s]).getBw(),
-							vmlist.get(task2ins[t]).getBw());
+					long bw = Long.min(vmlist.get(task2ins[s]).getBw(), vmlist.get(task2ins[t]).getBw());
 					double time = fileTransferTime.get(src) + this.getFileTransferSize(src, target) / bw;
 					fileTransferTime.put(src, time);
 				} // if type not equal

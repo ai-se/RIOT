@@ -242,7 +242,7 @@ public class MinMax {
 	}
 
 	public static void main(String[] args) {
-		Map<Integer, Map<Integer, Double>> estTimeMatrix = getEstTimeMatrix("j90");
+		Map<Integer, Map<Integer, Double>> estTimeMatrix = getEstTimeMatrix("j30");
 		Map<Integer, Integer> res = minmin(estTimeMatrix);
 		System.out.println(res);
 	}

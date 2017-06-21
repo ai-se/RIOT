@@ -1,6 +1,7 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -140,7 +141,7 @@ public class VmsProblem extends Problem {
 	}
 
 	@Override
-	public void evaluate(Solution solution) throws JMException {
+	public void evaluate(Solution solution) {
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = new int[getNumberOfVariables()];
 		int[] task2ins = new int[getNumberOfVariables()];
@@ -151,6 +152,7 @@ public class VmsProblem extends Problem {
 			task2ins[var] = ((VmEncoding) decs[var]).getTask2ins();
 			ins2type[var] = ((VmEncoding) decs[var]).getIns2type();
 		}
+
 
 		// ****** starting cloudsim simulation
 		// Log.disable();
@@ -176,27 +178,31 @@ public class VmsProblem extends Problem {
 		List<MyCloudlet> cloudletList = (List<MyCloudlet>) info[0];
 		CloudletPassport workflow = (CloudletPassport) info[1];
 
+		// reset cloudlet to factory config
+		for (MyCloudlet c : cloudletList)
+			c.setCloudletFinishedSoFar(0);
+
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
 		vmlist = Infrastructure.createVms(dcBrokerId, task2ins, ins2type);
-		for (Vm vm : vmlist) {
-			if (vm == null)
-				continue;
-			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
-		}
 
 		// map task to vm
 		for (int var = 0; var < cloudletNum; var++)
 			cloudletList.get(var).setVmId(vmlist.get(task2ins[var]).getId());
 		workflow.calcFileTransferTimes(task2ins, vmlist, cloudletList);
+		
+		// binding global workflow to vm
 		vmlist.removeAll(Collections.singleton(null)); // remove null in vmlist
+		for (Vm vm : vmlist) {
+			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
+		}
 
 		// re-range cloudletList according to order
 		List<MyCloudlet> tmp = new ArrayList<MyCloudlet>();
+		
 		for (int i : order)
 			tmp.add(cloudletList.get(i));
 		broker.submitCloudletList(tmp);
-
 		broker.submitVmList(vmlist);
 
 		CloudSim.startSimulation();
@@ -207,6 +213,9 @@ public class VmsProblem extends Problem {
 
 		if (newList.size() != cloudletList.size()) {
 			System.err.println("can not simulating all cloudlets!");
+//			System.err.println(cloudletList.get(0).getStatus());
+//			System.out.println(Arrays.toString(task2ins));
+//			System.out.println(Arrays.toString(ins2type));
 			System.exit(-1);
 		}
 
@@ -228,13 +237,10 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("fmri", new Random());
-		// System.out.println(p.workflow);
-		Solution randS = new Solution(p);
-		p.evaluate(randS);
-		// for (int i = 0; i < 1; i++) {
-		// Solution randS = new Solution(p);
-		// p.evaluate(randS);
-		// }
+		VmsProblem p = new VmsProblem("sci_Inspiral_100", new Random());
+		for (int i = 0; i < 1; i++) {
+			Solution randS = new Solution(p);
+			p.evaluate(randS);
+		}
 	}
 }
