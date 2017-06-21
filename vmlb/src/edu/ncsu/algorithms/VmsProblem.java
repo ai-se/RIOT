@@ -153,7 +153,6 @@ public class VmsProblem extends Problem {
 			ins2type[var] = ((VmEncoding) decs[var]).getIns2type();
 		}
 
-
 		// ****** starting cloudsim simulation
 		// Log.disable();
 		// Create Cloudsim server
@@ -181,6 +180,7 @@ public class VmsProblem extends Problem {
 		// reset cloudlet to factory config
 		for (MyCloudlet c : cloudletList)
 			c.setCloudletFinishedSoFar(0);
+		workflow.rmCache();
 
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
@@ -190,7 +190,7 @@ public class VmsProblem extends Problem {
 		for (int var = 0; var < cloudletNum; var++)
 			cloudletList.get(var).setVmId(vmlist.get(task2ins[var]).getId());
 		workflow.calcFileTransferTimes(task2ins, vmlist, cloudletList);
-		
+
 		// binding global workflow to vm
 		vmlist.removeAll(Collections.singleton(null)); // remove null in vmlist
 		for (Vm vm : vmlist) {
@@ -199,7 +199,7 @@ public class VmsProblem extends Problem {
 
 		// re-range cloudletList according to order
 		List<MyCloudlet> tmp = new ArrayList<MyCloudlet>();
-		
+
 		for (int i : order)
 			tmp.add(cloudletList.get(i));
 		broker.submitCloudletList(tmp);
@@ -213,9 +213,9 @@ public class VmsProblem extends Problem {
 
 		if (newList.size() != cloudletList.size()) {
 			System.err.println("can not simulating all cloudlets!");
-//			System.err.println(cloudletList.get(0).getStatus());
-//			System.out.println(Arrays.toString(task2ins));
-//			System.out.println(Arrays.toString(ins2type));
+			// System.out.println(Arrays.toString(order));
+			// System.out.println(Arrays.toString(task2ins));
+			// System.out.println(Arrays.toString(ins2type));
 			System.exit(-1);
 		}
 
@@ -238,7 +238,7 @@ public class VmsProblem extends Problem {
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		VmsProblem p = new VmsProblem("sci_Inspiral_100", new Random());
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 20; i++) {
 			Solution randS = new Solution(p);
 			p.evaluate(randS);
 		}

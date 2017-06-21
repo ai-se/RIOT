@@ -28,6 +28,10 @@ public class CloudletPassport {
 	public CloudletPassport() {
 	}
 
+	public void rmCache(){
+		receivedCloudletIds.clear();
+	}
+	
 	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
 		if (!this.requiring.containsKey(to))
 			this.requiring.put(to, new ArrayList<Cloudlet>());

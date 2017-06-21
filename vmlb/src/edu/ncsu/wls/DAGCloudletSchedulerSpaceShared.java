@@ -372,7 +372,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	@Override
 	// NOTE: parameter fileTransferTime will be ignored here
 	public double cloudletSubmit(Cloudlet cloudlet, double fileTransferTime) {
-		// System.out.print(cloudlet);
+		// System.out.println("submitting " + cloudlet);
 		if (this.currentvmid < 0)
 			this.currentvmid = cloudlet.getVmId();
 
