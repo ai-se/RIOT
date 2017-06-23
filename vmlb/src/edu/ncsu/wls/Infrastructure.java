@@ -206,6 +206,7 @@ public class Infrastructure {
 	 * starts, and terminates after workflow terminates. TODO 1. vm provision
 	 * time? 2. boot only when needed?
 	 * 
+	 * https://aws.amazon.com/ec2/instance-types/
 	 * @return
 	 */
 	public static double getUnitPrice(List<Vm> vmlist) {

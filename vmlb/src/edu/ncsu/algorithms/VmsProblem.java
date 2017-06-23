@@ -1,11 +1,12 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
@@ -74,7 +75,7 @@ class VmEncoding extends Variable {
 
 	@Override
 	public Variable deepCopy() {
-		return new VmEncoding(task2ins, ins2type, taskInOrder);
+		return new VmEncoding(taskInOrder, task2ins, ins2type);
 	}
 
 }
@@ -99,8 +100,13 @@ class VMScheduleSolutionType extends SolutionType {
 	@Override
 	public Variable[] createVariables() {
 		Variable[] variables = new Variable[problem_.getNumberOfVariables()];
+		int[] tmp_orders = IntStream.range(0, problem_.getNumberOfVariables()).toArray();
+		List<Integer> orders = IntStream.of(tmp_orders).boxed().collect(Collectors.toList());
+
+		Collections.shuffle(orders, problem_.rand);
+
 		for (int var = 0; var < problem_.getNumberOfVariables(); var++) {
-			int order = var;
+			int order = orders.get(var);
 			int task2ins = rand.nextInt(problem_.getNumberOfVariables() - 1);
 			int ins2type = rand.nextInt(Infrastructure.getAvailableVmTypes());
 			variables[var] = new VmEncoding(order, task2ins, ins2type);
@@ -154,7 +160,7 @@ public class VmsProblem extends Problem {
 		}
 
 		// ****** starting cloudsim simulation
-		Log.disable();
+//		Log.disable();
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
@@ -223,7 +229,7 @@ public class VmsProblem extends Problem {
 		}
 
 		double cost = Infrastructure.getUnitPrice(vmlist) * makespan / 3600;
-		
+
 		System.out.println(makespan + " $" + cost);
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);

@@ -106,7 +106,7 @@ class VmsMutation extends Mutation {
 
 /**
  * Class implementing a generational genetic algorithm
- * 
+ * Modifying: execute() function. add some print out script
  * Copy and modify from
  * jmetal.metaheuristics.singleObjective.geneticAlgorithm.gGA
  */
