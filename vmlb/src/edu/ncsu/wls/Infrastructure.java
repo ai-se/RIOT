@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
@@ -29,6 +28,7 @@ import edu.ncsu.datasets.Randomset;
 public class Infrastructure {
 	public static final int VM_ID_SHIFT = 0;
 	public static final int CLOUDLET_ID_SHIFT = 0;
+	public static final int PEROID_BETWEEN_EVENTS = 1;
 	public static final String DATACENTER_NAME = "AWS_EC2";
 	// public static final String[] models = new String[] { "fmri", "eprotein",
 	// "j30_1", "j30_2", "j60_1", "j60_2",
@@ -125,7 +125,7 @@ public class Infrastructure {
 		ram = 4096;
 		pesNumber = 1;
 
-		double sdm = 1000;
+		double sdm = 100;
 
 		for (int i = 0; i <= Ints.max(ins); i++)
 			list.add(null);
@@ -207,6 +207,7 @@ public class Infrastructure {
 	 * time? 2. boot only when needed?
 	 * 
 	 * https://aws.amazon.com/ec2/instance-types/
+	 * 
 	 * @return
 	 */
 	public static double getUnitPrice(List<Vm> vmlist) {

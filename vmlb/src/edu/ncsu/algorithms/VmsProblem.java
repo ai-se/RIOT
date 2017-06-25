@@ -113,6 +113,7 @@ class VMScheduleSolutionType extends SolutionType {
 		}
 		return variables;
 	}
+
 }
 
 /**
@@ -125,6 +126,7 @@ public class VmsProblem extends Problem {
 	private static final long serialVersionUID = 6371615104008697832L;
 	public Random rand;
 	private int cloudletNum;
+	private int evalCount;
 	private List<MyCloudlet> cloudletList;
 	private CloudletPassport workflow;
 
@@ -144,10 +146,16 @@ public class VmsProblem extends Problem {
 		this.numberOfObjectives_ = 2; // TODO change this if needed
 
 		this.solutionType_ = new VMScheduleSolutionType(this, rand);
+
+		this.evalCount = 0;
 	}
 
 	@Override
 	public void evaluate(Solution solution) {
+		evalCount += 1;
+		if (evalCount % 100 == 0)
+			System.out
+					.println("Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = new int[getNumberOfVariables()];
 		int[] task2ins = new int[getNumberOfVariables()];
@@ -160,13 +168,13 @@ public class VmsProblem extends Problem {
 		}
 
 		// ****** starting cloudsim simulation
-//		Log.disable();
+		Log.disable();
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
 		boolean trace_flag = false; // trace events
 
-		CloudSim.init(num_user, calendar, trace_flag);
+		CloudSim.init(num_user, calendar, trace_flag, Infrastructure.PEROID_BETWEEN_EVENTS);
 		Infrastructure.createDatacenter(this.cloudletNum);
 		OnlineDatacenterBroker broker = null;
 		try {
@@ -230,7 +238,7 @@ public class VmsProblem extends Problem {
 
 		double cost = Infrastructure.getUnitPrice(vmlist) * makespan / 3600;
 
-		System.out.println(makespan + " $" + cost);
+		// System.out.println(makespan + " $" + cost);
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);
 	}

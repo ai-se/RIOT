@@ -184,9 +184,11 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		for (ResCloudlet rcl : getCloudletExecList()) {
 			double remainingLength = rcl.getRemainingCloudletLength();
 			double estimatedFinishTime = currentTime + (remainingLength / (capacity * rcl.getNumberOfPes()));
-			if (estimatedFinishTime - currentTime < CloudSim.getMinTimeBetweenEvents()) {
-				estimatedFinishTime = currentTime + CloudSim.getMinTimeBetweenEvents();
-			}
+			// if (estimatedFinishTime - currentTime <
+			// CloudSim.getMinTimeBetweenEvents()) {
+			// estimatedFinishTime = currentTime +
+			// CloudSim.getMinTimeBetweenEvents();
+			// }
 			if (estimatedFinishTime < nextEvent) {
 				nextEvent = estimatedFinishTime;
 			}

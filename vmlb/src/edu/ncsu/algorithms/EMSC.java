@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.google.common.primitives.Ints;
+
 import jmetal.core.Algorithm;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
@@ -36,27 +38,27 @@ class ZhuCrossover extends Crossover {
 		randomChangeProbability_ = (Double) parameters.get("randomChangeProbability");
 	}
 
-	private void debugs(Solution s) {
-		Variable[] decs = s.getDecisionVariables();
-		int varLength = decs.length;
-
-		int[] order = new int[varLength];
-		int[] task2ins = new int[varLength];
-		int[] ins2type = new int[varLength];
-
-		for (int v = 0; v < varLength; v++) {
-			VmEncoding var = (VmEncoding) decs[v];
-			order[v] = var.getOrder();
-			task2ins[v] = var.getTask2ins();
-			ins2type[v] = var.getIns2type();
-		}
-		System.out.println(Arrays.toString(order));
-		System.out.println(Arrays.toString(task2ins));
-		System.out.println(Arrays.toString(ins2type));
-		System.out.println("------");
-		System.out.println();
-
-	}
+	// private void debugs(Solution s) {
+	// Variable[] decs = s.getDecisionVariables();
+	// int varLength = decs.length;
+	//
+	// int[] order = new int[varLength];
+	// int[] task2ins = new int[varLength];
+	// int[] ins2type = new int[varLength];
+	//
+	// for (int v = 0; v < varLength; v++) {
+	// VmEncoding var = (VmEncoding) decs[v];
+	// order[v] = var.getOrder();
+	// task2ins[v] = var.getTask2ins();
+	// ins2type[v] = var.getIns2type();
+	// }
+	// System.out.println(Arrays.toString(order));
+	// System.out.println(Arrays.toString(task2ins));
+	// System.out.println(Arrays.toString(ins2type));
+	// System.out.println("------");
+	// System.out.println();
+	//
+	// }
 
 	/*
 	 * Implements sect 4.3.1 in Zhu's paper ATTENTION: in this code repo, the
@@ -185,14 +187,84 @@ class ZhuCrossover extends Crossover {
 
 class ZhuMutation extends Mutation {
 	private static final long serialVersionUID = 3956833626877416282L;
-	private Double mutationProbability_ = null;
+	private double mutationProbability_;
+	private double bitMutationProbability_;
 
 	public ZhuMutation(HashMap<String, Object> parameters) {
 		super(parameters);
-		mutationProbability_ = (Double) parameters.get("probability");
+		mutationProbability_ = (double) parameters.get("probability");
+		bitMutationProbability_ = (double) parameters.get("bitMutationProbability");
 	}
 
-	private void debugs(Solution s) {
+	// private void debugs(Solution s) {
+	// Variable[] decs = s.getDecisionVariables();
+	// int varLength = decs.length;
+	//
+	// int[] order = new int[varLength];
+	// int[] task2ins = new int[varLength];
+	// int[] ins2type = new int[varLength];
+	//
+	// for (int v = 0; v < varLength; v++) {
+	// VmEncoding var = (VmEncoding) decs[v];
+	// order[v] = var.getOrder();
+	// task2ins[v] = var.getTask2ins();
+	// ins2type[v] = var.getIns2type();
+	// }
+	// System.out.println(Arrays.toString(order));
+	// System.out.println(Arrays.toString(task2ins));
+	// System.out.println(Arrays.toString(ins2type));
+	// System.out.println("------");
+	// System.out.println();
+	//
+	// }
+
+	@Override
+	public Object execute(Object object) throws JMException {
+		Solution solution = (Solution) object;
+		if (PseudoRandom.randDouble() < mutationProbability_) {
+			// 1, fetch configurations
+			Variable[] decs = solution.getDecisionVariables();
+			int varLength = decs.length;
+
+			int[] order = new int[varLength];
+			int[] task2ins = new int[varLength];
+			int[] ins2type = new int[varLength];
+
+			for (int v = 0; v < varLength; v++) {
+				VmEncoding var = (VmEncoding) decs[v];
+				order[v] = var.getOrder();
+				task2ins[v] = var.getTask2ins();
+				ins2type[v] = var.getIns2type();
+			}
+
+			// 2, mutate the orders.
+			// pick two locations, swap them
+			int i = PseudoRandom.randInt(0, varLength - 1);
+			int j = PseudoRandom.randInt(0, varLength - 1);
+
+			int tmp = ((VmEncoding) decs[i]).getOrder();
+			((VmEncoding) decs[i]).setOrder(((VmEncoding) decs[j]).getOrder());
+			((VmEncoding) decs[j]).setOrder(tmp);
+
+			// 3, mutate task2ins and ins2type
+			int maxIns = Ints.max(task2ins);
+			int maxType = Ints.max(ins2type);
+			for (int v = 0; v < varLength; v++) {
+				VmEncoding var = (VmEncoding) decs[v];
+				if (PseudoRandom.randDouble() < bitMutationProbability_)
+					var.setTask2ins(PseudoRandom.randInt(0, maxIns));
+				if (PseudoRandom.randDouble() < bitMutationProbability_)
+					var.setIns2Type(PseudoRandom.randInt(0, maxType));
+			}
+		}
+		// debugs(solution);
+		return solution;
+	}
+
+}
+
+public class EMSC {
+	private static void debugs(Solution s) {
 		Variable[] decs = s.getDecisionVariables();
 		int varLength = decs.length;
 
@@ -214,43 +286,23 @@ class ZhuMutation extends Mutation {
 
 	}
 
-	@Override
-	public Object execute(Object object) throws JMException {
-		Solution solution = (Solution) object;
-		// if (PseudoRandom.randDouble() < mutationProbability_) {
-		// // 1, fetch configurations
-		// Variable[] decs = solution.getDecisionVariables();
-		// int varLength = decs.length;
-		//
-		// int[] order = new int[varLength];
-		// int[] task2ins = new int[varLength];
-		// int[] ins2type = new int[varLength];
-		//
-		// for (int v = 0; v < varLength; v++) {
-		// VmEncoding var = (VmEncoding) decs[v];
-		// order[v] = var.getOrder();
-		// task2ins[v] = var.getTask2ins();
-		// ins2type[v] = var.getIns2type();
-		// }
-		//
-		// // 2, mutate the orders
-		//// System.out.println(Arrays.toString(order));
-		// }
-
-		debugs(solution);
-		return solution;
-	}
-
-}
-
-public class EMSC {
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		VmsProblem problem_ = new VmsProblem("j30", new Random(322));
+		VmsProblem problem_ = new VmsProblem("sci_Epigenomics_46", new Random());
 		Algorithm alg = new NSGAII(problem_);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
-		alg.setInputParameter("populationSize", 16); //WARNING MUST BE EVEN
-		alg.setInputParameter("maxEvaluations", 100);
+		/** for all MOEA */
+		alg.setInputParameter("populationSize", 50); // WARNING MUST BE EVEN
+		alg.setInputParameter("maxEvaluations", 1000);
+
+		/** for nsga-ii only */
+		alg.setInputParameter("archiveSize", 10); // for NSGA-II
+
+		// /** for moead only **/
+		// alg.setInputParameter("dataDirectory", "");
+		// alg.setInputParameter("T", 5); // default (int) 0.1 * populationSize
+		// alg.setInputParameter("delta", 0.9); // default 0.9
+		// alg.setInputParameter("nr", 1); // default (int) 0.01* populationSize
 
 		parameters.clear();
 		parameters.put("probability", 0.6);
@@ -259,9 +311,10 @@ public class EMSC {
 
 		parameters.clear();
 		parameters.put("probability", 0.8);
+		parameters.put("bitMutationProbability", 0.4);
 		Mutation mutation = new ZhuMutation(parameters);
 
-		parameters = null;
+		parameters.clear();
 		Selection selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters);
 
 		alg.addOperator("crossover", crossover);
@@ -271,7 +324,7 @@ public class EMSC {
 		SolutionSet p = alg.execute();
 		for (int v = 0; v < p.size(); v++) {
 			System.out.println(p.get(v).getObjective(0) + " " + p.get(v).getObjective(1));
-
+			debugs(p.get(v));
 		}
 	}
 }
