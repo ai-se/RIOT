@@ -1,6 +1,7 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -249,6 +250,28 @@ public class VmsProblem extends Problem {
 
 	public CloudletPassport getWorkflow() {
 		return workflow;
+	}
+
+	public void printSolution(Solution s) {
+		Variable[] decs = s.getDecisionVariables();
+		int varLength = decs.length;
+
+		int[] order = new int[varLength];
+		int[] task2ins = new int[varLength];
+		int[] ins2type = new int[varLength];
+
+		for (int v = 0; v < varLength; v++) {
+			VmEncoding var = (VmEncoding) decs[v];
+			order[v] = var.getOrder();
+			task2ins[v] = var.getTask2ins();
+			ins2type[v] = var.getIns2type();
+		}
+		System.out.println(Arrays.toString(order));
+		System.out.println(Arrays.toString(task2ins));
+		System.out.println(Arrays.toString(ins2type));
+		System.out.println("------");
+		System.out.println();
+
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {

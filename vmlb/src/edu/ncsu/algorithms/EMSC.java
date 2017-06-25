@@ -1,6 +1,5 @@
 package edu.ncsu.algorithms;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -38,28 +37,6 @@ class ZhuCrossover extends Crossover {
 		randomChangeProbability_ = (Double) parameters.get("randomChangeProbability");
 	}
 
-	// private void debugs(Solution s) {
-	// Variable[] decs = s.getDecisionVariables();
-	// int varLength = decs.length;
-	//
-	// int[] order = new int[varLength];
-	// int[] task2ins = new int[varLength];
-	// int[] ins2type = new int[varLength];
-	//
-	// for (int v = 0; v < varLength; v++) {
-	// VmEncoding var = (VmEncoding) decs[v];
-	// order[v] = var.getOrder();
-	// task2ins[v] = var.getTask2ins();
-	// ins2type[v] = var.getIns2type();
-	// }
-	// System.out.println(Arrays.toString(order));
-	// System.out.println(Arrays.toString(task2ins));
-	// System.out.println(Arrays.toString(ins2type));
-	// System.out.println("------");
-	// System.out.println();
-	//
-	// }
-
 	/*
 	 * Implements sect 4.3.1 in Zhu's paper ATTENTION: in this code repo, the
 	 * order can be randomly shuffle, regardless of the workflow-- the
@@ -75,9 +52,6 @@ class ZhuCrossover extends Crossover {
 
 		offspring[0] = new Solution(parents[0]);
 		offspring[1] = new Solution(parents[1]);
-		// debugs(parents[0]);
-		// debugs(offspring[0]);
-		// debugs(offspring[1]);
 
 		if (PseudoRandom.randDouble() < crossoverProbability_) {
 			int varLength = parents[0].getDecisionVariables().length;
@@ -88,8 +62,6 @@ class ZhuCrossover extends Crossover {
 				swap((VmEncoding) offspring[0].getDecisionVariables()[var],
 						(VmEncoding) offspring[1].getDecisionVariables()[var]);
 			}
-			// debugs(offspring[0]);
-			// debugs(offspring[1]);
 			// 2nd, handle conflict ins2type. See fig 6 in Zhu's paper
 			VmEncoding[] var0 = new VmEncoding[varLength];
 			VmEncoding[] var1 = new VmEncoding[varLength];
@@ -109,9 +81,6 @@ class ZhuCrossover extends Crossover {
 				otypes1[i] = var1[i].getIns2type();
 			}
 
-			// debugs(offspring[0]);
-			// debugs(offspring[1]);
-
 			// 2.1 DecideType for offspring[0]
 			for (int var = 0; var <= cxPoint; var++) {
 				int nins = instance0[var];
@@ -126,9 +95,6 @@ class ZhuCrossover extends Crossover {
 					var0[nins].setIns2Type(s);
 				}
 			}
-
-			// debugs(offspring[0]);
-			// debugs(offspring[1]);
 
 			// 2.2 DecideType for offspring[1]
 			for (int var = 0; var <= cxPoint; var++) {
@@ -145,8 +111,6 @@ class ZhuCrossover extends Crossover {
 				} // if i== -1
 			} // for 2.2
 
-			// debugs(offspring[0]);
-			// debugs(offspring[1]);
 		} // if rand double
 		return offspring;
 	}
@@ -196,28 +160,6 @@ class ZhuMutation extends Mutation {
 		bitMutationProbability_ = (double) parameters.get("bitMutationProbability");
 	}
 
-	// private void debugs(Solution s) {
-	// Variable[] decs = s.getDecisionVariables();
-	// int varLength = decs.length;
-	//
-	// int[] order = new int[varLength];
-	// int[] task2ins = new int[varLength];
-	// int[] ins2type = new int[varLength];
-	//
-	// for (int v = 0; v < varLength; v++) {
-	// VmEncoding var = (VmEncoding) decs[v];
-	// order[v] = var.getOrder();
-	// task2ins[v] = var.getTask2ins();
-	// ins2type[v] = var.getIns2type();
-	// }
-	// System.out.println(Arrays.toString(order));
-	// System.out.println(Arrays.toString(task2ins));
-	// System.out.println(Arrays.toString(ins2type));
-	// System.out.println("------");
-	// System.out.println();
-	//
-	// }
-
 	@Override
 	public Object execute(Object object) throws JMException {
 		Solution solution = (Solution) object;
@@ -264,54 +206,48 @@ class ZhuMutation extends Mutation {
 }
 
 public class EMSC {
-	private static void debugs(Solution s) {
-		Variable[] decs = s.getDecisionVariables();
-		int varLength = decs.length;
-
-		int[] order = new int[varLength];
-		int[] task2ins = new int[varLength];
-		int[] ins2type = new int[varLength];
-
-		for (int v = 0; v < varLength; v++) {
-			VmEncoding var = (VmEncoding) decs[v];
-			order[v] = var.getOrder();
-			task2ins[v] = var.getTask2ins();
-			ins2type[v] = var.getIns2type();
-		}
-		System.out.println(Arrays.toString(order));
-		System.out.println(Arrays.toString(task2ins));
-		System.out.println(Arrays.toString(ins2type));
-		System.out.println("------");
-		System.out.println();
-
+	public void execNSGAII(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
+		execNSGAII((String) para.get("dataset"), //
+				(int) para.get("popSize"), //
+				(int) para.get("maxEval"), //
+				(double) para.get("cxProb"), //
+				(double) para.get("cxRandChangeProb"), //
+				(double) para.get("mutProb"), //
+				(double) para.get("bitMutProb"), //
+				(long) para.get("seed"));
 	}
 
-	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		VmsProblem problem_ = new VmsProblem("sci_Epigenomics_46", new Random());
+	public void execSPEAs(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
+		execSPEA2((String) para.get("dataset"), //
+				(int) para.get("popSize"), //
+				(int) para.get("maxEval"), //
+				(int) para.get("arxvSize"), //
+				(double) para.get("cxProb"), //
+				(double) para.get("cxRandChangeProb"), //
+				(double) para.get("mutProb"), //
+				(double) para.get("bitMutProb"), //
+				(long) para.get("seed"));
+	}
+
+	public void execNSGAII(String dataset, int popSize, int maxEval, double cxProb, double cxRandChangeProb,
+			double mutProb, double bitMutProb, long seed) throws JMException, ClassNotFoundException {
+		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
 		Algorithm alg = new NSGAII(problem_);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
 		/** for all MOEA */
-		alg.setInputParameter("populationSize", 50); // WARNING MUST BE EVEN
-		alg.setInputParameter("maxEvaluations", 1000);
-
-		/** for nsga-ii only */
-		alg.setInputParameter("archiveSize", 10); // for NSGA-II
-
-		// /** for moead only **/
-		// alg.setInputParameter("dataDirectory", "");
-		// alg.setInputParameter("T", 5); // default (int) 0.1 * populationSize
-		// alg.setInputParameter("delta", 0.9); // default 0.9
-		// alg.setInputParameter("nr", 1); // default (int) 0.01* populationSize
+		alg.setInputParameter("populationSize", popSize); // WARNING MUST BE
+															// EVEN
+		alg.setInputParameter("maxEvaluations", maxEval);
 
 		parameters.clear();
-		parameters.put("probability", 0.6);
-		parameters.put("randomChangeProbability", 0.1);
+		parameters.put("probability", cxProb);
+		parameters.put("randomChangeProbability", cxRandChangeProb);
 		Crossover crossover = new ZhuCrossover(parameters);
 
 		parameters.clear();
-		parameters.put("probability", 0.8);
-		parameters.put("bitMutationProbability", 0.4);
+		parameters.put("probability", mutProb);
+		parameters.put("bitMutationProbability", bitMutProb);
 		Mutation mutation = new ZhuMutation(parameters);
 
 		parameters.clear();
@@ -324,7 +260,61 @@ public class EMSC {
 		SolutionSet p = alg.execute();
 		for (int v = 0; v < p.size(); v++) {
 			System.out.println(p.get(v).getObjective(0) + " " + p.get(v).getObjective(1));
-			debugs(p.get(v));
+			problem_.printSolution(p.get(v));
 		}
+	}
+
+	public void execSPEA2(String dataset, int popSize, int maxEval, int arxvSzie, double cxProb,
+			double cxRandChangeProb, double mutProb, double bitMutProb, long seed)
+			throws JMException, ClassNotFoundException {
+		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
+		Algorithm alg = new NSGAII(problem_);
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+
+		/** for all MOEA */
+		alg.setInputParameter("populationSize", popSize); // WARNING MUST BE
+															// EVEN
+		alg.setInputParameter("maxEvaluations", maxEval);
+		/** for spea2 only */
+		alg.setInputParameter("archiveSize", arxvSzie); // for spea2
+
+		parameters.clear();
+		parameters.put("probability", cxProb);
+		parameters.put("randomChangeProbability", cxRandChangeProb);
+		Crossover crossover = new ZhuCrossover(parameters);
+
+		parameters.clear();
+		parameters.put("probability", mutProb);
+		parameters.put("bitMutationProbability", bitMutProb);
+		Mutation mutation = new ZhuMutation(parameters);
+
+		parameters.clear();
+		Selection selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters);
+
+		alg.addOperator("crossover", crossover);
+		alg.addOperator("mutation", mutation);
+		alg.addOperator("selection", selection);
+
+		SolutionSet p = alg.execute();
+		for (int v = 0; v < p.size(); v++) {
+			System.out.println(p.get(v).getObjective(0) + " " + p.get(v).getObjective(1));
+			problem_.printSolution(p.get(v));
+		}
+	}
+
+	public static void main(String[] args) throws JMException, ClassNotFoundException {
+		HashMap<String, Object> paras = new HashMap<String, Object>();
+		paras.put("dataset", "sci_Epigenomics_46");
+		paras.put("seed", System.currentTimeMillis());
+		paras.put("popSize", 50);
+		paras.put("maxEval", 1000);
+		paras.put("archiveSize", 10); // spea2 used only
+		paras.put("cxProb", 0.6);
+		paras.put("cxRandChangeProb", 0.1);
+		paras.put("mutProb", 0.8);
+		paras.put("bitMutProb", 0.4);
+
+		EMSC runner = new EMSC();
+		runner.execNSGAII(paras);
 	}
 }
