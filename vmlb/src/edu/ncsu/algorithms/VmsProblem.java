@@ -129,6 +129,7 @@ public class VmsProblem extends Problem {
 	private int cloudletNum;
 	private int evalCount;
 	private List<MyCloudlet> cloudletList;
+
 	private CloudletPassport workflow;
 
 	private String name;
@@ -250,6 +251,17 @@ public class VmsProblem extends Problem {
 
 	public CloudletPassport getWorkflow() {
 		return workflow;
+	}
+
+	public List<MyCloudlet> getCloudletList() {
+		return cloudletList;
+	}
+
+	public List<Cloudlet> getCloudletList2() {
+		List<Cloudlet> l = new ArrayList<Cloudlet>();
+		for (MyCloudlet c : cloudletList)
+			l.add((Cloudlet) c);
+		return l;
 	}
 
 	public void printSolution(Solution s) {

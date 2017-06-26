@@ -24,14 +24,14 @@ public class CloudletPassport {
 	private HashMap<Cloudlet, HashMap<Cloudlet, Long>> files = new HashMap<Cloudlet, HashMap<Cloudlet, Long>>();
 	private HashMap<Cloudlet, Double> fileTransferTime = new HashMap<Cloudlet, Double>();
 	private int totalCloudletNum = 0;
-	
+
 	public CloudletPassport() {
 	}
 
-	public void rmCache(){
+	public void rmCache() {
 		receivedCloudletIds.clear();
 	}
-	
+
 	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
 		if (!this.requiring.containsKey(to))
 			this.requiring.put(to, new ArrayList<Cloudlet>());
@@ -62,13 +62,13 @@ public class CloudletPassport {
 	public void afterOneCloudletSuccess(Cloudlet cloudlet) {
 		this.receivedCloudletIds.add(cloudlet.getCloudletId());
 	}
-	
-	public void setCloudletNum(int totalCloudletNum){
+
+	public void setCloudletNum(int totalCloudletNum) {
 		this.totalCloudletNum = totalCloudletNum;
 	}
-	
+
 	public boolean isAllDone() {
-		if (totalCloudletNum == 0){
+		if (totalCloudletNum == 0) {
 			System.err.println("CHECK HERE"); // please setCloudletNum
 			System.exit(-1);
 		}
@@ -130,6 +130,13 @@ public class CloudletPassport {
 
 	public HashMap<Cloudlet, List<Cloudlet>> getRequiring() {
 		return requiring;
+	}
+
+	public List<Cloudlet> meRequires(Cloudlet me) {
+		if (!requiring.containsKey(me))
+			return new ArrayList<Cloudlet>();
+
+		return requiring.get(me);
 	}
 
 	public String toString() {
