@@ -206,8 +206,8 @@ class ZhuMutation extends Mutation {
 }
 
 public class EMSC {
-	public void execNSGAII(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
-		execNSGAII((String) para.get("dataset"), //
+	public SolutionSet execNSGAII(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
+		return execNSGAII((String) para.get("dataset"), //
 				(int) para.get("popSize"), //
 				(int) para.get("maxEval"), //
 				(double) para.get("cxProb"), //
@@ -217,8 +217,8 @@ public class EMSC {
 				(long) para.get("seed"));
 	}
 
-	public void execSPEAs(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
-		execSPEA2((String) para.get("dataset"), //
+	public SolutionSet execSPEA2(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
+		return execSPEA2((String) para.get("dataset"), //
 				(int) para.get("popSize"), //
 				(int) para.get("maxEval"), //
 				(int) para.get("arxvSize"), //
@@ -229,7 +229,7 @@ public class EMSC {
 				(long) para.get("seed"));
 	}
 
-	public void execNSGAII(String dataset, int popSize, int maxEval, double cxProb, double cxRandChangeProb,
+	public SolutionSet execNSGAII(String dataset, int popSize, int maxEval, double cxProb, double cxRandChangeProb,
 			double mutProb, double bitMutProb, long seed) throws JMException, ClassNotFoundException {
 		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
 		Algorithm alg = new NSGAII(problem_);
@@ -262,9 +262,11 @@ public class EMSC {
 			System.out.println(p.get(v).getObjective(0) + " " + p.get(v).getObjective(1));
 			problem_.printSolution(p.get(v));
 		}
+
+		return p;
 	}
 
-	public void execSPEA2(String dataset, int popSize, int maxEval, int arxvSzie, double cxProb,
+	public SolutionSet execSPEA2(String dataset, int popSize, int maxEval, int arxvSzie, double cxProb,
 			double cxRandChangeProb, double mutProb, double bitMutProb, long seed)
 			throws JMException, ClassNotFoundException {
 		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
@@ -300,15 +302,17 @@ public class EMSC {
 			System.out.println(p.get(v).getObjective(0) + " " + p.get(v).getObjective(1));
 			problem_.printSolution(p.get(v));
 		}
+
+		return p;
 	}
 
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
 		HashMap<String, Object> paras = new HashMap<String, Object>();
-		paras.put("dataset", "sci_Epigenomics_46");
+		paras.put("dataset", "j30");
 		paras.put("seed", System.currentTimeMillis());
 		paras.put("popSize", 50);
 		paras.put("maxEval", 1000);
-		paras.put("archiveSize", 10); // spea2 used only
+		paras.put("arxvSize", 10); // spea2 used only
 		paras.put("cxProb", 0.6);
 		paras.put("cxRandChangeProb", 0.1);
 		paras.put("mutProb", 0.8);
