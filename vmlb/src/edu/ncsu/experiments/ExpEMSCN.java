@@ -34,7 +34,7 @@ public class ExpEMSCN {
 			models = Infrastructure.models;
 
 		Log.disable();
-		File file = new File("emsc-nsgaii.csv");
+		File file = new File("emsc-nsgaii.txt");
 
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
 		exp_para.put("popSize", 50);
