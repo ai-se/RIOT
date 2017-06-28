@@ -1,13 +1,15 @@
 package edu.ncsu.wls;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeSet;
+import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Vm;
+import org.cloudbus.cloudsim.core.CloudSim;
 
 /**
  * 
@@ -20,22 +22,37 @@ import org.cloudbus.cloudsim.Vm;
 
 public class CloudletPassport {
 	private HashMap<Cloudlet, List<Cloudlet>> requiring = new HashMap<Cloudlet, List<Cloudlet>>();
-	private List<Integer> receivedCloudletIds = new ArrayList<Integer>();
+	private HashMap<Cloudlet, List<Cloudlet>> contributeTo = new HashMap<Cloudlet, List<Cloudlet>>();
+	private int receivedCloudletNum = 0;
 	private HashMap<Cloudlet, HashMap<Cloudlet, Long>> files = new HashMap<Cloudlet, HashMap<Cloudlet, Long>>();
 	private HashMap<Cloudlet, Double> fileTransferTime = new HashMap<Cloudlet, Double>();
 	private int totalCloudletNum = 0;
+	private TreeSet<Double> globalNextEvent = new TreeSet<Double>();
+
+	// ready 0-notCalc 1-ready 2-notReady 3-Always ready(no requires)
+	private int[] readyed = new int[5000]; // TODO assume 5k cloudlets at max
 
 	public CloudletPassport() {
 	}
 
 	public void rmCache() {
-		receivedCloudletIds.clear();
+		receivedCloudletNum = 0;
+		globalNextEvent.clear();
+		globalNextEvent.add(CloudSim.getMinTimeBetweenEvents());
+
+		if (IntStream.of(readyed).sum() != 0) // not the first time to rmCache
+			for (int i = 0; i < totalCloudletNum; i++)
+				readyed[i] = readyed[i] != 3 ? 2 : 3; // set 1 or 2 to 2
 	}
 
 	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
 		if (!this.requiring.containsKey(to))
 			this.requiring.put(to, new ArrayList<Cloudlet>());
 		this.requiring.get(to).add(from);
+
+		if (!this.contributeTo.containsKey(from))
+			this.contributeTo.put(from, new ArrayList<Cloudlet>());
+		this.contributeTo.get(from).add(to);
 	}
 
 	public void setFilesBetween(Cloudlet from, Cloudlet to, long fileSize) {
@@ -44,23 +61,41 @@ public class CloudletPassport {
 		files.get(from).put(to, fileSize);
 	}
 
-	public boolean isCloudletPrepared(Cloudlet cloudlet) {
-		// Log.printLine("checking passing? at" + cloudlet.getCloudletId());
-		if (!this.requiring.containsKey(cloudlet) || this.requiring.get(cloudlet).size() == 0) {
-			return true;
-		}
+	public synchronized boolean isCloudletPrepared(Cloudlet cloudlet) {
+		int index = cloudlet.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
 
-		for (Cloudlet requirement : this.requiring.get(cloudlet))
-			if (!this.receivedCloudletIds.contains(requirement.getCloudletId())) {
-				// Log.printLine("We're checking cloudlet and found fail at ***
-				// " + cloudlet.getCloudletId());
+		switch (readyed[index]) {
+		case 3:
+			return true;
+		case 2:
+			return false;
+		case 1:
+			return true;
+		case 0:
+			if (!this.hasPred(cloudlet)) {
+				readyed[index] = 3;
+				return true;
+			} else {
+				readyed[index] = 2;
 				return false;
 			}
-		return true;
+		}
+		return false; // not touch
 	}
 
-	public void afterOneCloudletSuccess(Cloudlet cloudlet) {
-		this.receivedCloudletIds.add(cloudlet.getCloudletId());
+	public synchronized void afterOneCloudletSuccess(Cloudlet cloudlet) {
+		receivedCloudletNum += 1;
+		if (contributeTo.containsKey(cloudlet))
+			for (Cloudlet p : contributeTo.get(cloudlet))
+				readyed[p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT] = 1;
+	}
+
+	public synchronized void setNextEvent(double v) {
+		this.globalNextEvent.add(v);
+	}
+
+	public synchronized double getNextEvent(double currentTime) {
+		return this.globalNextEvent.higher(currentTime);
 	}
 
 	public void setCloudletNum(int totalCloudletNum) {
@@ -72,7 +107,7 @@ public class CloudletPassport {
 			System.err.println("CHECK HERE"); // please setCloudletNum
 			System.exit(-1);
 		}
-		return receivedCloudletIds.size() == totalCloudletNum;
+		return receivedCloudletNum == totalCloudletNum;
 	}
 
 	/**
@@ -122,9 +157,8 @@ public class CloudletPassport {
 	}
 
 	public boolean hasSucc(Cloudlet x) {
-		for (Cloudlet c : requiring.keySet())
-			if (requiring.get(c).contains(x))
-				return true;
+		if (contributeTo.containsKey(x) && contributeTo.get(x).size() > 0)
+			return true;
 		return false;
 	}
 

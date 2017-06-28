@@ -84,13 +84,12 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	public void controlPrint(Object x) {
 		if (controlvmid == -2)
 			controlvmid = currentvmid;
-		if (currentvmid == 0)
+		if (currentvmid == controlvmid)
 			System.err.println(x);
 	}
 
 	@Override
 	public double updateVmProcessing(double currentTime, List<Double> mipsShare) {
-		this.controlPrint(currentTime);
 		setCurrentMipsShare(mipsShare);
 		double timeSpam = currentTime - getPreviousTime(); // time since last
 															// update
@@ -173,9 +172,10 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			// Still need to wait for other requirements
 			if (toRemove.size() == 0) {
 				setPreviousTime(currentTime);
-				// we don't know when the other requirements can f	inished, have
+				// we don't know when the other requirements can f inished, have
 				// to wait and re-check very frequently!
-				return currentTime + CloudSim.getMinTimeBetweenEvents();
+				// return currentTime + CloudSim.getMinTimeBetweenEvents();
+				return cp.getNextEvent(currentTime);
 			}
 			getCloudletWaitingList().removeAll(toRemove);
 		}
@@ -193,6 +193,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			}
 		}
 		setPreviousTime(currentTime);
+		cp.setNextEvent(nextEvent);
 		return nextEvent;
 	}
 
