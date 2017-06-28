@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.google.common.primitives.Ints;
 
+import edu.ncsu.wls.Infrastructure;
 import jmetal.core.Algorithm;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
@@ -306,19 +307,27 @@ public class EMSC {
 		return p;
 	}
 
+	/**
+	 * This is a DEMOSTRATION of EMSC algorithm. To do experiments, go to
+	 * edu.ncsu.experiments
+	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		HashMap<String, Object> paras = new HashMap<String, Object>();
-		paras.put("dataset", "j30");
-		paras.put("seed", System.currentTimeMillis());
-		paras.put("popSize", 50);
-		paras.put("maxEval", 1000);
-		paras.put("arxvSize", 10); // spea2 used only
-		paras.put("cxProb", 0.6);
-		paras.put("cxRandChangeProb", 0.1);
-		paras.put("mutProb", 0.8);
-		paras.put("bitMutProb", 0.4);
-
-		EMSC runner = new EMSC();
-		runner.execNSGAII(paras);
+		for (String model : Infrastructure.models) {
+			System.out.println("Starting : " + model);
+			HashMap<String, Object> paras = new HashMap<String, Object>();
+			paras.put("dataset", model);
+			paras.put("seed", System.currentTimeMillis());
+			paras.put("popSize", 50);
+			paras.put("maxEval", 50);
+			paras.put("arxvSize", 10); // spea2 used only
+			paras.put("cxProb", 0.6);
+			paras.put("cxRandChangeProb", 0.1);
+			paras.put("mutProb", 0.8);
+			paras.put("bitMutProb", 0.4);
+			long start_time = System.currentTimeMillis();
+			EMSC runner = new EMSC();
+			runner.execSPEA2(paras);
+			System.out.println("EXEC TIME = " + (System.currentTimeMillis() - start_time) / 1000);
+		}
 	}
 }

@@ -39,7 +39,6 @@ public class ExpEMSCN {
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
 		exp_para.put("popSize", 50);
 		exp_para.put("maxEval", 50*1000);
-		exp_para.put("archiveSize", 10); // spea2 used only
 		exp_para.put("cxProb", 0.6);
 		exp_para.put("cxRandChangeProb", 0.1);
 		exp_para.put("mutProb", 0.8);

@@ -84,12 +84,13 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	public void controlPrint(Object x) {
 		if (controlvmid == -2)
 			controlvmid = currentvmid;
-		if (currentvmid == controlvmid)
+		if (currentvmid == 0)
 			System.err.println(x);
 	}
 
 	@Override
 	public double updateVmProcessing(double currentTime, List<Double> mipsShare) {
+		this.controlPrint(currentTime);
 		setCurrentMipsShare(mipsShare);
 		double timeSpam = currentTime - getPreviousTime(); // time since last
 															// update
@@ -172,7 +173,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			// Still need to wait for other requirements
 			if (toRemove.size() == 0) {
 				setPreviousTime(currentTime);
-				// we don't know when the other requirements can finished, have
+				// we don't know when the other requirements can f	inished, have
 				// to wait and re-check very frequently!
 				return currentTime + CloudSim.getMinTimeBetweenEvents();
 			}
@@ -184,11 +185,9 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		for (ResCloudlet rcl : getCloudletExecList()) {
 			double remainingLength = rcl.getRemainingCloudletLength();
 			double estimatedFinishTime = currentTime + (remainingLength / (capacity * rcl.getNumberOfPes()));
-			// if (estimatedFinishTime - currentTime <
-			// CloudSim.getMinTimeBetweenEvents()) {
-			// estimatedFinishTime = currentTime +
-			// CloudSim.getMinTimeBetweenEvents();
-			// }
+			if (estimatedFinishTime - currentTime < CloudSim.getMinTimeBetweenEvents()) {
+				estimatedFinishTime = currentTime + CloudSim.getMinTimeBetweenEvents();
+			}
 			if (estimatedFinishTime < nextEvent) {
 				nextEvent = estimatedFinishTime;
 			}

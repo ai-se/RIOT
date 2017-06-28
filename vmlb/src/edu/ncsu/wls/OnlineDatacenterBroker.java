@@ -55,7 +55,7 @@ public class OnlineDatacenterBroker extends DatacenterBroker {
 			break;
 		case CloudSimTags.VM_MIGRATE:
 			// processVmMigrate(ev);
-			System.out.println("debuging message... vm migration...");
+			System.err.println("debuging message... vm migration...");
 			break;
 		// other unknown tags are processed by this method
 		default:
