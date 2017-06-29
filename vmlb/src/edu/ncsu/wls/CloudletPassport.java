@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
+import org.cloudbus.cloudsim.ResCloudlet;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
@@ -27,9 +28,10 @@ public class CloudletPassport {
 	private HashMap<Cloudlet, HashMap<Cloudlet, Long>> files = new HashMap<Cloudlet, HashMap<Cloudlet, Long>>();
 	private HashMap<Cloudlet, Double> fileTransferTime = new HashMap<Cloudlet, Double>();
 	private int totalCloudletNum = 0;
-	private TreeSet<Double> globalNextEvent = new TreeSet<Double>();
+	// private TreeSet<Double> globalNextEvent = new TreeSet<Double>();
 
-	// ready 0-notCalc 1-ready 2-notReady 3-Always ready(no requires)
+	// ready 0-notCalc -2-notReady -1-Always ready(no requires) x-ready after
+	// moment x
 	private int[] readyed = new int[5000]; // TODO assume 5k cloudlets at max
 
 	public CloudletPassport() {
@@ -37,12 +39,12 @@ public class CloudletPassport {
 
 	public void rmCache() {
 		receivedCloudletNum = 0;
-		globalNextEvent.clear();
-		globalNextEvent.add(CloudSim.getMinTimeBetweenEvents());
+		// globalNextEvent.clear();
+		// globalNextEvent.add(CloudSim.getMinTimeBetweenEvents());
 
 		if (IntStream.of(readyed).sum() != 0) // not the first time to rmCache
 			for (int i = 0; i < totalCloudletNum; i++)
-				readyed[i] = readyed[i] != 3 ? 2 : 3; // set 1 or 2 to 2
+				readyed[i] = readyed[i] == -1 ? -1 : -2;
 	}
 
 	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
@@ -61,41 +63,54 @@ public class CloudletPassport {
 		files.get(from).put(to, fileSize);
 	}
 
-	public synchronized boolean isCloudletPrepared(Cloudlet cloudlet) {
+	public synchronized boolean isCloudletPrepared(Cloudlet cloudlet, int currentTime) {
 		int index = cloudlet.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
 
 		switch (readyed[index]) {
-		case 3:
-			return true;
-		case 2:
+		case -2:
 			return false;
-		case 1:
+		case -1:
 			return true;
 		case 0:
 			if (!this.hasPred(cloudlet)) {
-				readyed[index] = 3;
+				readyed[index] = -1;
 				return true;
 			} else {
-				readyed[index] = 2;
+				readyed[index] = -2;
 				return false;
 			}
+		default: // positive x
+			return currentTime >= readyed[index];
 		}
-		return false; // not touch
 	}
 
-	public synchronized void afterOneCloudletSuccess(Cloudlet cloudlet) {
+	public synchronized void afterOneCloudletSuccess(Cloudlet cloudlet, int currentTime) {
 		receivedCloudletNum += 1;
 		if (contributeTo.containsKey(cloudlet))
-			for (Cloudlet p : contributeTo.get(cloudlet))
-				readyed[p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT] = 1;
+			for (Cloudlet p : contributeTo.get(cloudlet)) {
+				int pindex = p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
+				if (readyed[pindex] == -2 || readyed[pindex] == 0)
+					readyed[pindex] = currentTime;
+			}
 	}
 
-	public synchronized void setNextEvent(double v) {
-		this.globalNextEvent.add(v);
-	}
-
-	public synchronized double getNextEvent(double currentTime) {
-		return this.globalNextEvent.higher(currentTime);
+	// public synchronized void setNextEvent(double v) {
+	// this.globalNextEvent.add(v);
+	// }
+	//
+	public synchronized double getNextEvent(List<ResCloudlet> waitingList, int currentTime) {
+		double res = Double.MAX_VALUE;
+		for (ResCloudlet p : waitingList) {
+			int pindex = p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
+			// if (readyed[pindex] == -2 || readyed[pindex] == 0)
+			// return currentTime + CloudSim.getMinTimeBetweenEvents();
+			// else
+				if (readyed[pindex] < res)
+				res = readyed[pindex];
+		}
+		if (res == Double.MAX_VALUE)
+			return currentTime + CloudSim.getMinTimeBetweenEvents();
+		return res;
 	}
 
 	public void setCloudletNum(int totalCloudletNum) {

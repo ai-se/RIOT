@@ -2,6 +2,7 @@ package edu.ncsu.wls;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletScheduler;
@@ -84,7 +85,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 	public void controlPrint(Object x) {
 		if (controlvmid == -2)
 			controlvmid = currentvmid;
-		if (currentvmid == controlvmid)
+		if (currentvmid == 6)
 			System.err.println(x);
 	}
 
@@ -126,6 +127,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			if (rcl.getRemainingCloudletLength() == 0) {
 				toRemove.add(rcl);
 				cloudletFinish(rcl);
+				cp.afterOneCloudletSuccess(rcl.getCloudlet(), (int) currentTime);
 				finished++;
 			}
 		}
@@ -138,7 +140,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 				toRemove.clear();
 				for (ResCloudlet rcl : getCloudletWaitingList()) {
 					if ((currentCpus - usedPes) >= rcl.getNumberOfPes()
-							&& this.cp.isCloudletPrepared(rcl.getCloudlet())) {
+							&& this.cp.isCloudletPrepared(rcl.getCloudlet(), (int) currentTime)) {
 						rcl.setCloudletStatus(Cloudlet.INEXEC);
 						for (int k = 0; k < rcl.getNumberOfPes(); k++) {
 							rcl.setMachineAndPeId(0, i);
@@ -157,7 +159,8 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		toRemove.clear();
 		if (this.usedPes == 0 && getCloudletWaitingList().size() > 0) {
 			for (ResCloudlet rcl : getCloudletWaitingList()) {
-				if ((currentCpus - usedPes) >= rcl.getNumberOfPes() && this.cp.isCloudletPrepared(rcl.getCloudlet())) {
+				if ((currentCpus - usedPes) >= rcl.getNumberOfPes()
+						&& this.cp.isCloudletPrepared(rcl.getCloudlet(), (int) currentTime)) {
 					rcl.setCloudletStatus(Cloudlet.INEXEC);
 					for (int k = 0; k < rcl.getNumberOfPes(); k++) {
 						rcl.setMachineAndPeId(0, i++);
@@ -172,16 +175,17 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 			// Still need to wait for other requirements
 			if (toRemove.size() == 0) {
 				setPreviousTime(currentTime);
-				// we don't know when the other requirements can f inished, have
+				// we don't know when the other requirements can finished, have
 				// to wait and re-check very frequently!
 				// return currentTime + CloudSim.getMinTimeBetweenEvents();
-				return cp.getNextEvent(currentTime);
+				return cp.getNextEvent(this.getCloudletWaitingList(), (int) currentTime);
 			}
 			getCloudletWaitingList().removeAll(toRemove);
 		}
 
 		// estimate finish time of cloudlets in the execution queue
 		double nextEvent = Double.MAX_VALUE;
+
 		for (ResCloudlet rcl : getCloudletExecList()) {
 			double remainingLength = rcl.getRemainingCloudletLength();
 			double estimatedFinishTime = currentTime + (remainingLength / (capacity * rcl.getNumberOfPes()));
@@ -192,8 +196,10 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 				nextEvent = estimatedFinishTime;
 			}
 		}
+
 		setPreviousTime(currentTime);
-		cp.setNextEvent(nextEvent);
+		// cp.setNextEvent(nextEvent);
+
 		return nextEvent;
 	}
 
@@ -303,7 +309,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		rcl.finalizeCloudlet();
 		getCloudletFinishedList().add(rcl);
 		usedPes -= rcl.getNumberOfPes();
-		this.cp.afterOneCloudletSuccess(rcl.getCloudlet());
+		// this.cp.afterOneCloudletSuccess(rcl.getCloudlet());
 	}
 
 	@Override
@@ -396,7 +402,7 @@ public class DAGCloudletSchedulerSpaceShared extends CloudletScheduler {
 		cloudlet.setCloudletLength(length);
 
 		// it can go to the exec list
-		if ((currentCpus - usedPes) >= cloudlet.getNumberOfPes() && cp.isCloudletPrepared(cloudlet)) {
+		if ((currentCpus - usedPes) >= cloudlet.getNumberOfPes() && cp.isCloudletPrepared(cloudlet, 0)) {
 			ResCloudlet rcl = new ResCloudlet(cloudlet);
 			rcl.setCloudletStatus(Cloudlet.INEXEC);
 			for (int i = 0; i < cloudlet.getNumberOfPes(); i++) {

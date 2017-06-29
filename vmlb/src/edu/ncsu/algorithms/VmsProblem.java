@@ -158,6 +158,7 @@ public class VmsProblem extends Problem {
 		if (evalCount % 100 == 0 || evalCount == 1)
 			System.out
 					.println("Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
+
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = new int[getNumberOfVariables()];
 		int[] task2ins = new int[getNumberOfVariables()];
@@ -171,7 +172,7 @@ public class VmsProblem extends Problem {
 
 		// ****** starting cloudsim simulation
 		long s1 = System.currentTimeMillis();
-		// System.err.println("\n\ngo!");
+
 		 Log.disable();
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
@@ -189,7 +190,7 @@ public class VmsProblem extends Problem {
 
 		int dcBrokerId = broker.getId();
 		long s2 = System.currentTimeMillis();
-		// System.err.println(s2 - s1 + " A");
+
 		// Get dataset
 		Object[] info = Infrastructure.getCaseCloudlets(this.name, broker.getId());
 		@SuppressWarnings("unchecked")
@@ -202,6 +203,7 @@ public class VmsProblem extends Problem {
 		workflow.rmCache();
 		long s3 = System.currentTimeMillis();
 		// System.err.println(s3 - s2 + " B");
+
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
 		vmlist = Infrastructure.createVms(dcBrokerId, task2ins, ins2type);
@@ -218,6 +220,7 @@ public class VmsProblem extends Problem {
 		}
 		long s4 = System.currentTimeMillis();
 		// System.err.println(s4 - s3 + " C");
+
 		// re-range cloudletList according to order
 		List<MyCloudlet> tmp = new ArrayList<MyCloudlet>();
 
@@ -228,16 +231,20 @@ public class VmsProblem extends Problem {
 
 		long s5 = System.currentTimeMillis();
 		// System.err.println(s5 - s4 + " D");
+
 		CloudSim.startSimulation();
 		CloudSim.stopSimulation();
 		long s6 = System.currentTimeMillis();
 		// System.err.println(s6 - s5 + " E");
+
 		List<Cloudlet> newList = broker.getCloudletReceivedList();
 		MyCloudSimHelper.printCloudletList(newList);
 
 		if (newList.size() != cloudletList.size()) {
 			System.err.println("can not simulating all cloudlets!");
-			System.exit(-1);
+			 MyCloudSimHelper.forcePrintCloudList(newList);
+			 System.exit(-1);
+			return;
 		}
 
 		// calculating objectives
@@ -253,10 +260,10 @@ public class VmsProblem extends Problem {
 		solution.setObjective(1, cost);
 		long s7 = System.currentTimeMillis();
 		// System.err.println(s7 - s6 + " F");
-		 System.err.println(System.currentTimeMillis() - s1);
-//		System.out.println("makespan = " + makespan);
-//		System.out.println("cost = " + cost);
-//		System.out.println();
+		System.err.println(System.currentTimeMillis() - s1);
+		// System.out.println("makespan = " + makespan);
+		// System.out.println("cost = " + cost);
+		// System.out.println();
 	}
 
 	public int randInt(int bound) {
@@ -301,7 +308,7 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_Epigenomics_997", new Random(36));
+		VmsProblem p = new VmsProblem("sci_Epigenomics_997", new Random(3));
 		for (int i = 0; i < 100; i++) {
 			Solution randS = new Solution(p);
 			p.evaluate(randS);

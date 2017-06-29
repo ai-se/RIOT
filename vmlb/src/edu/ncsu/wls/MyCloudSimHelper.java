@@ -21,6 +21,11 @@ public class MyCloudSimHelper {
 		return org;
 	}
 
+	public static void forcePrintCloudList(List<Cloudlet> list) {
+		Log.enable();
+		printCloudletList(list);
+	}
+
 	public static void printCloudletList(List<Cloudlet> list) {
 		int size = list.size();
 		Cloudlet cloudlet;
