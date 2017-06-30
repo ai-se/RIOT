@@ -9,7 +9,7 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 
-import edu.ncsu.wls.CloudletPassport;
+import edu.ncsu.wls.CloudletDAG;
 import edu.ncsu.wls.MyCloudlet;
 
 /**
@@ -28,11 +28,11 @@ public class FMRI implements Dataset {
 	private int userid; // TODO assuming single user at this time
 	private double starttime = 0.1; // TODO Set start time?
 	private Map<String, MyCloudlet> tasks;
-	private CloudletPassport workflow;
+	private CloudletDAG workflow;
 
 	public FMRI(int userid, int idshift) {
 		tasks = new HashMap<String, MyCloudlet>();
-		workflow = new CloudletPassport();
+		workflow = new CloudletDAG();
 		this.idshift = idshift;
 		this.userid = userid;
 
@@ -50,7 +50,7 @@ public class FMRI implements Dataset {
 		return cloudletList;
 	}
 
-	public CloudletPassport getCloudletPassport() {
+	public CloudletDAG getCloudletPassport() {
 		return workflow;
 	}
 

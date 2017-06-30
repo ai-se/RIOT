@@ -5,13 +5,13 @@ import java.util.List;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 
-import edu.ncsu.wls.CloudletPassport;
+import edu.ncsu.wls.CloudletDAG;
 import edu.ncsu.wls.MyCloudlet;
 
 public class Randomset implements Dataset {
 	private double starttime = 0.1; // TODO Set start time?
 	private List<MyCloudlet> cloudletList;
-	private CloudletPassport workflow;
+	private CloudletDAG workflow;
 
 	public Randomset(int userid, int idshift, int cloudlets) {
 		// cloudlet parameters
@@ -31,7 +31,7 @@ public class Randomset implements Dataset {
 			this.cloudletList.add(cloudlet[i]);
 		}
 
-		workflow = new CloudletPassport();
+		workflow = new CloudletDAG();
 		workflow.addCloudWorkflow(cloudletList.get(3), cloudletList.get(2));
 		workflow.addCloudWorkflow(cloudletList.get(4), cloudletList.get(2));
 		workflow.addCloudWorkflow(cloudletList.get(2), cloudletList.get(1));
@@ -44,7 +44,7 @@ public class Randomset implements Dataset {
 	}
 
 	@Override
-	public CloudletPassport getCloudletPassport() {
+	public CloudletDAG getCloudletPassport() {
 		return workflow;
 	}
 }

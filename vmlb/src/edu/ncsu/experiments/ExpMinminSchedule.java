@@ -17,8 +17,8 @@ import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
 import edu.ncsu.algorithms.MinMax;
-import edu.ncsu.wls.CloudletPassport;
-import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
+import edu.ncsu.wls.CloudletDAG;
+import edu.ncsu.wls.DAGCentralScheduler;
 import edu.ncsu.wls.Infrastructure;
 import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
@@ -33,7 +33,7 @@ import edu.ncsu.wls.OnlineDatacenterBroker;
  */
 public class ExpMinminSchedule {
 	static List<MyCloudlet> cloudletList;
-	static CloudletPassport workflow;
+	static CloudletDAG workflow;
 
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> core(String dataset, Map<Integer, Integer> mapping) {
@@ -58,12 +58,12 @@ public class ExpMinminSchedule {
 		Object[] info;
 		info = Infrastructure.getCaseCloudlets(dataset, broker.getId());
 		cloudletList = (List<MyCloudlet>) info[0];
-		workflow = (CloudletPassport) info[1];
+		workflow = (CloudletDAG) info[1];
 
 		List<Vm> vmlist = new ArrayList<Vm>();
 		vmlist = Infrastructure.createVms(dcBrokerId);
 		for (Vm vm : vmlist)
-			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
+			((DAGCentralScheduler) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
 		Collections.shuffle(cloudletList);
 
 		// **** VM Assignment

@@ -19,7 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import edu.ncsu.wls.CloudletPassport;
+import edu.ncsu.wls.CloudletDAG;
 import edu.ncsu.wls.MyCloudlet;
 
 /**
@@ -36,11 +36,11 @@ public class PEGASUS implements Dataset {
 	private double starttime = 0.1; // TODO Set start time?
 
 	private Map<String, MyCloudlet> tasks;
-	private CloudletPassport workflow;
+	private CloudletDAG workflow;
 
 	public PEGASUS(int userid, int idshift, String problemName) {
 		tasks = new LinkedHashMap<String, MyCloudlet>();
-		workflow = new CloudletPassport();
+		workflow = new CloudletDAG();
 		this.userid = userid;
 		this.idshift = idshift;
 		this.problemName = problemName;
@@ -169,7 +169,7 @@ public class PEGASUS implements Dataset {
 	}
 
 	@Override
-	public CloudletPassport getCloudletPassport() {
+	public CloudletDAG getCloudletPassport() {
 		return this.workflow;
 	}
 

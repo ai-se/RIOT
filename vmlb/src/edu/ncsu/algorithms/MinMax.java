@@ -12,8 +12,8 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
-import edu.ncsu.wls.CloudletPassport;
-import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
+import edu.ncsu.wls.CloudletDAG;
+import edu.ncsu.wls.DAGCentralScheduler;
 import edu.ncsu.wls.Infrastructure;
 import edu.ncsu.wls.MyCloudlet;
 import edu.ncsu.wls.OnlineDatacenterBroker;
@@ -61,12 +61,12 @@ public class MinMax {
 			vmlist = Infrastructure.createVms(dcBrokerId);
 			vmNum = vmlist.size();
 
-			CloudletPassport workflow = new CloudletPassport(); // in MinMin or
+			CloudletDAG workflow = new CloudletDAG(); // in MinMin or
 																// MinMax, we
 																// ignore
 																// the DAG
 			for (Vm vm : vmlist)
-				((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
+				((DAGCentralScheduler) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
 
 			broker.submitCloudletList(cloudletList);
 			broker.submitVmList(vmlist);

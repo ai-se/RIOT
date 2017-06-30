@@ -17,8 +17,8 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
-import edu.ncsu.wls.CloudletPassport;
-import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
+import edu.ncsu.wls.CloudletDAG;
+import edu.ncsu.wls.DAGCentralScheduler;
 import edu.ncsu.wls.Infrastructure;
 import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
@@ -32,7 +32,7 @@ import edu.ncsu.wls.OnlineDatacenterBroker;
  */
 public class RandomSchedule {
 	static List<MyCloudlet> cloudletList;
-	static CloudletPassport workflow;
+	static CloudletDAG workflow;
 
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> core(String[] args) {
@@ -65,10 +65,10 @@ public class RandomSchedule {
 			info = Infrastructure.getCaseCloudlets("random", broker.getId());
 		}
 		cloudletList = (List<MyCloudlet>) info[0];
-		workflow = (CloudletPassport) info[1];
+		workflow = (CloudletDAG) info[1];
 
 		for (Vm vm : vmlist)
-			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
+			((DAGCentralScheduler) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
 		Collections.shuffle(cloudletList);
 
 		// Random Assign cloudlet to vms

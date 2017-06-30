@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.TreeSet;
 import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.ResCloudlet;
 import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.core.CloudSim;
 
 /**
  * 
@@ -21,30 +18,23 @@ import org.cloudbus.cloudsim.core.CloudSim;
  * 
  */
 
-public class CloudletPassport {
+public class CloudletDAG {
 	private HashMap<Cloudlet, List<Cloudlet>> requiring = new HashMap<Cloudlet, List<Cloudlet>>();
 	private HashMap<Cloudlet, List<Cloudlet>> contributeTo = new HashMap<Cloudlet, List<Cloudlet>>();
-	private int receivedCloudletNum = 0;
 	private HashMap<Cloudlet, HashMap<Cloudlet, Long>> files = new HashMap<Cloudlet, HashMap<Cloudlet, Long>>();
 	private HashMap<Cloudlet, Double> fileTransferTime = new HashMap<Cloudlet, Double>();
-	private int totalCloudletNum = 0;
-	// private TreeSet<Double> globalNextEvent = new TreeSet<Double>();
+	public int totalCloudletNum = 0;
 
-	// ready 0-notCalc -2-notReady -1-Always ready(no requires) x-ready after
-	// moment x
+	// ready 0-notCalc 1-notReady 2-Ready -1-Always ready(no requires)
 	private int[] readyed = new int[5000]; // TODO assume 5k cloudlets at max
 
-	public CloudletPassport() {
+	public CloudletDAG() {
 	}
 
 	public void rmCache() {
-		receivedCloudletNum = 0;
-		// globalNextEvent.clear();
-		// globalNextEvent.add(CloudSim.getMinTimeBetweenEvents());
-
-		if (IntStream.of(readyed).sum() != 0) // not the first time to rmCache
+		if (IntStream.of(readyed).sum() != 0) // not the first time rmCache
 			for (int i = 0; i < totalCloudletNum; i++)
-				readyed[i] = readyed[i] == -1 ? -1 : -2;
+				readyed[i] = readyed[i] == -1 ? -1 : 1;
 	}
 
 	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
@@ -63,12 +53,14 @@ public class CloudletPassport {
 		files.get(from).put(to, fileSize);
 	}
 
-	public synchronized boolean isCloudletPrepared(Cloudlet cloudlet, int currentTime) {
+	public synchronized boolean isCloudletPrepared(Cloudlet cloudlet) {
 		int index = cloudlet.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
 
 		switch (readyed[index]) {
-		case -2:
+		case 1:
 			return false;
+		case 2:
+			return true;
 		case -1:
 			return true;
 		case 0:
@@ -76,53 +68,25 @@ public class CloudletPassport {
 				readyed[index] = -1;
 				return true;
 			} else {
-				readyed[index] = -2;
+				readyed[index] = 1;
 				return false;
 			}
-		default: // positive x
-			return currentTime >= readyed[index];
+
 		}
+		return true;
 	}
 
-	public synchronized void afterOneCloudletSuccess(Cloudlet cloudlet, int currentTime) {
-		receivedCloudletNum += 1;
+	public synchronized void afterOneCloudletSuccess(Cloudlet cloudlet) {
 		if (contributeTo.containsKey(cloudlet))
 			for (Cloudlet p : contributeTo.get(cloudlet)) {
 				int pindex = p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
-				if (readyed[pindex] == -2 || readyed[pindex] == 0)
-					readyed[pindex] = currentTime;
+				if (readyed[pindex] != -1)
+					readyed[pindex] = 2;
 			}
-	}
-
-	// public synchronized void setNextEvent(double v) {
-	// this.globalNextEvent.add(v);
-	// }
-	//
-	public synchronized double getNextEvent(List<ResCloudlet> waitingList, int currentTime) {
-		double res = Double.MAX_VALUE;
-		for (ResCloudlet p : waitingList) {
-			int pindex = p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
-			// if (readyed[pindex] == -2 || readyed[pindex] == 0)
-			// return currentTime + CloudSim.getMinTimeBetweenEvents();
-			// else
-				if (readyed[pindex] < res)
-				res = readyed[pindex];
-		}
-		if (res == Double.MAX_VALUE)
-			return currentTime + CloudSim.getMinTimeBetweenEvents();
-		return res;
 	}
 
 	public void setCloudletNum(int totalCloudletNum) {
 		this.totalCloudletNum = totalCloudletNum;
-	}
-
-	public boolean isAllDone() {
-		if (totalCloudletNum == 0) {
-			System.err.println("CHECK HERE"); // please setCloudletNum
-			System.exit(-1);
-		}
-		return receivedCloudletNum == totalCloudletNum;
 	}
 
 	/**

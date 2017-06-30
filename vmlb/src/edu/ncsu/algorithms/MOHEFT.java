@@ -8,7 +8,7 @@ import java.util.Random;
 
 import org.cloudbus.cloudsim.Cloudlet;
 
-import edu.ncsu.wls.CloudletPassport;
+import edu.ncsu.wls.CloudletDAG;
 import jmetal.core.Algorithm;
 import jmetal.core.Problem;
 import jmetal.core.SolutionSet;
@@ -43,7 +43,7 @@ class MOHEFTcore extends Algorithm {
 	 */
 	private List<Cloudlet> bRank(VmsProblem p) {
 		List<Cloudlet> cloudlets = p.getCloudletList2();
-		CloudletPassport cp = p.getWorkflow();
+		CloudletDAG cp = p.getWorkflow();
 
 		Map<Cloudlet, Integer> upwardRank = new HashMap<Cloudlet, Integer>();
 

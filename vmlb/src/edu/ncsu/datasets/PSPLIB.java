@@ -12,7 +12,7 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 
-import edu.ncsu.wls.CloudletPassport;
+import edu.ncsu.wls.CloudletDAG;
 import edu.ncsu.wls.MyCloudlet;
 
 /**
@@ -32,11 +32,11 @@ public class PSPLIB implements Dataset {
 	private int taskNum;
 
 	private Map<String, MyCloudlet> tasks;
-	private CloudletPassport workflow;
+	private CloudletDAG workflow;
 
 	public PSPLIB(int userid, int idshift, String version, int taskNum) {
 		tasks = new HashMap<String, MyCloudlet>();
-		workflow = new CloudletPassport();
+		workflow = new CloudletDAG();
 		this.idshift = idshift;
 		this.userid = userid;
 		this.version = version;
@@ -54,7 +54,7 @@ public class PSPLIB implements Dataset {
 		return cloudletList;
 	}
 
-	public CloudletPassport getCloudletPassport() {
+	public CloudletDAG getCloudletPassport() {
 		return workflow;
 	}
 

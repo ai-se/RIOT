@@ -14,8 +14,8 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
-import edu.ncsu.wls.CloudletPassport;
-import edu.ncsu.wls.DAGCloudletSchedulerSpaceShared;
+import edu.ncsu.wls.CloudletDAG;
+import edu.ncsu.wls.DAGCentralScheduler;
 import edu.ncsu.wls.Infrastructure;
 import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.MyCloudlet;
@@ -130,7 +130,7 @@ public class VmsProblem extends Problem {
 	private int evalCount;
 	private List<MyCloudlet> cloudletList;
 
-	private CloudletPassport workflow;
+	private CloudletDAG workflow;
 
 	private String name;
 
@@ -142,7 +142,7 @@ public class VmsProblem extends Problem {
 		Object[] tmpInfo = Infrastructure.getCaseCloudlets(this.name, -1);
 		cloudletList = (List<MyCloudlet>) tmpInfo[0];
 		cloudletNum = cloudletList.size();
-		workflow = (CloudletPassport) (tmpInfo[1]);
+		workflow = (CloudletDAG) (tmpInfo[1]);
 
 		this.numberOfVariables_ = this.cloudletNum;
 		this.numberOfObjectives_ = 2; // TODO change this if needed
@@ -173,7 +173,7 @@ public class VmsProblem extends Problem {
 		// ****** starting cloudsim simulation
 		long s1 = System.currentTimeMillis();
 
-		 Log.disable();
+		Log.disable();
 		// Create Cloudsim server
 		int num_user = 1; // number of cloud users
 		Calendar calendar = Calendar.getInstance();
@@ -195,7 +195,7 @@ public class VmsProblem extends Problem {
 		Object[] info = Infrastructure.getCaseCloudlets(this.name, broker.getId());
 		@SuppressWarnings("unchecked")
 		List<MyCloudlet> cloudletList = (List<MyCloudlet>) info[0];
-		CloudletPassport workflow = (CloudletPassport) info[1];
+		CloudletDAG workflow = (CloudletDAG) info[1];
 
 		// reset cloudlet to factory config
 		for (MyCloudlet c : cloudletList)
@@ -215,9 +215,12 @@ public class VmsProblem extends Problem {
 
 		// binding global workflow to vm
 		vmlist.removeAll(Collections.singleton(null)); // remove null in vmlist
-		for (Vm vm : vmlist) {
-			((DAGCloudletSchedulerSpaceShared) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
+		for (Vm vm : vmlist.subList(0, 1)) { // ATTENTION: NOW SHARE SAME
+												// DAGCENTRALSCHEDULER
+			((DAGCentralScheduler) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
+			((DAGCentralScheduler) (vm.getCloudletScheduler())).setVmList(vmlist);
 		}
+
 		long s4 = System.currentTimeMillis();
 		// System.err.println(s4 - s3 + " C");
 
@@ -242,8 +245,9 @@ public class VmsProblem extends Problem {
 
 		if (newList.size() != cloudletList.size()) {
 			System.err.println("can not simulating all cloudlets!");
-			 MyCloudSimHelper.forcePrintCloudList(newList);
-			 System.exit(-1);
+			System.err.println("left # = " + (cloudletList.size() - newList.size()));
+			MyCloudSimHelper.forcePrintCloudList(newList);
+			System.exit(-1);
 			return;
 		}
 
@@ -255,12 +259,12 @@ public class VmsProblem extends Problem {
 
 		double cost = Infrastructure.getUnitPrice(vmlist) * makespan / 3600;
 
-		// System.out.println(makespan + " $" + cost);
+		System.out.println(makespan + " $" + cost);
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);
 		long s7 = System.currentTimeMillis();
 		// System.err.println(s7 - s6 + " F");
-		System.err.println(System.currentTimeMillis() - s1);
+		// System.err.println(System.currentTimeMillis() - s1);
 		// System.out.println("makespan = " + makespan);
 		// System.out.println("cost = " + cost);
 		// System.out.println();
@@ -270,7 +274,7 @@ public class VmsProblem extends Problem {
 		return this.rand.nextInt(bound);
 	}
 
-	public CloudletPassport getWorkflow() {
+	public CloudletDAG getWorkflow() {
 		return workflow;
 	}
 
@@ -308,8 +312,8 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_Epigenomics_997", new Random(3));
-		for (int i = 0; i < 100; i++) {
+		VmsProblem p = new VmsProblem("sci_Epigenomics_997", new Random(15188));
+		for (int i = 0; i < 30; i++) {
 			Solution randS = new Solution(p);
 			p.evaluate(randS);
 		}

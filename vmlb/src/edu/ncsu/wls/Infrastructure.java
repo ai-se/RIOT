@@ -69,7 +69,7 @@ public class Infrastructure {
 		bw = 1000;
 		pesNumber = 2; // number of cpus
 		vmm = "t2.medium"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
 
 		// =========================
 		size = 8000; // image size (MB)
@@ -78,7 +78,7 @@ public class Infrastructure {
 		bw = 1000;
 		pesNumber = 1; // number of cpus
 		vmm = "t2.small"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
 
 		// =========================
 		size = 8000; // image size (MB)
@@ -87,7 +87,7 @@ public class Infrastructure {
 		bw = 1000;
 		pesNumber = 1; // number of cpus
 		vmm = "t2.small"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
 
 		// =============
 		size = 10000; // image size (MB)
@@ -96,7 +96,7 @@ public class Infrastructure {
 		bw = 1500;
 		pesNumber = 1; // number of cpus
 		vmm = "m3.medium"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCloudletSchedulerSpaceShared()));
+		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
 		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
 		// vmm, new DAGCloudletSchedulerSpaceShared()));
 
@@ -127,41 +127,34 @@ public class Infrastructure {
 		for (int i = 0; i <= Ints.max(ins); i++)
 			list.add(null);
 
+		DAGCentralScheduler p = new DAGCentralScheduler();
 		for (int index : ins) {
 			if (list.get(index) != null)
 				continue;
 			switch (ins2type[index]) {
 			case 0:
-				list.set(index, new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium", p));
 				break;
 			case 1:
-				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
 				break;
 			case 2:
-				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
 				break;
 			case 3:
-				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
 				break;
 			case 4:
-				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large", p));
 				break;
 			case 5:
-				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge", p));
 				break;
 			case 6:
-				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
 				break;
 			case 7:
-				list.set(index, new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge",
-						new DAGCloudletSchedulerSpaceShared()));
+				list.set(index, new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge", p));
 				break;
 			}
 		}
@@ -181,7 +174,7 @@ public class Infrastructure {
 		LinkedList<Vm> list = new LinkedList<Vm>();
 		for (int i = 0; i < num; i++) {
 			list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm,
-					new DAGCloudletSchedulerSpaceShared()));
+					new DAGCentralScheduler()));
 		}
 
 		return list;
@@ -311,7 +304,7 @@ public class Infrastructure {
 
 		if (!archieveCloudLets.containsKey(ID)) {
 			List<MyCloudlet> cloudletList = null;
-			CloudletPassport workflow = null;
+			CloudletDAG workflow = null;
 
 			switch (dataset) {
 			case "fmri":
