@@ -53,53 +53,82 @@ public class Infrastructure {
 	 * @return
 	 */
 	private static List<Vm> createEC2Vms(int userId) {
+		// int idShift = VM_ID_SHIFT;
+		// long size, bw;
+		// int ram, mips, pesNumber;
+		// String vmm;
+		// // Creates a container to store VMs. This list is passed to the
+		// broker
+		// // later
+		// LinkedList<Vm> list = new LinkedList<Vm>();
+		//
+		// // create VMs
+		// // VM Parameters
+		// size = 10000; // image size (MB)
+		// ram = 4096; // vm memory (MB)
+		// mips = 225;
+		// bw = 1000;
+		// pesNumber = 2; // number of cpus
+		// vmm = "t2.medium"; // VMM name
+		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
+		// vmm, new DAGCentralScheduler()));
+		//
+		// // =========================
+		// size = 8000; // image size (MB)
+		// ram = 4096; // vm memory (MB)
+		// mips = 150;
+		// bw = 1000;
+		// pesNumber = 1; // number of cpus
+		// vmm = "t2.small"; // VMM name
+		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
+		// vmm, new DAGCentralScheduler()));
+		//
+		// // =========================
+		// size = 8000; // image size (MB)
+		// ram = 4096; // vm memory (MB)
+		// mips = 150;
+		// bw = 1000;
+		// pesNumber = 1; // number of cpus
+		// vmm = "t2.small"; // VMM name
+		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
+		// vmm, new DAGCentralScheduler()));
+		//
+		// // =============
+		// size = 10000; // image size (MB)
+		// ram = 4 * 1024; // vm memory (MB)
+		// mips = 200;
+		// bw = 1500;
+		// pesNumber = 1; // number of cpus
+		// vmm = "m3.medium"; // VMM name
+		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
+		// vmm, new DAGCentralScheduler()));
+		// // list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
+		// // vmm, new DAGCloudletSchedulerSpaceShared()));
+		//
+		// return list;
+
 		int idShift = VM_ID_SHIFT;
-		long size, bw;
-		int ram, mips, pesNumber;
-		String vmm;
-		// Creates a container to store VMs. This list is passed to the broker
-		// later
+		long size;
+		int ram, pesNumber;
+
 		LinkedList<Vm> list = new LinkedList<Vm>();
 
-		// create VMs
-		// VM Parameters
-		size = 10000; // image size (MB)
-		ram = 4096; // vm memory (MB)
-		mips = 225;
-		bw = 1000;
-		pesNumber = 2; // number of cpus
-		vmm = "t2.medium"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
+		// "irrelevant" parameters
+		size = 10000;
+		ram = 4096;
+		pesNumber = 1;
 
-		// =========================
-		size = 8000; // image size (MB)
-		ram = 4096; // vm memory (MB)
-		mips = 150;
-		bw = 1000;
-		pesNumber = 1; // number of cpus
-		vmm = "t2.small"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
+		double sdm = 100;
 
-		// =========================
-		size = 8000; // image size (MB)
-		ram = 4096; // vm memory (MB)
-		mips = 150;
-		bw = 1000;
-		pesNumber = 1; // number of cpus
-		vmm = "t2.small"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
-
-		// =============
-		size = 10000; // image size (MB)
-		ram = 4 * 1024; // vm memory (MB)
-		mips = 200;
-		bw = 1500;
-		pesNumber = 1; // number of cpus
-		vmm = "m3.medium"; // VMM name
-		list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
-		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
-		// vmm, new DAGCloudletSchedulerSpaceShared()));
-
+		DAGCentralScheduler p = new DAGCentralScheduler();
+		list.add(new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium", p));
+		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
+		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
+		list.add(new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
+		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large", p));
+		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge", p));
+		list.add(new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
+		list.add(new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge", p));
 		return list;
 	}
 
@@ -173,8 +202,7 @@ public class Infrastructure {
 
 		LinkedList<Vm> list = new LinkedList<Vm>();
 		for (int i = 0; i < num; i++) {
-			list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm,
-					new DAGCentralScheduler()));
+			list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
 		}
 
 		return list;

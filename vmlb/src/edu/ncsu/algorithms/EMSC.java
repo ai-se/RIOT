@@ -233,6 +233,7 @@ public class EMSC {
 	public SolutionSet execNSGAII(String dataset, int popSize, int maxEval, double cxProb, double cxRandChangeProb,
 			double mutProb, double bitMutProb, long seed) throws JMException, ClassNotFoundException {
 		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
+		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
 		Algorithm alg = new NSGAII(problem_);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
@@ -271,6 +272,7 @@ public class EMSC {
 			double cxRandChangeProb, double mutProb, double bitMutProb, long seed)
 			throws JMException, ClassNotFoundException {
 		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
+		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
 		Algorithm alg = new NSGAII(problem_);
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 
