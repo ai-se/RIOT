@@ -1,24 +1,21 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import javax.print.attribute.standard.Finishings;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Vm;
 
 import edu.ncsu.wls.CloudletDAG;
 import edu.ncsu.wls.Infrastructure;
-import edu.ncsu.wls.MyCloudlet;
 import jmetal.core.Algorithm;
 import jmetal.core.Problem;
-import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 import jmetal.util.PseudoRandom;
@@ -37,21 +34,126 @@ import jmetal.util.PseudoRandom;
  *
  */
 
-class VmMock {
-	public int typeIndex;
-	public double finalTime;
-	public long mips;
-	public double dollarPerHr;
+class HEFTScheduler {
+	private CloudletDAG dag;
+	private int maxSimuIns;
+	public int[] vmTypes;
+	private double[] unitPrice;
+	private double[] vmFinishTime;
+	public int usedVM;
+	private Map<Cloudlet, Integer> assingedTo;
+	private Map<Cloudlet, Double> singleCloudletFinishedTime;
+	public double makespan, cost;
 
-	public VmMock(int typeIndex, long mips, double dollarPerHr) {
-		this.typeIndex = typeIndex;
-		this.mips = mips;
-		this.dollarPerHr = dollarPerHr;
-		this.finalTime = 0;
+	public HEFTScheduler(CloudletDAG dag, int maxSimultaneousIns) {
+		this.dag = dag;
+		this.maxSimuIns = maxSimultaneousIns;
+		usedVM = 0;
+		assingedTo = new HashMap<Cloudlet, Integer>();
+		singleCloudletFinishedTime = new HashMap<Cloudlet, Double>();
+		makespan = -1;
+		cost = -1;
+
+		vmTypes = new int[maxSimultaneousIns];
+		vmFinishTime = new double[maxSimultaneousIns];
+		unitPrice = new double[maxSimultaneousIns];
+
+		for (int i = 0; i < maxSimultaneousIns; i++) {
+			vmTypes[i] = -1;
+			vmFinishTime[i] = 0.0;
+			unitPrice[i] = 0.0;
+		}
 	}
 
-	public void extendFinalTime(double extended) {
-		this.finalTime = finalTime + extended;
+	public boolean appendToExistVM(Cloudlet cl, int assignVmI, double expExecTime) {
+		if (assignVmI >= usedVM)
+			return false;
+
+		assingedTo.put(cl, assignVmI);
+
+		double earliestStart = 0;
+		for (Cloudlet requirement : dag.meRequires(cl)) {
+			earliestStart = Double.max(earliestStart, singleCloudletFinishedTime.get(requirement));
+		}
+
+		earliestStart = Double.max(earliestStart, vmFinishTime[assignVmI]);
+
+		singleCloudletFinishedTime.put(cl, earliestStart + expExecTime);
+		vmFinishTime[assignVmI] = earliestStart + expExecTime;
+
+		makespan = -1;
+		cost = -1;
+
+		return true;
+	}
+
+	public boolean useNewVm(Cloudlet cl, int type, double vmUnitPrice, double expExecTime) {
+		if (usedVM >= maxSimuIns)
+			return false;
+
+		usedVM += 1;
+		vmTypes[usedVM - 1] = type;
+		unitPrice[usedVM - 1] = vmUnitPrice;
+
+		assingedTo.put(cl, usedVM - 1);
+
+		double earliestStart = 0;
+		for (Cloudlet requirement : dag.meRequires(cl)) {
+			earliestStart = Double.max(earliestStart, singleCloudletFinishedTime.get(requirement));
+		}
+
+		singleCloudletFinishedTime.put(cl, earliestStart + expExecTime);
+		vmFinishTime[usedVM - 1] = earliestStart + expExecTime;
+
+		makespan = -1;
+		cost = -1;
+
+		return true;
+	}
+
+	public double[] getCurrentObj() {
+		if (makespan != -1)
+			return new double[] { makespan, cost };
+
+		double totalUnitPrice = 0;
+		double makespan = 0;
+
+		for (int i = 0; i < usedVM; i++) {
+			totalUnitPrice += unitPrice[i];
+			makespan = Double.max(makespan, vmFinishTime[i]);
+		}
+
+		this.makespan = makespan;
+		this.cost = makespan * totalUnitPrice / 3600;
+
+		return new double[] { this.makespan, this.cost };
+	}
+
+	public double getMakespan() {
+		return this.makespan;
+	}
+
+	public String toString() {
+		return this.makespan + " " + this.cost;
+	}
+
+	public HEFTScheduler clone() {
+		HEFTScheduler res = new HEFTScheduler(dag, maxSimuIns);
+		res.vmTypes = this.vmTypes.clone();
+		res.unitPrice = this.unitPrice.clone();
+		res.usedVM = this.usedVM;
+		res.vmFinishTime = this.vmFinishTime.clone();
+		res.assingedTo = new HashMap<>();
+		res.makespan = makespan;
+		res.cost = cost;
+		res.assingedTo = new HashMap<>();
+		res.singleCloudletFinishedTime = new HashMap<>();
+
+		for (Cloudlet cl : this.singleCloudletFinishedTime.keySet()) {
+			res.assingedTo.put(cl, assingedTo.get(cl));
+			res.singleCloudletFinishedTime.put(cl, singleCloudletFinishedTime.get(cl));
+		}
+		return res;
 	}
 }
 
@@ -74,33 +176,35 @@ class MOHEFTcore extends Algorithm {
 
 		Map<Cloudlet, Integer> upwardRank = new HashMap<Cloudlet, Integer>();
 
-		List<Cloudlet> lstVisit = new ArrayList<Cloudlet>();
 		int dep = 0;
+		int seted = 0;
 
-		for (Cloudlet c : cloudlets)
-			if (!cp.hasSucc(c)) {
+		for (Cloudlet c : cloudlets) {
+			if (!cp.hasPred(c)) {
 				upwardRank.put(c, 0);
-				lstVisit.add(c);
-			}
-		int prevLen0 = 0;
+				seted += 1;
+			} else
+				upwardRank.put(c, -1);
+		}
 
-		while (true) {
-			int prevLen1 = lstVisit.size();
+		while (seted < cp.totalCloudletNum) {
 			dep += 1;
-
-			for (int i = prevLen0; i < prevLen1; i++) {
-				Cloudlet lv = lstVisit.get(i);
-				for (Cloudlet x : cp.meRequires(lv)) {
-					if (!upwardRank.containsKey(x) || upwardRank.get(x) < dep) { // refresh
-						upwardRank.put(x, dep);
-						lstVisit.add(x);
+			for (Cloudlet c : cloudlets) {
+				if (upwardRank.get(c) != -1)
+					continue;
+				boolean ready = true;
+				for (Cloudlet r : cp.getRequiring().get(c)) {
+					if (upwardRank.get(r) == -1 || upwardRank.get(r) == dep) {
+						ready = false;
+						break;
 					} // if
-				} // for x
-			} // for lv
+				} // for r
+				if (ready) {
+					upwardRank.put(c, dep);
+					seted += 1;
+				}
+			}
 
-			if (lstVisit.size() == prevLen1)
-				break;
-			prevLen0 = prevLen1;
 		}
 
 		return upwardRank;
@@ -112,94 +216,137 @@ class MOHEFTcore extends Algorithm {
 		return Infrastructure.getUnitPrice(tmp);
 	}
 
+	private List<HEFTScheduler> pruneNextPlans(List<HEFTScheduler> nextPlans, int finalNum) {
+		List<HEFTScheduler> res = new ArrayList<HEFTScheduler>();
+		List<HEFTScheduler> left = new ArrayList<HEFTScheduler>();
+
+		int prevSize = 0;
+		while (res.size() < finalNum) {
+			prevSize = res.size();
+			for (HEFTScheduler i : nextPlans) {
+				for (HEFTScheduler j : nextPlans) {
+					if (j.makespan < i.makespan && j.cost < i.cost) {
+						left.add(i);
+					} // if dominated
+				} // for j
+			} // for i
+
+			nextPlans.removeAll(left);
+			res.addAll(nextPlans);
+			nextPlans.clear();
+			nextPlans.addAll(left);
+			left.clear();
+		}
+
+		while (res.size() > finalNum) { // crowd sorting
+			List<HEFTScheduler> toPrune = res.subList(prevSize, res.size());
+			toPrune.sort(Comparator.comparing(HEFTScheduler::getMakespan));
+
+			double dist[] = new double[toPrune.size()];
+			dist[0] = Double.MAX_VALUE;
+			dist[toPrune.size() - 1] = Double.MAX_VALUE;
+
+			double makespanDelta = Math.abs(toPrune.get(0).makespan - toPrune.get(toPrune.size() - 1).makespan);
+			double costDelta = Math.abs(toPrune.get(toPrune.size() - 1).cost - toPrune.get(0).cost);
+
+			// calc dist
+			for (int i = 1; i < dist.length - 1; i++) {
+				HEFTScheduler lhs = toPrune.get(i - 1);
+				HEFTScheduler rhs = toPrune.get(i + 1);
+				dist[i] = (Math.abs(lhs.makespan - rhs.makespan) / makespanDelta * Math.abs(lhs.cost - rhs.cost)
+						/ costDelta);
+			}
+
+			// sort toPrune by dist
+			Object[] toPruneObj = toPrune.toArray();
+			Integer[] indices = new Integer[dist.length];
+			for (int i = 0; i < dist.length; i++)
+				indices[i] = i;
+
+			Arrays.sort(indices, new Comparator<Integer>() {
+				@Override
+				public int compare(final Integer o1, final Integer o2) {
+					return -Double.compare(dist[o1], dist[o2]);
+				}
+			});
+
+			// removing uncessary res
+			int pp = finalNum - prevSize;
+			res.removeAll(toPrune);
+			for (int i = 0; i < pp; i++) {
+				res.add((HEFTScheduler) toPruneObj[indices[i]]);
+			}
+		}
+
+		return res;
+	}
+
 	@Override
 	public SolutionSet execute() throws JMException, ClassNotFoundException {
 		// 0. Set ups
 		int k = ((Integer) getInputParameter("K")).intValue();
 		int n = ((Integer) getInputParameter("N")).intValue();
-		SolutionSet SD = new SolutionSet(50000);
 		List<Vm> avalVmTypes = Infrastructure.createVms(0);
-		@SuppressWarnings("unchecked")
-		List<VmMock>[] currentVms = new List[k];
 
-		// 1. B-Rank
-		Map<Cloudlet, Integer> rank = this.bRank((VmsProblem) problem_);
+		HEFTScheduler[] frontier = new HEFTScheduler[k];
+		VmsProblem problem = (VmsProblem) problem_;
 
-		// 2. Initial k tradeoff solutions
-		SolutionSet population = new SolutionSet(k);
-		for (int i = 0; i < k; i++) {
-			Solution empty = new Solution(problem_);
-			empty.setObjective(0, 0.01); // makespan
-			empty.setObjective(1, 0.01); // cost
-			population.add(empty);
-			currentVms[i] = new ArrayList<VmMock>();
-		}
+		for (int i = 0; i < k; i++)
+			frontier[i] = new HEFTScheduler(problem.getWorkflow(), n);
+
+		// 1. Calc lookup table
+		double[][] expTime = new double[problem_.getNumberOfVariables()][avalVmTypes.size()];
+		for (int c = 0; c < problem_.getNumberOfVariables(); c++)
+			for (int v = 0; v < avalVmTypes.size(); v++) {
+				expTime[c][v] = problem.getCloudletList().get(c).getCloudletLength() / avalVmTypes.get(v).getMips();
+
+			}
+
+		// 2. B-Rank
+		Map<Cloudlet, Integer> rank = this.bRank(problem);
 
 		// 3. Sort cloudlets with b-rabk
-		List<MyCloudlet> sortedCloudlets = ((VmsProblem) problem_).getCloudletList();
+		List<Cloudlet> unsortedCloudlets = problem.getCloudletList2();
+		List<Cloudlet> sortedCloudlets = problem.getCloudletList2();
 		Collections.shuffle(sortedCloudlets, new Random(PseudoRandom.randInt()));
-		Collections.sort(sortedCloudlets, (MyCloudlet one, MyCloudlet other) -> {
-			return rank.get((Cloudlet) one).compareTo(rank.get((Cloudlet) other));
+		Collections.sort(sortedCloudlets, (Cloudlet one, Cloudlet other) -> {
+			return rank.get(one).compareTo(rank.get(other));
 		});
 
-		int var = 0;
-
-		for (MyCloudlet adding : sortedCloudlets) { // 4 For each cloudlet
-			int varI = ((VmsProblem) problem_).getCloudletList().indexOf(adding);
-			for (int i = 0; i < k; i++) // filling order
-				((VmEncoding) (population.get(i).getDecisionVariables()[varI])).setOrder(var);
-			var++;
-
-			
-			SD.clear();
-
-			for (int i = 0; i < k; i++) {
-				Solution froniter = population.get(i);
-				// case I: reusing currentVms[i]
-				for (VmMock vml : currentVms[i]) {
-					Solution x = new Solution(problem_);
-					((VmEncoding) x.getDecisionVariables()[varI]).setTask2ins(currentVms[i].indexOf(vml));
-					vml.extendFinalTime(adding.getCloudletLength() / vml.mips);
-					double delta = vml.finalTime - froniter.getObjective(0);
-					if (delta > 0) {
-						x.setObjective(0, vml.finalTime);
-						x.setObjective(1, froniter.getObjective(1) / froniter.getObjective(0) * vml.finalTime);
-					} else {
-						x.setObjective(0, froniter.getObjective(0));
-						x.setObjective(1, froniter.getObjective(1));
+		for (Cloudlet adding : sortedCloudlets) {
+			System.out.println(
+					"try to assign " + adding + " left# " + (sortedCloudlets.size() - sortedCloudlets.indexOf(adding)));
+			List<HEFTScheduler> nextPlans = new ArrayList<>();
+			for (HEFTScheduler f : frontier) {
+				for (int i = 0; i < f.usedVM; i++) { // reusing exist vm
+					HEFTScheduler next = f.clone();
+					boolean succeed = next.appendToExistVM(adding, i,
+							expTime[unsortedCloudlets.indexOf(adding)][f.vmTypes[i]]);
+					if (succeed) {
+						next.getCurrentObj();
+						nextPlans.add(next);
 					}
-					SD.add(x);
 				}
-				// case II: assign to new vm
-				if (currentVms[i].size() >= n)
-					continue;
-				for (Vm newAssigned : avalVmTypes) {
-					int insIndex = currentVms[i].size() + 1;
-					int typeIndex = avalVmTypes.indexOf(newAssigned);
 
-					Solution x = new Solution(problem_);
-					((VmEncoding) x.getDecisionVariables()[varI]).setTask2ins(insIndex);
-					((VmEncoding) x.getDecisionVariables()[insIndex]).setIns2Type(typeIndex);
+				for (int v = 0; v < avalVmTypes.size(); v++) { // using new vm
+					HEFTScheduler next = f.clone();
+					boolean succeed = next.useNewVm(adding, v, unitPrice(avalVmTypes.get(v)),
+							expTime[unsortedCloudlets.indexOf(adding)][v]);
+					if (succeed) {
+						next.getCurrentObj();
+						nextPlans.add(next);
+					}
+				}
+			} // for f in frontier
 
-					VmMock newMock = new VmMock(typeIndex, (long) newAssigned.getMips(), unitPrice(newAssigned));
-					currentVms[i].add(newMock);
-					newMock.extendFinalTime(froniter.getObjective(0) + adding.getCloudletLength() / newMock.mips);
+			nextPlans = this.pruneNextPlans(nextPlans, k);
+			for (int i = 0; i < k; i++)
+				frontier[i] = nextPlans.get(i);
+		}
 
-					x.setObjective(0, newMock.finalTime);
-					x.setObjective(1, (froniter.getObjective(1) / froniter.getObjective(0) + newMock.dollarPerHr / 3600)
-							* newMock.finalTime);
-
-					SD.add(x);
-				} // for newAssigned
-			} // for i
-			
-			// step 5 sort crowd SD
-			System.out.println(3);
-			
-		} // for step 4
-		
-		
-
+		for (HEFTScheduler f : frontier) {
+			System.out.println(f.makespan + " " + f.cost);
+		}
 		return null;
 	}
 
@@ -220,6 +367,6 @@ public class MOHEFT {
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		MOHEFT testrun = new MOHEFT();
-		testrun.execMOHEFT("eprotein", 10, 10, 1860);
+		testrun.execMOHEFT("sci_Epigenomics_997", 10, 10, 1860L);
 	}
 }
