@@ -16,6 +16,7 @@ import edu.ncsu.wls.CloudletDAG;
 import edu.ncsu.wls.Infrastructure;
 import jmetal.core.Algorithm;
 import jmetal.core.Problem;
+import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 import jmetal.util.PseudoRandom;
@@ -63,6 +64,40 @@ class HEFTScheduler {
 			vmFinishTime[i] = 0.0;
 			unitPrice[i] = 0.0;
 		}
+	}
+
+	/**
+	 * Must be completely assigned
+	 * 
+	 * @param problem
+	 * @param orderedCloudlets
+	 * @return
+	 */
+	public Solution translate(VmsProblem problem, List<Cloudlet> orderedCloudlets) {
+		Solution sol = null;
+		try {
+			sol = new Solution(problem);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		// set orders
+		List<Cloudlet> problem_cloudlets = problem.getCloudletList2();
+		for (int i = 0; i < problem_cloudlets.size(); i++) {
+			((VmEncoding) (sol.getDecisionVariables()[i])).setOrder(orderedCloudlets.indexOf(problem_cloudlets.get(i)));
+		}
+
+		// set task2ins
+		for (int i = 0; i < problem_cloudlets.size(); i++) {
+			((VmEncoding) (sol.getDecisionVariables()[i])).setTask2ins(assingedTo.get(problem_cloudlets.get(i)));
+		}
+
+		// set ins2type
+		for (int i = 0; i < vmTypes.length; i++) {
+			((VmEncoding) (sol.getDecisionVariables()[i])).setIns2Type(vmTypes[i]);
+		}
+
+		return sol;
 	}
 
 	public boolean appendToExistVM(Cloudlet cl, int assignVmI, double expExecTime) {
@@ -284,8 +319,8 @@ class MOHEFTcore extends Algorithm {
 	@Override
 	public SolutionSet execute() throws JMException, ClassNotFoundException {
 		// 0. Set ups
-		int k = ((Integer) getInputParameter("K")).intValue();
-		int n = ((Integer) getInputParameter("N")).intValue();
+		int k = ((Integer) getInputParameter("K")).intValue(); // tradeOffSolNum
+		int n = ((Integer) getInputParameter("N")).intValue(); // maxSimultaneousIns
 		List<Vm> avalVmTypes = Infrastructure.createVms(0);
 
 		HEFTScheduler[] frontier = new HEFTScheduler[k];
@@ -314,8 +349,9 @@ class MOHEFTcore extends Algorithm {
 		});
 
 		for (Cloudlet adding : sortedCloudlets) {
-			System.out.println(
-					"try to assign " + adding + " left# " + (sortedCloudlets.size() - sortedCloudlets.indexOf(adding)));
+			int leftCNum = sortedCloudlets.size() - sortedCloudlets.indexOf(adding);
+			if (leftCNum % 10 == 0)
+				System.out.println("try to assign " + adding + " left# " + leftCNum);
 			List<HEFTScheduler> nextPlans = new ArrayList<>();
 			for (HEFTScheduler f : frontier) {
 				for (int i = 0; i < f.usedVM; i++) { // reusing exist vm
@@ -342,18 +378,31 @@ class MOHEFTcore extends Algorithm {
 			nextPlans = this.pruneNextPlans(nextPlans, k);
 			for (int i = 0; i < k; i++)
 				frontier[i] = nextPlans.get(i);
+
 		}
 
+		SolutionSet finalOptRes = new SolutionSet(k);
+
 		for (HEFTScheduler f : frontier) {
-			System.out.println(f.makespan + " " + f.cost);
+			Solution x = f.translate(problem, sortedCloudlets);
+			problem.evaluate(x);
+			finalOptRes.add(x);
 		}
-		return null;
+
+		return finalOptRes;
 	}
 
 }
 
 public class MOHEFT {
-	public void execMOHEFT(String dataset, int tradeOffSolNum, int maxSimultaneousIns, long seed)
+	public SolutionSet execMOHEFT(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
+		return execMOHEFT((String) para.get("dataset"), //
+				(int) para.get("tradeOffSolNum"), //
+				(int) para.get("maxSimultaneousIns"), //
+				(long) para.get("seed"));
+	}
+
+	public SolutionSet execMOHEFT(String dataset, int tradeOffSolNum, int maxSimultaneousIns, long seed)
 			throws ClassNotFoundException, JMException {
 		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
 		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
@@ -361,12 +410,25 @@ public class MOHEFT {
 
 		alg.setInputParameter("K", tradeOffSolNum);
 		alg.setInputParameter("N", maxSimultaneousIns);
-		alg.execute();
-		// TODO add any problems
+		SolutionSet p = alg.execute();
+
+		// for (int v = 0; v < p.size(); v++) {
+		// System.out.println(p.get(v).getObjective(0) + " " +
+		// p.get(v).getObjective(1));
+		// problem_.printSolution(p.get(v));
+		// }
+
+		return p;
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		MOHEFT testrun = new MOHEFT();
-		testrun.execMOHEFT("sci_Epigenomics_997", 10, 10, 1860L);
+		HashMap<String, Object> paras = new HashMap<String, Object>();
+		paras.put("dataset", "sci_Inspiral_30");
+		paras.put("seed", System.currentTimeMillis());
+		paras.put("tradeOffSolNum", 10);
+		paras.put("maxSimultaneousIns", 10);
+
+		MOHEFT runner = new MOHEFT();
+		runner.execMOHEFT(paras);
 	}
 }
