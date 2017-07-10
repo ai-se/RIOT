@@ -152,6 +152,13 @@ public class CloudletDAG {
 		return requiring.get(me);
 	}
 
+	public List<Cloudlet> meContributeTo(Cloudlet me) {
+		if (!contributeTo.containsKey(me))
+			return new ArrayList<Cloudlet>();
+
+		return contributeTo.get(me);
+	}
+
 	public String toString() {
 		String r = "FLOW\n";
 		for (Cloudlet to : this.requiring.keySet()) {

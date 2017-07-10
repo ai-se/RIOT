@@ -256,10 +256,11 @@ public class VmsProblem extends Problem {
 		for (Cloudlet c : newList) {
 			makespan = Math.max(makespan, c.getFinishTime());
 		}
+		
+		double cost = Infrastructure.getUnitPrice(vmlist) * Math.ceil(makespan / 3600);
 
-		double cost = Infrastructure.getUnitPrice(vmlist) * makespan / 3600;
-
-		System.out.println(makespan + " $" + cost);
+//		System.out.println(makespan + " $" + cost);
+		System.out.printf("%.1fs with $%.3f\n", makespan, cost);
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);
 		long s7 = System.currentTimeMillis();

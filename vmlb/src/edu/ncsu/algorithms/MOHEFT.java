@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.cloudbus.cloudsim.Cloudlet;
@@ -39,12 +40,13 @@ class HEFTScheduler {
 	private CloudletDAG dag;
 	private int maxSimuIns;
 	public int[] vmTypes;
-	private double[] unitPrice;
+	double[] unitPrice;
 	private double[] vmFinishTime;
 	public int usedVM;
 	private Map<Cloudlet, Integer> assingedTo;
 	private Map<Cloudlet, Double> singleCloudletFinishedTime;
 	public double makespan, cost;
+	public double crowdDist; // for crowd sorting used
 
 	public HEFTScheduler(CloudletDAG dag, int maxSimultaneousIns) {
 		this.dag = dag;
@@ -159,7 +161,7 @@ class HEFTScheduler {
 		}
 
 		this.makespan = makespan;
-		this.cost = makespan * totalUnitPrice / 3600;
+		this.cost = Math.ceil(makespan / 3600) * totalUnitPrice;
 
 		return new double[] { this.makespan, this.cost };
 	}
@@ -168,8 +170,20 @@ class HEFTScheduler {
 		return this.makespan;
 	}
 
+	public double getCrowdDist() {
+		return this.crowdDist;
+	}
+
 	public String toString() {
-		return this.makespan + " " + this.cost;
+		return "\n" + this.makespan + " " + this.cost;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		HEFTScheduler o = (HEFTScheduler) other;
+		if (Math.abs(this.makespan - o.makespan) < 0.01 && Math.abs(this.cost - o.cost) < 0.001)
+			return true;
+		return false;
 	}
 
 	public HEFTScheduler clone() {
@@ -205,7 +219,7 @@ class MOHEFTcore extends Algorithm {
 	 * @param p
 	 * @return the rank. use pointers of cloudlets
 	 */
-	private Map<Cloudlet, Integer> bRank(VmsProblem p) {
+	private Map<Cloudlet, Double> bRank(VmsProblem p) {
 		List<Cloudlet> cloudlets = p.getCloudletList2();
 		CloudletDAG cp = p.getWorkflow();
 
@@ -242,7 +256,25 @@ class MOHEFTcore extends Algorithm {
 
 		}
 
-		return upwardRank;
+		Map<Cloudlet, Double> res = new HashMap<Cloudlet, Double>();
+
+		// for the same rank cloudlet, one with more succeed have higher rank
+		int maxDeap = Collections.max(upwardRank.values());
+		List<Cloudlet> match = new ArrayList<Cloudlet>();
+		for (int deap = 0; deap <= maxDeap; deap++) {
+			match.clear();
+			for (Entry<Cloudlet, Integer> entry : upwardRank.entrySet())
+				if (entry.getValue() == deap)
+					match.add(entry.getKey());
+
+			match.sort((Cloudlet a, Cloudlet b) -> cp.meContributeTo(b).size() - (cp.meContributeTo(a).size()));
+
+			for (Cloudlet i : match)
+				res.put(i, (deap + (match.indexOf(i) + 0.0) / (match.size() + 1.0)));
+
+		}
+
+		return res;
 	}
 
 	private double unitPrice(Vm v) {
@@ -253,66 +285,78 @@ class MOHEFTcore extends Algorithm {
 
 	private List<HEFTScheduler> pruneNextPlans(List<HEFTScheduler> nextPlans, int finalNum) {
 		List<HEFTScheduler> res = new ArrayList<HEFTScheduler>();
-		List<HEFTScheduler> left = new ArrayList<HEFTScheduler>();
+		List<HEFTScheduler> rmv = new ArrayList<HEFTScheduler>();
 
+		// step1 remove repeat solutions
+		List<HEFTScheduler> notr = new ArrayList<HEFTScheduler>();
+		for (HEFTScheduler i : nextPlans) {
+			boolean exist = false;
+			for (HEFTScheduler j : notr)
+				if (i.equals(j)) {
+					exist = true;
+					break;
+				}
+			if (!exist)
+				notr.add(i);
+		}
+		nextPlans = notr;
+
+		// step 1.5 if not enough plans...
+		while (nextPlans.size() < finalNum) {
+			Collections.shuffle(nextPlans);
+			nextPlans.addAll(nextPlans);
+			if (nextPlans.size() >= finalNum)
+				return nextPlans.subList(0, finalNum);
+		}
+
+		// step 2 get frontiers layer-by-layer
 		int prevSize = 0;
 		while (res.size() < finalNum) {
 			prevSize = res.size();
 			for (HEFTScheduler i : nextPlans) {
 				for (HEFTScheduler j : nextPlans) {
 					if (j.makespan < i.makespan && j.cost < i.cost) {
-						left.add(i);
+						rmv.add(i);
+						break;
 					} // if dominated
 				} // for j
 			} // for i
 
-			nextPlans.removeAll(left);
+			nextPlans.removeAll(rmv);
 			res.addAll(nextPlans);
 			nextPlans.clear();
-			nextPlans.addAll(left);
-			left.clear();
+			nextPlans.addAll(rmv);
+			rmv.clear();
 		}
 
-		while (res.size() > finalNum) { // crowd sorting
-			List<HEFTScheduler> toPrune = res.subList(prevSize, res.size());
-			toPrune.sort(Comparator.comparing(HEFTScheduler::getMakespan));
+		// step 3 crowd sorting
+		if (res.size() > finalNum) {
+			int s = prevSize;
+			int t = res.size();
+			res.subList(s, t).sort(Comparator.comparing(HEFTScheduler::getMakespan));
 
-			double dist[] = new double[toPrune.size()];
-			dist[0] = Double.MAX_VALUE;
-			dist[toPrune.size() - 1] = Double.MAX_VALUE;
+			res.get(s).crowdDist = Double.MAX_VALUE;
+			res.get(t - 1).crowdDist = Double.MAX_VALUE;
 
-			double makespanDelta = Math.abs(toPrune.get(0).makespan - toPrune.get(toPrune.size() - 1).makespan);
-			double costDelta = Math.abs(toPrune.get(toPrune.size() - 1).cost - toPrune.get(0).cost);
+			HEFTScheduler first = res.get(s);
+			HEFTScheduler lst = res.get(t - 1);
+			double makespanDelta = Math.abs(first.makespan - lst.makespan);
+			double costDelta = Math.abs(first.cost - lst.cost);
 
 			// calc dist
-			for (int i = 1; i < dist.length - 1; i++) {
-				HEFTScheduler lhs = toPrune.get(i - 1);
-				HEFTScheduler rhs = toPrune.get(i + 1);
-				dist[i] = (Math.abs(lhs.makespan - rhs.makespan) / makespanDelta * Math.abs(lhs.cost - rhs.cost)
-						/ costDelta);
+			for (int i = s + 1; i < t - 1; i++) {
+				HEFTScheduler lhs = res.get(i - 1);
+				HEFTScheduler rhs = res.get(i + 1);
+				res.get(i).crowdDist = -(Math.abs(lhs.makespan - rhs.makespan) / makespanDelta
+						* Math.abs(lhs.cost - rhs.cost) / costDelta);
 			}
 
 			// sort toPrune by dist
-			Object[] toPruneObj = toPrune.toArray();
-			Integer[] indices = new Integer[dist.length];
-			for (int i = 0; i < dist.length; i++)
-				indices[i] = i;
+			Collections.sort(res.subList(s, t), Comparator.comparing(HEFTScheduler::getCrowdDist));
 
-			Arrays.sort(indices, new Comparator<Integer>() {
-				@Override
-				public int compare(final Integer o1, final Integer o2) {
-					return -Double.compare(dist[o1], dist[o2]);
-				}
-			});
-
-			// removing uncessary res
-			int pp = finalNum - prevSize;
-			res.removeAll(toPrune);
-			for (int i = 0; i < pp; i++) {
-				res.add((HEFTScheduler) toPruneObj[indices[i]]);
-			}
 		}
 
+		res = res.subList(0, finalNum);
 		return res;
 	}
 
@@ -334,24 +378,23 @@ class MOHEFTcore extends Algorithm {
 		for (int c = 0; c < problem_.getNumberOfVariables(); c++)
 			for (int v = 0; v < avalVmTypes.size(); v++) {
 				expTime[c][v] = problem.getCloudletList().get(c).getCloudletLength() / avalVmTypes.get(v).getMips();
-
 			}
 
 		// 2. B-Rank
-		Map<Cloudlet, Integer> rank = this.bRank(problem);
+		Map<Cloudlet, Double> rank = this.bRank(problem);
 
 		// 3. Sort cloudlets with b-rabk
 		List<Cloudlet> unsortedCloudlets = problem.getCloudletList2();
 		List<Cloudlet> sortedCloudlets = problem.getCloudletList2();
-		Collections.shuffle(sortedCloudlets, new Random(PseudoRandom.randInt()));
-		Collections.sort(sortedCloudlets, (Cloudlet one, Cloudlet other) -> {
-			return rank.get(one).compareTo(rank.get(other));
-		});
+		// Collections.shuffle(sortedCloudlets, new
+		// Random(PseudoRandom.randInt()));
+		Collections.sort(sortedCloudlets, (Cloudlet one, Cloudlet other) -> rank.get(one).compareTo(rank.get(other)));
 
 		for (Cloudlet adding : sortedCloudlets) {
 			int leftCNum = sortedCloudlets.size() - sortedCloudlets.indexOf(adding);
 			if (leftCNum % 10 == 0)
 				System.out.println("try to assign " + adding + " left# " + leftCNum);
+
 			List<HEFTScheduler> nextPlans = new ArrayList<>();
 			for (HEFTScheduler f : frontier) {
 				for (int i = 0; i < f.usedVM; i++) { // reusing exist vm
@@ -376,12 +419,30 @@ class MOHEFTcore extends Algorithm {
 			} // for f in frontier
 
 			nextPlans = this.pruneNextPlans(nextPlans, k);
-			for (int i = 0; i < k; i++)
-				frontier[i] = nextPlans.get(i);
 
-		}
+			for (int i = 0; i < k; i++) {
+				frontier[i] = null;
+				frontier[i] = nextPlans.get(i);
+			}
+
+			// rank froniters.
+			Arrays.sort(frontier, new Comparator<HEFTScheduler>() {
+				@Override
+				public int compare(final HEFTScheduler o1, final HEFTScheduler o2) {
+					return Double.compare(o1.makespan, o2.makespan);
+				}
+			});
+		} // for adding
 
 		SolutionSet finalOptRes = new SolutionSet(k);
+
+		// rank froniters.
+		Arrays.sort(frontier, new Comparator<HEFTScheduler>() {
+			@Override
+			public int compare(final HEFTScheduler o1, final HEFTScheduler o2) {
+				return Double.compare(o1.makespan, o2.makespan);
+			}
+		});
 
 		for (HEFTScheduler f : frontier) {
 			Solution x = f.translate(problem, sortedCloudlets);
@@ -409,7 +470,7 @@ public class MOHEFT {
 		Algorithm alg = new MOHEFTcore(problem_);
 
 		alg.setInputParameter("K", tradeOffSolNum);
-		alg.setInputParameter("N", maxSimultaneousIns);
+		alg.setInputParameter("N", Math.min(maxSimultaneousIns, problem_.getNumberOfVariables()));
 		SolutionSet p = alg.execute();
 
 		// for (int v = 0; v < p.size(); v++) {
@@ -423,7 +484,7 @@ public class MOHEFT {
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		HashMap<String, Object> paras = new HashMap<String, Object>();
-		paras.put("dataset", "sci_Inspiral_30");
+		paras.put("dataset", "sci_Epigenomics_100");
 		paras.put("seed", System.currentTimeMillis());
 		paras.put("tradeOffSolNum", 10);
 		paras.put("maxSimultaneousIns", 10);
