@@ -158,7 +158,7 @@ public class Infrastructure {
 
 		DAGCentralScheduler p = new DAGCentralScheduler();
 		for (int index : ins) {
-			if (list.get(index) != null)
+			if (index == -1 || list.get(index) != null)
 				continue;
 			switch (ins2type[index]) {
 			case 0:

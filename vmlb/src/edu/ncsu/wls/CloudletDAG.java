@@ -9,6 +9,8 @@ import java.util.stream.IntStream;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Vm;
 
+import com.google.common.primitives.Ints;
+
 /**
  * 
  * @author jianfeng
@@ -23,6 +25,8 @@ public class CloudletDAG {
 	private HashMap<Cloudlet, List<Cloudlet>> contributeTo = new HashMap<Cloudlet, List<Cloudlet>>();
 	private HashMap<Cloudlet, HashMap<Cloudlet, Long>> files = new HashMap<Cloudlet, HashMap<Cloudlet, Long>>();
 	private HashMap<Cloudlet, Double> fileTransferTime = new HashMap<Cloudlet, Double>();
+	private boolean ignoreDAGmode = false;
+	private int defultTotalCloudletNum;
 	public int totalCloudletNum = 0;
 
 	// ready 0-notCalc 1-notReady 2-Ready -1-Always ready(no requires)
@@ -32,9 +36,20 @@ public class CloudletDAG {
 	}
 
 	public void rmCache() {
-		if (IntStream.of(readyed).sum() != 0) // not the first time rmCache
+		if(ignoreDAGmode){
+			for (int i = 0; i < totalCloudletNum; i++)
+				readyed[i] = 0;
+		}
+		
+		if (!ignoreDAGmode && IntStream.of(readyed).sum() != 0) // not the first time rmCache
 			for (int i = 0; i < totalCloudletNum; i++)
 				readyed[i] = readyed[i] == -1 ? -1 : 1;
+		this.ignoreDAGmode = false;
+		totalCloudletNum = defultTotalCloudletNum;
+	}
+
+	public void turnOnIgnoreDAGMode() {
+		this.ignoreDAGmode = true;
 	}
 
 	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
@@ -54,6 +69,9 @@ public class CloudletDAG {
 	}
 
 	public synchronized boolean isCloudletPrepared(Cloudlet cloudlet) {
+		if (ignoreDAGmode)
+			return true;
+
 		int index = cloudlet.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
 
 		switch (readyed[index]) {
@@ -87,6 +105,7 @@ public class CloudletDAG {
 
 	public void setCloudletNum(int totalCloudletNum) {
 		this.totalCloudletNum = totalCloudletNum;
+		defultTotalCloudletNum = totalCloudletNum;
 	}
 
 	/**
@@ -101,6 +120,9 @@ public class CloudletDAG {
 		this.fileTransferTime.clear();
 		for (Cloudlet c : cList)
 			fileTransferTime.put(c, 0.0);
+
+		if (ignoreDAGmode)
+			return;
 
 		for (Cloudlet target : requiring.keySet()) {
 			for (Cloudlet src : requiring.get(target)) {
@@ -130,12 +152,18 @@ public class CloudletDAG {
 	}
 
 	public boolean hasPred(Cloudlet x) {
+		if (ignoreDAGmode)
+			return false;
+
 		if (requiring.containsKey(x) && requiring.get(x).size() > 0)
 			return true;
 		return false;
 	}
 
 	public boolean hasSucc(Cloudlet x) {
+		if (ignoreDAGmode)
+			return false;
+
 		if (contributeTo.containsKey(x) && contributeTo.get(x).size() > 0)
 			return true;
 		return false;
@@ -146,14 +174,14 @@ public class CloudletDAG {
 	}
 
 	public List<Cloudlet> meRequires(Cloudlet me) {
-		if (!requiring.containsKey(me))
+		if (ignoreDAGmode || !requiring.containsKey(me))
 			return new ArrayList<Cloudlet>();
 
 		return requiring.get(me);
 	}
 
 	public List<Cloudlet> meContributeTo(Cloudlet me) {
-		if (!contributeTo.containsKey(me))
+		if (ignoreDAGmode || !contributeTo.containsKey(me))
 			return new ArrayList<Cloudlet>();
 
 		return contributeTo.get(me);

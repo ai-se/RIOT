@@ -14,6 +14,8 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
+import com.google.common.primitives.Ints;
+
 import edu.ncsu.wls.CloudletDAG;
 import edu.ncsu.wls.DAGCentralScheduler;
 import edu.ncsu.wls.Infrastructure;
@@ -201,6 +203,10 @@ public class VmsProblem extends Problem {
 		for (MyCloudlet c : cloudletList)
 			c.setCloudletFinishedSoFar(0);
 		workflow.rmCache();
+
+		if (Ints.contains(task2ins, -1))
+			workflow.turnOnIgnoreDAGMode();
+
 		long s3 = System.currentTimeMillis();
 		// System.err.println(s3 - s2 + " B");
 
@@ -209,8 +215,14 @@ public class VmsProblem extends Problem {
 		vmlist = Infrastructure.createVms(dcBrokerId, task2ins, ins2type);
 
 		// map task to vm
-		for (int var = 0; var < cloudletNum; var++)
+		for (int var = 0; var < cloudletNum; var++) {
+			if (task2ins[var] == -1) {
+				workflow.totalCloudletNum -= 1;
+				continue;
+			}
 			cloudletList.get(var).setVmId(vmlist.get(task2ins[var]).getId());
+		}
+
 		workflow.calcFileTransferTimes(task2ins, vmlist, cloudletList);
 
 		// binding global workflow to vm
@@ -227,8 +239,11 @@ public class VmsProblem extends Problem {
 		// re-range cloudletList according to order
 		List<MyCloudlet> tmp = new ArrayList<MyCloudlet>();
 
-		for (int i : order)
-			tmp.add(cloudletList.get(i));
+		for (int i : order) {
+			if (task2ins[i] != -1)
+				tmp.add(cloudletList.get(i));
+		}
+
 		broker.submitCloudletList(tmp);
 		broker.submitVmList(vmlist);
 
@@ -243,7 +258,7 @@ public class VmsProblem extends Problem {
 		List<Cloudlet> revList = broker.getCloudletReceivedList();
 		MyCloudSimHelper.printCloudletList(revList);
 
-		if (revList.size() != cloudletList.size()) {
+		if (revList.size() != workflow.totalCloudletNum) {
 			System.err.println("can not simulating all cloudlets!");
 			System.err.println("left # = " + (cloudletList.size() - revList.size()));
 			MyCloudSimHelper.forcePrintCloudList(revList);

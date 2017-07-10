@@ -46,11 +46,14 @@ class HEFTScheduler {
 	private Map<Cloudlet, Integer> assingedTo;
 	private Map<Cloudlet, Double> singleCloudletFinishedTime;
 	public double makespan, cost;
+	public List<Cloudlet> cloudletsOrder;
 	public double crowdDist; // for crowd sorting used
 
-	public HEFTScheduler(CloudletDAG dag, int maxSimultaneousIns) {
+	public HEFTScheduler(CloudletDAG dag, int maxSimultaneousIns, List<Cloudlet> order) {
 		this.dag = dag;
 		this.maxSimuIns = maxSimultaneousIns;
+		this.cloudletsOrder = order;
+
 		usedVM = 0;
 		assingedTo = new HashMap<Cloudlet, Integer>();
 		singleCloudletFinishedTime = new HashMap<Cloudlet, Double>();
@@ -69,13 +72,11 @@ class HEFTScheduler {
 	}
 
 	/**
-	 * Must be completely assigned
-	 * 
 	 * @param problem
 	 * @param orderedCloudlets
 	 * @return
 	 */
-	public Solution translate(VmsProblem problem, List<Cloudlet> orderedCloudlets) {
+	public Solution translate(VmsProblem problem) {
 		Solution sol = null;
 		try {
 			sol = new Solution(problem);
@@ -86,12 +87,15 @@ class HEFTScheduler {
 		// set orders
 		List<Cloudlet> problem_cloudlets = problem.getCloudletList2();
 		for (int i = 0; i < problem_cloudlets.size(); i++) {
-			((VmEncoding) (sol.getDecisionVariables()[i])).setOrder(orderedCloudlets.indexOf(problem_cloudlets.get(i)));
+			((VmEncoding) (sol.getDecisionVariables()[i])).setOrder(cloudletsOrder.indexOf(problem_cloudlets.get(i)));
 		}
 
 		// set task2ins
 		for (int i = 0; i < problem_cloudlets.size(); i++) {
-			((VmEncoding) (sol.getDecisionVariables()[i])).setTask2ins(assingedTo.get(problem_cloudlets.get(i)));
+			if (!assingedTo.containsKey(problem_cloudlets.get(i)))
+				((VmEncoding) (sol.getDecisionVariables()[i])).setTask2ins(-1);
+			else
+				((VmEncoding) (sol.getDecisionVariables()[i])).setTask2ins(assingedTo.get(problem_cloudlets.get(i)));
 		}
 
 		// set ins2type
@@ -149,7 +153,6 @@ class HEFTScheduler {
 	}
 
 	public double[] getCurrentObj() {
-		
 		if (makespan != -1)
 			return new double[] { makespan, cost };
 
@@ -165,6 +168,11 @@ class HEFTScheduler {
 		this.cost = Math.ceil(makespan / 3600) * totalUnitPrice;
 
 		return new double[] { this.makespan, this.cost };
+	}
+
+	public void setCurrentObj(double makespan, double cost) {
+		this.makespan = makespan;
+		this.cost = cost;
 	}
 
 	public double getMakespan() {
@@ -188,7 +196,7 @@ class HEFTScheduler {
 	}
 
 	public HEFTScheduler clone() {
-		HEFTScheduler res = new HEFTScheduler(dag, maxSimuIns);
+		HEFTScheduler res = new HEFTScheduler(dag, maxSimuIns, cloudletsOrder);
 		res.vmTypes = this.vmTypes.clone();
 		res.unitPrice = this.unitPrice.clone();
 		res.usedVM = this.usedVM;
@@ -348,15 +356,15 @@ class MOHEFTcore extends Algorithm {
 		List<HEFTScheduler> frontier = new ArrayList<HEFTScheduler>();
 		VmsProblem problem = (VmsProblem) problem_;
 
-		for (int i = 0; i < k; i++)
-			frontier.add(new HEFTScheduler(problem.getWorkflow(), n));
-
 		// 1. B-Rank
 		Map<Cloudlet, Double> rank = this.bRank(problem);
 
 		// 2. Sort cloudlets with b-rabk
 		List<Cloudlet> sortedCloudlets = problem.getCloudletList2();
 		Collections.sort(sortedCloudlets, (Cloudlet one, Cloudlet other) -> rank.get(one).compareTo(rank.get(other)));
+
+		for (int i = 0; i < k; i++)
+			frontier.add(new HEFTScheduler(problem.getWorkflow(), n, sortedCloudlets));
 
 		for (Cloudlet adding : sortedCloudlets) {
 			int leftCNum = sortedCloudlets.size() - sortedCloudlets.indexOf(adding);
@@ -370,7 +378,10 @@ class MOHEFTcore extends Algorithm {
 					boolean succeed = next.appendToExistVM(adding, i,
 							adding.getCloudletLength() / avalVmTypes.get(f.vmTypes[i]).getMips());
 					if (succeed) {
-						next.getCurrentObj();
+						Solution tmp = next.translate(problem);
+						problem.evaluate(tmp);
+						// next.getCurrentObj();
+						next.setCurrentObj(tmp.getObjective(0), tmp.getObjective(1));
 						nextPlans.add(next);
 					}
 				}
@@ -380,7 +391,10 @@ class MOHEFTcore extends Algorithm {
 					boolean succeed = next.useNewVm(adding, v, unitPrice(avalVmTypes.get(v)),
 							adding.getCloudletLength() / avalVmTypes.get(v).getMips());
 					if (succeed) {
-						next.getCurrentObj();
+						Solution tmp = next.translate(problem);
+						problem.evaluate(tmp);
+						// next.getCurrentObj();
+						next.setCurrentObj(tmp.getObjective(0), tmp.getObjective(1));
 						nextPlans.add(next);
 					}
 				}
@@ -395,7 +409,7 @@ class MOHEFTcore extends Algorithm {
 		SolutionSet finalOptRes = new SolutionSet(k);
 
 		for (HEFTScheduler f : frontier) {
-			Solution x = f.translate(problem, sortedCloudlets);
+			Solution x = f.translate(problem);
 			problem.evaluate(x);
 			finalOptRes.add(x);
 		}
@@ -420,6 +434,10 @@ public class MOHEFT {
 
 		alg.setInputParameter("K", tradeOffSolNum);
 		alg.setInputParameter("N", Math.min(maxSimultaneousIns, problem_.getNumberOfVariables()));
+		if (tradeOffSolNum * maxSimultaneousIns * problem_.getNumberOfVariables() > 50000) {
+			System.err.println("K * N too large. Not suitable for MOHEFT algorithm!");
+			return null;
+		}
 		SolutionSet p = alg.execute();
 
 		return p;
@@ -427,7 +445,7 @@ public class MOHEFT {
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		HashMap<String, Object> paras = new HashMap<String, Object>();
-		paras.put("dataset", "sci_Inspiral_1000");
+		paras.put("dataset", "sci_Inspiral_100");
 		paras.put("seed", System.currentTimeMillis()); // ATTENTION: THIS ALG IS
 														// DETERMINISTIC
 		paras.put("tradeOffSolNum", 10);
