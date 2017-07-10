@@ -1,7 +1,6 @@
 package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,6 +19,7 @@ import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
+import jmetal.util.NonDominatedSolutionList;
 import jmetal.util.PseudoRandom;
 
 /**
@@ -149,6 +149,7 @@ class HEFTScheduler {
 	}
 
 	public double[] getCurrentObj() {
+		
 		if (makespan != -1)
 			return new double[] { makespan, cost };
 
@@ -283,11 +284,15 @@ class MOHEFTcore extends Algorithm {
 		return Infrastructure.getUnitPrice(tmp);
 	}
 
+	/**
+	 * Sort and prune candidates with crowd distance
+	 * 
+	 * @param nextPlans
+	 * @param finalNum
+	 * @return
+	 */
 	private List<HEFTScheduler> pruneNextPlans(List<HEFTScheduler> nextPlans, int finalNum) {
-		List<HEFTScheduler> res = new ArrayList<HEFTScheduler>();
-		List<HEFTScheduler> rmv = new ArrayList<HEFTScheduler>();
-
-		// step1 remove repeat solutions
+		// step 1 remove repeat solutions
 		List<HEFTScheduler> notr = new ArrayList<HEFTScheduler>();
 		for (HEFTScheduler i : nextPlans) {
 			boolean exist = false;
@@ -301,63 +306,36 @@ class MOHEFTcore extends Algorithm {
 		}
 		nextPlans = notr;
 
-		// step 1.5 if not enough plans...
-		while (nextPlans.size() < finalNum) {
-			Collections.shuffle(nextPlans);
-			nextPlans.addAll(nextPlans);
-			if (nextPlans.size() >= finalNum)
-				return nextPlans.subList(0, finalNum);
+		// step 2.1
+		if (nextPlans.size() < finalNum) {
+			return nextPlans;
 		}
 
-		// step 2 get frontiers layer-by-layer
-		int prevSize = 0;
-		while (res.size() < finalNum) {
-			prevSize = res.size();
-			for (HEFTScheduler i : nextPlans) {
-				for (HEFTScheduler j : nextPlans) {
-					if (j.makespan < i.makespan && j.cost < i.cost) {
-						rmv.add(i);
-						break;
-					} // if dominated
-				} // for j
-			} // for i
+		// step 2.2
+		int s = 0;
+		int t = nextPlans.size();
+		nextPlans.sort(Comparator.comparing(HEFTScheduler::getMakespan));
 
-			nextPlans.removeAll(rmv);
-			res.addAll(nextPlans);
-			nextPlans.clear();
-			nextPlans.addAll(rmv);
-			rmv.clear();
+		nextPlans.get(s).crowdDist = Double.MAX_VALUE;
+		nextPlans.get(t - 1).crowdDist = Double.MAX_VALUE;
+
+		HEFTScheduler first = nextPlans.get(s);
+		HEFTScheduler lst = nextPlans.get(t - 1);
+		double makespanDelta = Math.abs(first.makespan - lst.makespan);
+		double costDelta = Math.abs(first.cost - lst.cost);
+
+		// calc dist
+		for (int i = s + 1; i < t - 1; i++) {
+			HEFTScheduler lhs = nextPlans.get(i - 1);
+			HEFTScheduler rhs = nextPlans.get(i + 1);
+			nextPlans.get(i).crowdDist = -(Math.abs(lhs.makespan - rhs.makespan) / makespanDelta
+					* Math.abs(lhs.cost - rhs.cost) / costDelta);
 		}
 
-		// step 3 crowd sorting
-		if (res.size() > finalNum) {
-			int s = prevSize;
-			int t = res.size();
-			res.subList(s, t).sort(Comparator.comparing(HEFTScheduler::getMakespan));
+		// sort toPrune by dist
+		Collections.sort(nextPlans, Comparator.comparing(HEFTScheduler::getCrowdDist));
 
-			res.get(s).crowdDist = Double.MAX_VALUE;
-			res.get(t - 1).crowdDist = Double.MAX_VALUE;
-
-			HEFTScheduler first = res.get(s);
-			HEFTScheduler lst = res.get(t - 1);
-			double makespanDelta = Math.abs(first.makespan - lst.makespan);
-			double costDelta = Math.abs(first.cost - lst.cost);
-
-			// calc dist
-			for (int i = s + 1; i < t - 1; i++) {
-				HEFTScheduler lhs = res.get(i - 1);
-				HEFTScheduler rhs = res.get(i + 1);
-				res.get(i).crowdDist = -(Math.abs(lhs.makespan - rhs.makespan) / makespanDelta
-						* Math.abs(lhs.cost - rhs.cost) / costDelta);
-			}
-
-			// sort toPrune by dist
-			Collections.sort(res.subList(s, t), Comparator.comparing(HEFTScheduler::getCrowdDist));
-
-		}
-
-		res = res.subList(0, finalNum);
-		return res;
+		return nextPlans.subList(0, finalNum);
 	}
 
 	@Override
@@ -367,27 +345,17 @@ class MOHEFTcore extends Algorithm {
 		int n = ((Integer) getInputParameter("N")).intValue(); // maxSimultaneousIns
 		List<Vm> avalVmTypes = Infrastructure.createVms(0);
 
-		HEFTScheduler[] frontier = new HEFTScheduler[k];
+		List<HEFTScheduler> frontier = new ArrayList<HEFTScheduler>();
 		VmsProblem problem = (VmsProblem) problem_;
 
 		for (int i = 0; i < k; i++)
-			frontier[i] = new HEFTScheduler(problem.getWorkflow(), n);
+			frontier.add(new HEFTScheduler(problem.getWorkflow(), n));
 
-		// 1. Calc lookup table
-		double[][] expTime = new double[problem_.getNumberOfVariables()][avalVmTypes.size()];
-		for (int c = 0; c < problem_.getNumberOfVariables(); c++)
-			for (int v = 0; v < avalVmTypes.size(); v++) {
-				expTime[c][v] = problem.getCloudletList().get(c).getCloudletLength() / avalVmTypes.get(v).getMips();
-			}
-
-		// 2. B-Rank
+		// 1. B-Rank
 		Map<Cloudlet, Double> rank = this.bRank(problem);
 
-		// 3. Sort cloudlets with b-rabk
-		List<Cloudlet> unsortedCloudlets = problem.getCloudletList2();
+		// 2. Sort cloudlets with b-rabk
 		List<Cloudlet> sortedCloudlets = problem.getCloudletList2();
-		// Collections.shuffle(sortedCloudlets, new
-		// Random(PseudoRandom.randInt()));
 		Collections.sort(sortedCloudlets, (Cloudlet one, Cloudlet other) -> rank.get(one).compareTo(rank.get(other)));
 
 		for (Cloudlet adding : sortedCloudlets) {
@@ -400,7 +368,7 @@ class MOHEFTcore extends Algorithm {
 				for (int i = 0; i < f.usedVM; i++) { // reusing exist vm
 					HEFTScheduler next = f.clone();
 					boolean succeed = next.appendToExistVM(adding, i,
-							expTime[unsortedCloudlets.indexOf(adding)][f.vmTypes[i]]);
+							adding.getCloudletLength() / avalVmTypes.get(f.vmTypes[i]).getMips());
 					if (succeed) {
 						next.getCurrentObj();
 						nextPlans.add(next);
@@ -410,7 +378,7 @@ class MOHEFTcore extends Algorithm {
 				for (int v = 0; v < avalVmTypes.size(); v++) { // using new vm
 					HEFTScheduler next = f.clone();
 					boolean succeed = next.useNewVm(adding, v, unitPrice(avalVmTypes.get(v)),
-							expTime[unsortedCloudlets.indexOf(adding)][v]);
+							adding.getCloudletLength() / avalVmTypes.get(v).getMips());
 					if (succeed) {
 						next.getCurrentObj();
 						nextPlans.add(next);
@@ -419,30 +387,12 @@ class MOHEFTcore extends Algorithm {
 			} // for f in frontier
 
 			nextPlans = this.pruneNextPlans(nextPlans, k);
+			frontier.clear();
+			frontier.addAll(nextPlans);
 
-			for (int i = 0; i < k; i++) {
-				frontier[i] = null;
-				frontier[i] = nextPlans.get(i);
-			}
-
-			// rank froniters.
-			Arrays.sort(frontier, new Comparator<HEFTScheduler>() {
-				@Override
-				public int compare(final HEFTScheduler o1, final HEFTScheduler o2) {
-					return Double.compare(o1.makespan, o2.makespan);
-				}
-			});
 		} // for adding
 
 		SolutionSet finalOptRes = new SolutionSet(k);
-
-		// rank froniters.
-		Arrays.sort(frontier, new Comparator<HEFTScheduler>() {
-			@Override
-			public int compare(final HEFTScheduler o1, final HEFTScheduler o2) {
-				return Double.compare(o1.makespan, o2.makespan);
-			}
-		});
 
 		for (HEFTScheduler f : frontier) {
 			Solution x = f.translate(problem, sortedCloudlets);
@@ -452,7 +402,6 @@ class MOHEFTcore extends Algorithm {
 
 		return finalOptRes;
 	}
-
 }
 
 public class MOHEFT {
@@ -473,23 +422,30 @@ public class MOHEFT {
 		alg.setInputParameter("N", Math.min(maxSimultaneousIns, problem_.getNumberOfVariables()));
 		SolutionSet p = alg.execute();
 
-		// for (int v = 0; v < p.size(); v++) {
-		// System.out.println(p.get(v).getObjective(0) + " " +
-		// p.get(v).getObjective(1));
-		// problem_.printSolution(p.get(v));
-		// }
-
 		return p;
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		HashMap<String, Object> paras = new HashMap<String, Object>();
-		paras.put("dataset", "sci_Epigenomics_100");
-		paras.put("seed", System.currentTimeMillis());
+		paras.put("dataset", "sci_Inspiral_1000");
+		paras.put("seed", System.currentTimeMillis()); // ATTENTION: THIS ALG IS
+														// DETERMINISTIC
 		paras.put("tradeOffSolNum", 10);
-		paras.put("maxSimultaneousIns", 10);
+		paras.put("maxSimultaneousIns", 20);
 
 		MOHEFT runner = new MOHEFT();
-		runner.execMOHEFT(paras);
+		SolutionSet res = runner.execMOHEFT(paras);
+
+		NonDominatedSolutionList r = new NonDominatedSolutionList();
+
+		for (int i = 0; i < res.size(); i++) {
+			r.add(res.get(i));
+			System.out.printf("%.2f  $%.3f\n", res.get(i).getObjective(0), res.get(i).getObjective(1));
+		}
+
+		System.out.println("---");
+		for (int i = 0; i < r.size(); i++) {
+			System.out.printf("%.2f  $%.3f\n", r.get(i).getObjective(0), r.get(i).getObjective(1));
+		}
 	}
 }

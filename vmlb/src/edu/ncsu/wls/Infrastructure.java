@@ -251,6 +251,21 @@ public class Infrastructure {
 
 	}
 
+	public static double getUnitPrice(Vm v) {
+		ImmutableMap<String, Double> unit_price = ImmutableMap.<String, Double> builder().put("m1.small", 0.06) //
+				.put("m3.medium", 0.067) //
+				.put("m3.large", 0.133) //
+				.put("m3.xlarge", 0.266) //
+				.put("m3.2xlarge", 0.532) //
+				.put("m4.large", 0.1) //
+				.put("m4.xlarge", 0.2) //
+				.put("m4.2xlarge", 0.4) //
+				.put("m4.4xlarge", 0.8) //
+				.build();
+
+		return unit_price.get(v.getVmm());
+	}
+
 	public static int getAvailableVmTypes() {
 		return 8; // in aws EC2
 	}

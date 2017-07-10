@@ -240,35 +240,44 @@ public class VmsProblem extends Problem {
 		long s6 = System.currentTimeMillis();
 		// System.err.println(s6 - s5 + " E");
 
-		List<Cloudlet> newList = broker.getCloudletReceivedList();
-		MyCloudSimHelper.printCloudletList(newList);
+		List<Cloudlet> revList = broker.getCloudletReceivedList();
+		MyCloudSimHelper.printCloudletList(revList);
 
-		if (newList.size() != cloudletList.size()) {
+		if (revList.size() != cloudletList.size()) {
 			System.err.println("can not simulating all cloudlets!");
-			System.err.println("left # = " + (cloudletList.size() - newList.size()));
-			MyCloudSimHelper.forcePrintCloudList(newList);
+			System.err.println("left # = " + (cloudletList.size() - revList.size()));
+			MyCloudSimHelper.forcePrintCloudList(revList);
 			System.exit(-1);
 			return;
 		}
 
 		// calculating objectives
 		double makespan = 0;
-		for (Cloudlet c : newList) {
+		for (Cloudlet c : revList) {
 			makespan = Math.max(makespan, c.getFinishTime());
 		}
-		
-		double cost = Infrastructure.getUnitPrice(vmlist) * Math.ceil(makespan / 3600);
 
-//		System.out.println(makespan + " $" + cost);
-		System.out.printf("%.1fs with $%.3f\n", makespan, cost);
+		// calculating cost
+		double cost = 0;
+		for (Vm v : vmlist) {
+			double start = Double.MAX_VALUE;
+			double end = -Double.MAX_VALUE;
+			for (Cloudlet c : revList) {
+				if (c.getVmId() != v.getId())
+					continue;
+				start = Double.min(start, c.getExecStartTime());
+				end = Double.max(start, c.getFinishTime());
+			}
+			if (end - start > 0)
+				cost += Infrastructure.getUnitPrice(v) * Math.ceil((end - start) / 3600);
+		}
+
+		// System.out.printf("%.1fs with $%.3f\n", makespan, cost);
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);
 		long s7 = System.currentTimeMillis();
 		// System.err.println(s7 - s6 + " F");
 		// System.err.println(System.currentTimeMillis() - s1);
-		// System.out.println("makespan = " + makespan);
-		// System.out.println("cost = " + cost);
-		// System.out.println();
 	}
 
 	public int randInt(int bound) {
