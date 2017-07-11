@@ -159,7 +159,7 @@ public class VmsProblem extends Problem {
 		evalCount += 1;
 		if (evalCount % 100 == 0 || evalCount == 1)
 			System.out
-					.println("Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
+					.println("[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
 
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = new int[getNumberOfVariables()];
@@ -259,7 +259,7 @@ public class VmsProblem extends Problem {
 		MyCloudSimHelper.printCloudletList(revList);
 
 		if (revList.size() != workflow.totalCloudletNum) {
-			System.err.println("can not simulating all cloudlets!");
+			System.err.println("[VmsP] can not simulating all cloudlets!");
 			System.err.println("left # = " + (cloudletList.size() - revList.size()));
 			MyCloudSimHelper.forcePrintCloudList(revList);
 			System.exit(-1);

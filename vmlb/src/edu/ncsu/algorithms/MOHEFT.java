@@ -65,7 +65,7 @@ class HEFTScheduler {
 		unitPrice = new double[maxSimultaneousIns];
 
 		for (int i = 0; i < maxSimultaneousIns; i++) {
-			vmTypes[i] = -1;
+			vmTypes[i] = 0;
 			vmFinishTime[i] = 0.0;
 			unitPrice[i] = 0.0;
 		}
@@ -177,6 +177,10 @@ class HEFTScheduler {
 
 	public double getMakespan() {
 		return this.makespan;
+	}
+
+	public double getCost() {
+		return this.cost;
 	}
 
 	public double getCrowdDist() {
@@ -346,6 +350,65 @@ class MOHEFTcore extends Algorithm {
 		return nextPlans.subList(0, finalNum);
 	}
 
+	public Solution executeHEFT(Comparator<HEFTScheduler> cmpr) throws JMException, ClassNotFoundException {
+		// 0. Set ups
+		VmsProblem problem = (VmsProblem) problem_;
+		int n = ((Integer) getInputParameter("N")).intValue(); // maxSimultaneousIns
+		List<Vm> avalVmTypes = Infrastructure.createVms(0);
+
+		// 1. B-Rank
+		Map<Cloudlet, Double> rank = this.bRank(problem);
+
+		// 2. Sort cloudlets with b-rank
+		List<Cloudlet> sortedCloudlets = problem.getCloudletList2();
+		Collections.sort(sortedCloudlets, (Cloudlet one, Cloudlet other) -> rank.get(one).compareTo(rank.get(other)));
+
+		HEFTScheduler sched = new HEFTScheduler(problem.getWorkflow(), n, sortedCloudlets);
+
+		for (Cloudlet adding : sortedCloudlets) {
+			int leftCNum = sortedCloudlets.size() - sortedCloudlets.indexOf(adding);
+			if (leftCNum % 10 == 0)
+				System.out.println("[HEFT] try to assign " + adding + " left# " + leftCNum);
+
+			List<HEFTScheduler> nextPlans = new ArrayList<>();
+			for (int i = 0; i < sched.usedVM; i++) { // reusing exist vm
+				HEFTScheduler next = sched.clone();
+				boolean succeed = next.appendToExistVM(adding, i,
+						adding.getCloudletLength() / avalVmTypes.get(sched.vmTypes[i]).getMips());
+				if (succeed) {
+					// Solution tmp = next.translate(problem);
+					// problem.evaluate(tmp);
+					// next.setCurrentObj(tmp.getObjective(0),
+					// tmp.getObjective(1));
+					next.getCurrentObj();
+					nextPlans.add(next);
+				}
+			}
+
+			for (int v = 0; v < avalVmTypes.size(); v++) { // using new vm
+				HEFTScheduler next = sched.clone();
+				boolean succeed = next.useNewVm(adding, v, unitPrice(avalVmTypes.get(v)),
+						adding.getCloudletLength() / avalVmTypes.get(v).getMips());
+				if (succeed) {
+					// Solution tmp = next.translate(problem);
+					// problem.evaluate(tmp);
+					// next.setCurrentObj(tmp.getObjective(0),
+					// tmp.getObjective(1));
+					next.getCurrentObj();
+					nextPlans.add(next);
+				}
+			}
+
+			Collections.sort(nextPlans, cmpr);
+			sched = nextPlans.get(0);
+		}
+
+		Solution res = sched.translate(problem);
+		problem.evaluate(res);
+
+		return res;
+	}
+
 	@Override
 	public SolutionSet execute() throws JMException, ClassNotFoundException {
 		// 0. Set ups
@@ -359,7 +422,7 @@ class MOHEFTcore extends Algorithm {
 		// 1. B-Rank
 		Map<Cloudlet, Double> rank = this.bRank(problem);
 
-		// 2. Sort cloudlets with b-rabk
+		// 2. Sort cloudlets with b-rank
 		List<Cloudlet> sortedCloudlets = problem.getCloudletList2();
 		Collections.sort(sortedCloudlets, (Cloudlet one, Cloudlet other) -> rank.get(one).compareTo(rank.get(other)));
 
@@ -369,7 +432,7 @@ class MOHEFTcore extends Algorithm {
 		for (Cloudlet adding : sortedCloudlets) {
 			int leftCNum = sortedCloudlets.size() - sortedCloudlets.indexOf(adding);
 			if (leftCNum % 10 == 0)
-				System.out.println("try to assign " + adding + " left# " + leftCNum);
+				System.out.println("[MOHEFT] try to assign " + adding + " left# " + leftCNum);
 
 			List<HEFTScheduler> nextPlans = new ArrayList<>();
 			for (HEFTScheduler f : frontier) {
@@ -419,9 +482,17 @@ class MOHEFTcore extends Algorithm {
 }
 
 public class MOHEFT {
+	/* overloading */
 	public SolutionSet execMOHEFT(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
 		return execMOHEFT((String) para.get("dataset"), //
 				(int) para.get("tradeOffSolNum"), //
+				(int) para.get("maxSimultaneousIns"), //
+				(long) para.get("seed"));
+	}
+
+	/* overloading */
+	public SolutionSet execHEFTMinExtremes(HashMap<String, Object> para) throws ClassNotFoundException, JMException {
+		return execHEFTMinExtremes((String) para.get("dataset"), //
 				(int) para.get("maxSimultaneousIns"), //
 				(long) para.get("seed"));
 	}
@@ -443,6 +514,25 @@ public class MOHEFT {
 		return p;
 	}
 
+	public SolutionSet execHEFTMinExtremes(String dataset, int maxSimultaneousIns, long seed)
+			throws ClassNotFoundException, JMException {
+		VmsProblem problem_ = new VmsProblem(dataset, new Random(seed));
+		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
+		MOHEFTcore alg = new MOHEFTcore(problem_);
+
+		alg.setInputParameter("N", Math.min(maxSimultaneousIns, problem_.getNumberOfVariables()));
+
+		SolutionSet res = new SolutionSet(2);
+
+		Solution fastest = alg.executeHEFT(Comparator.comparing(HEFTScheduler::getMakespan));
+		Solution cheapest = alg.executeHEFT(Comparator.comparing(HEFTScheduler::getCost));
+		res.add(fastest);
+		res.add(cheapest);
+
+		return res;
+	}
+
+	/* demo */
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		HashMap<String, Object> paras = new HashMap<String, Object>();
 		paras.put("dataset", "sci_Inspiral_100");
@@ -452,18 +542,23 @@ public class MOHEFT {
 		paras.put("maxSimultaneousIns", 20);
 
 		MOHEFT runner = new MOHEFT();
+		SolutionSet x = runner.execHEFTMinExtremes(paras);
+		System.out.println(x.get(0));
+		System.out.println(x.get(1));
+		System.exit(0);
+
 		SolutionSet res = runner.execMOHEFT(paras);
 
 		NonDominatedSolutionList r = new NonDominatedSolutionList();
 
 		for (int i = 0; i < res.size(); i++) {
 			r.add(res.get(i));
-			System.out.printf("%.2f  $%.3f\n", res.get(i).getObjective(0), res.get(i).getObjective(1));
+			System.out.printf("%.2f $%.3f\n", res.get(i).getObjective(0), res.get(i).getObjective(1));
 		}
 
 		System.out.println("---");
 		for (int i = 0; i < r.size(); i++) {
-			System.out.printf("%.2f  $%.3f\n", r.get(i).getObjective(0), r.get(i).getObjective(1));
+			System.out.printf("%.2f $%.3f\n", r.get(i).getObjective(0), r.get(i).getObjective(1));
 		}
 	}
 }
