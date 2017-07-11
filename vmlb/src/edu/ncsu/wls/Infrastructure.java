@@ -41,6 +41,10 @@ public class Infrastructure {
 			"sci_Sipht_30", "sci_Sipht_60", "sci_Sipht_100", "sci_Sipht_1000", //
 			"sci_Inspiral_30", "sci_Inspiral_50", "sci_Inspiral_100", "sci_Inspiral_1000" };
 
+	public static final String[] smallmodels = new String[] { "sci_Montage_25", "sci_Montage_50", "sci_Montage_100",
+			"sci_Epigenomics_24", "sci_Epigenomics_46", "sci_Epigenomics_100", "sci_CyberShake_30", "sci_CyberShake_50",
+			"sci_CyberShake_100", "sci_Sipht_30", "sci_Sipht_60", "sci_Inspiral_30", "sci_Inspiral_50" };
+
 	// public static final String[] models = new String[] { "sci_Montage_25",
 	// "sci_Epigenomics_24", "sci_CyberShake_30",
 	// "sci_Sipht_30", "sci_Inspiral_30", "sci_Inspiral_50" };

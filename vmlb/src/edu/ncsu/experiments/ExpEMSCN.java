@@ -28,8 +28,10 @@ public class ExpEMSCN {
 
 		if (args.length > 0)
 			repeats = Integer.parseInt(args[0]);
-		if (args.length > 1)
+		if (args.length > 1 && !args[1].equals("small"))
 			models = new String[] { args[1] };
+		if (args.length > 1 && args[1].equals("small"))
+			models = Infrastructure.smallmodels;
 		else
 			models = Infrastructure.models;
 
@@ -38,7 +40,7 @@ public class ExpEMSCN {
 
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
 		exp_para.put("popSize", 50);
-		exp_para.put("maxEval", 50*1000);
+		exp_para.put("maxEval", 50 * 1000);
 		exp_para.put("cxProb", 0.6);
 		exp_para.put("cxRandChangeProb", 0.1);
 		exp_para.put("mutProb", 0.8);
@@ -54,7 +56,7 @@ public class ExpEMSCN {
 				SolutionSet res = new EMSC().execNSGAII(exp_para);
 
 				String output = "";
-				output += ("* " + s + " " + (System.currentTimeMillis() - startTime)/1000 + "\n");
+				output += ("* " + s + " " + (System.currentTimeMillis() - startTime) / 1000 + "\n");
 				for (int v = 0; v < res.size(); v++) {
 					output += (res.get(v).getObjective(0) + " " + res.get(v).getObjective(1));
 					output += "\n";
