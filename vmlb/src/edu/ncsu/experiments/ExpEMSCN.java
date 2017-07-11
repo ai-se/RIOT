@@ -28,11 +28,12 @@ public class ExpEMSCN {
 
 		if (args.length > 0)
 			repeats = Integer.parseInt(args[0]);
-		if (args.length > 1 && !args[1].equals("small"))
-			models = new String[] { args[1] };
-		if (args.length > 1 && args[1].equals("small"))
-			models = Infrastructure.smallmodels;
-		else
+		if (args.length > 1) {
+			if (args[1].equals("small"))
+				models = Infrastructure.smallmodels;
+			else
+				models = new String[] { args[1] };
+		} else
 			models = Infrastructure.models;
 
 		Log.disable();

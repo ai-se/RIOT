@@ -8,6 +8,7 @@
 *.war
 *.ear
 *.csv
+*.txt
 _*.java
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
@@ -121,3 +122,5 @@ lst.csv
 target/
 
 .swp
+
+FUN_NSGAII
