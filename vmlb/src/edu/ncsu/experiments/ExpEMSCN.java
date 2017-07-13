@@ -46,6 +46,7 @@ public class ExpEMSCN {
 		exp_para.put("cxRandChangeProb", 0.1);
 		exp_para.put("mutProb", 0.8);
 		exp_para.put("bitMutProb", 0.4);
+		exp_para.put("algorithm", "NSGA2");
 
 		for (int repeat = 0; repeat < repeats; repeat++) {
 			exp_para.put("seed", System.currentTimeMillis() + (long) repeat);
@@ -54,7 +55,7 @@ public class ExpEMSCN {
 				exp_para.put("dataset", s);
 
 				long startTime = System.currentTimeMillis();
-				SolutionSet res = new EMSC().execNSGAII(exp_para);
+				SolutionSet res = new EMSC().execute(exp_para);
 
 				String output = "";
 				output += ("* " + s + " " + (System.currentTimeMillis() - startTime) / 1000 + "\n");

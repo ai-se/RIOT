@@ -505,10 +505,11 @@ public class MOHEFT {
 
 		alg.setInputParameter("K", tradeOffSolNum);
 		alg.setInputParameter("N", Math.min(maxSimultaneousIns, problem_.getNumberOfVariables()));
-		if (tradeOffSolNum * maxSimultaneousIns * problem_.getNumberOfVariables() > 50000) {
-			System.err.println("K * N too large. Not suitable for MOHEFT algorithm!");
-			return null;
+		if (tradeOffSolNum * maxSimultaneousIns * problem_.getNumberOfVariables() > 110000) {
+			System.err.println("[MOHEFT] K * N too large. Not suitable for MOHEFT algorithm!");
+			return new SolutionSet(1);
 		}
+		
 		SolutionSet p = alg.execute();
 
 		return p;
@@ -538,8 +539,8 @@ public class MOHEFT {
 		paras.put("dataset", "sci_Inspiral_100");
 		paras.put("seed", System.currentTimeMillis()); // ATTENTION: THIS ALG IS
 														// DETERMINISTIC
-		paras.put("tradeOffSolNum", 10);
-		paras.put("maxSimultaneousIns", 20);
+		paras.put("tradeOffSolNum", 50);
+		paras.put("maxSimultaneousIns", 10);
 
 		MOHEFT runner = new MOHEFT();
 		SolutionSet x = runner.execHEFTMinExtremes(paras);

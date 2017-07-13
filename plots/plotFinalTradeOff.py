@@ -87,12 +87,15 @@ colors = ['red', 'green']
 
 for model in models:
     plt.clf()
+    ax = plt.gca()
     for alg, color in zip(algs, colors):
         points = filter(lambda exp: exp.alg == alg and exp.model == model, AllExps)
         for repeat in points:
             x = [t[0] for t in repeat.objs]
             y = [t[1] for t in repeat.objs]
-        plt.scatter(x, y, c=color, label=alg)
+        ax.scatter(x, y, c=color, label=alg)
+        # plt.scatter(x, y, c=color, label=alg)
+        ax.set_xscale("log")
     plt.legend()
     plt.title(model)
     # plt.show()

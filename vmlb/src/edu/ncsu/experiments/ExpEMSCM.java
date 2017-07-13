@@ -14,14 +14,14 @@ import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 
 /**
- * Experiment. for each model, run ENSC-SPEA2 algorithm. record the hall-of-fame
- * during the iteration Repeats = 1
+ * Experiment. for each model, run EMSC-NSGAII algorithm. record the
+ * hall-of-fame during the iteration Repeats = 1
  * 
  * @author jianfeng
  *
  */
 
-public class ExpEMSCS {
+public class ExpEMSCM {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, JMException {
 		int repeats = 1;
 		String[] models;
@@ -37,17 +37,16 @@ public class ExpEMSCS {
 			models = Infrastructure.models;
 
 		Log.disable();
-		File file = new File("emsc-spea2.txt");
+		File file = new File("emsc-moead.txt");
 
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
 		exp_para.put("popSize", 50);
 		exp_para.put("maxEval", 50 * 1000);
-		exp_para.put("arxvSize", 10); // spea2 used only
 		exp_para.put("cxProb", 0.6);
 		exp_para.put("cxRandChangeProb", 0.1);
 		exp_para.put("mutProb", 0.8);
 		exp_para.put("bitMutProb", 0.4);
-		exp_para.put("algorithm", "SPEA2");
+		exp_para.put("algorithm", "MOEAD");
 
 		for (int repeat = 0; repeat < repeats; repeat++) {
 			exp_para.put("seed", System.currentTimeMillis() + (long) repeat);
