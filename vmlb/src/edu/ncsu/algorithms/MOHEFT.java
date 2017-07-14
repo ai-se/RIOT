@@ -84,23 +84,25 @@ class HEFTScheduler {
 			e.printStackTrace();
 		}
 
+		VmEncoding code = (VmEncoding) sol.getDecisionVariables()[0];
+
 		// set orders
 		List<Cloudlet> problem_cloudlets = problem.getCloudletList2();
 		for (int i = 0; i < problem_cloudlets.size(); i++) {
-			((VmEncoding) (sol.getDecisionVariables()[i])).setOrder(cloudletsOrder.indexOf(problem_cloudlets.get(i)));
+			code.taskInOrder[i] = cloudletsOrder.indexOf(problem_cloudlets.get(i));
 		}
 
 		// set task2ins
 		for (int i = 0; i < problem_cloudlets.size(); i++) {
 			if (!assingedTo.containsKey(problem_cloudlets.get(i)))
-				((VmEncoding) (sol.getDecisionVariables()[i])).setTask2ins(-1);
+				code.task2ins[i] = -1;
 			else
-				((VmEncoding) (sol.getDecisionVariables()[i])).setTask2ins(assingedTo.get(problem_cloudlets.get(i)));
+				code.task2ins[i] = assingedTo.get(problem_cloudlets.get(i));
 		}
 
 		// set ins2type
 		for (int i = 0; i < vmTypes.length; i++) {
-			((VmEncoding) (sol.getDecisionVariables()[i])).setIns2Type(vmTypes[i]);
+			code.ins2type[i] = vmTypes[i];
 		}
 
 		return sol;
@@ -509,7 +511,7 @@ public class MOHEFT {
 			System.err.println("[MOHEFT] K * N too large. Not suitable for MOHEFT algorithm!");
 			return new SolutionSet(1);
 		}
-		
+
 		SolutionSet p = alg.execute();
 
 		return p;

@@ -26,6 +26,7 @@ import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionType;
 import jmetal.core.Variable;
+import jmetal.metaheuristics.moead.Utils;
 import jmetal.util.JMException;
 
 /**
@@ -37,43 +38,23 @@ import jmetal.util.JMException;
  */
 class VmEncoding extends Variable {
 	private static final long serialVersionUID = 7889788136550407561L;
-	private int task2ins;
-	private int ins2type;
-	private int taskInOrder;
+	protected int[] task2ins;
+	protected int[] ins2type;
+	protected int[] taskInOrder;
 
-	public VmEncoding(int taskInOrder, int task2ins, int ins2type) {
+	public VmEncoding(int[] taskInOrder, int[] task2ins, int[] ins2type) {
 		this.taskInOrder = taskInOrder;
 		this.task2ins = task2ins;
 		this.ins2type = ins2type;
 	}
 
-	public void setTask2ins(int ins) {
-		this.task2ins = ins;
+	public VmEncoding() {
 	}
 
-	public void setIns2Type(int type) {
-		this.ins2type = type;
-	}
-
-	public void setOrder(int order) {
-		this.taskInOrder = order;
-	}
-
-	public int getTask2ins() {
-		return task2ins;
-	}
-
-	public int getIns2type() {
-		return ins2type;
-	}
-
-	public int getOrder() {
-		return taskInOrder;
-	}
-
-	@Override
-	public String toString() {
-		return this.task2ins + "";
+	public VmEncoding(int l) {
+		task2ins = new int[l];
+		ins2type = new int[l];
+		taskInOrder = new int[l];
 	}
 
 	@Override
@@ -102,19 +83,27 @@ class VMScheduleSolutionType extends SolutionType {
 
 	@Override
 	public Variable[] createVariables() {
-		Variable[] variables = new Variable[problem_.getNumberOfVariables()];
-		int[] tmp_orders = IntStream.range(0, problem_.getNumberOfVariables()).toArray();
-		List<Integer> orders = IntStream.of(tmp_orders).boxed().collect(Collectors.toList());
+		int totalV = problem_.cloudletNum;
+		VmEncoding coding = new VmEncoding();
 
-		Collections.shuffle(orders, problem_.rand);
+		int[] orders = IntStream.range(0, totalV).toArray();
+		List<Integer> o = Ints.asList(orders);
+		Collections.shuffle(o);
+		orders = o.stream().mapToInt(i -> i).toArray();
+		coding.taskInOrder = orders;
 
-		for (int var = 0; var < problem_.getNumberOfVariables(); var++) {
-			int order = orders.get(var);
-			int task2ins = rand.nextInt(problem_.getNumberOfVariables() - 1);
-			int ins2type = rand.nextInt(Infrastructure.getAvailableVmTypes());
-			variables[var] = new VmEncoding(order, task2ins, ins2type);
-		}
-		return variables;
+		int[] task2ins = new int[totalV];
+		for (int i = 0; i < task2ins.length; i++)
+			task2ins[i] = rand.nextInt(totalV - 1);
+		coding.task2ins = task2ins;
+
+		int[] ins2type = new int[totalV];
+		int avalType = Infrastructure.getAvailableVmTypes();
+		for (int i = 0; i < ins2type.length; i++)
+			ins2type[i] = rand.nextInt(avalType);
+		coding.ins2type = ins2type;
+
+		return new Variable[] { coding };
 	}
 
 }
@@ -128,7 +117,7 @@ class VMScheduleSolutionType extends SolutionType {
 public class VmsProblem extends Problem {
 	private static final long serialVersionUID = 6371615104008697832L;
 	public Random rand;
-	private int cloudletNum;
+	public int cloudletNum;
 	private int evalCount;
 	private List<MyCloudlet> cloudletList;
 
@@ -146,7 +135,7 @@ public class VmsProblem extends Problem {
 		cloudletNum = cloudletList.size();
 		workflow = (CloudletDAG) (tmpInfo[1]);
 
-		this.numberOfVariables_ = this.cloudletNum;
+		this.numberOfVariables_ = 1; // TODO ATTENTION
 		this.numberOfObjectives_ = 2; // TODO change this if needed
 
 		this.solutionType_ = new VMScheduleSolutionType(this, rand);
@@ -158,19 +147,13 @@ public class VmsProblem extends Problem {
 	public void evaluate(Solution solution) {
 		evalCount += 1;
 		if (evalCount % 100 == 0 || evalCount == 1)
-			System.out
-					.println("[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
+			System.out.println(
+					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
 
 		Variable[] decs = solution.getDecisionVariables();
-		int[] order = new int[getNumberOfVariables()];
-		int[] task2ins = new int[getNumberOfVariables()];
-		int[] ins2type = new int[getNumberOfVariables()];
-
-		for (int var = 0; var < getNumberOfVariables(); var++) {
-			order[var] = ((VmEncoding) decs[var]).getOrder();
-			task2ins[var] = ((VmEncoding) decs[var]).getTask2ins();
-			ins2type[var] = ((VmEncoding) decs[var]).getIns2type();
-		}
+		int[] order = ((VmEncoding) decs[0]).taskInOrder;
+		int[] task2ins = ((VmEncoding) decs[0]).task2ins;
+		int[] ins2type = ((VmEncoding) decs[0]).ins2type;
 
 		// ****** starting cloudsim simulation
 		long s1 = System.currentTimeMillis();
@@ -316,31 +299,27 @@ public class VmsProblem extends Problem {
 
 	public void printSolution(Solution s) {
 		Variable[] decs = s.getDecisionVariables();
-		int varLength = decs.length;
 
-		int[] order = new int[varLength];
-		int[] task2ins = new int[varLength];
-		int[] ins2type = new int[varLength];
+		int[] order = ((VmEncoding) decs[0]).taskInOrder;
+		int[] task2ins = ((VmEncoding) decs[0]).task2ins;
+		int[] ins2type = ((VmEncoding) decs[0]).ins2type;
 
-		for (int v = 0; v < varLength; v++) {
-			VmEncoding var = (VmEncoding) decs[v];
-			order[v] = var.getOrder();
-			task2ins[v] = var.getTask2ins();
-			ins2type[v] = var.getIns2type();
-		}
 		System.out.println(Arrays.toString(order));
 		System.out.println(Arrays.toString(task2ins));
 		System.out.println(Arrays.toString(ins2type));
 		System.out.println("------");
 		System.out.println();
-
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_Epigenomics_997", new Random(15188));
-		for (int i = 0; i < 30; i++) {
+		VmsProblem p = new VmsProblem("sci_Inspiral_100", new Random(15188));
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < 1000; i++) {
 			Solution randS = new Solution(p);
 			p.evaluate(randS);
+			System.out.println(i + " done.");
 		}
+
+		System.out.println("Total time = " + (System.currentTimeMillis() - start) / 1000);
 	}
 }

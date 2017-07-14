@@ -46,7 +46,7 @@ public class ExpEMSCN {
 		exp_para.put("cxRandChangeProb", 0.1);
 		exp_para.put("mutProb", 0.8);
 		exp_para.put("bitMutProb", 0.4);
-		exp_para.put("algorithm", "NSGA2");
+		exp_para.put("algorithm", "NSGAII");
 
 		for (int repeat = 0; repeat < repeats; repeat++) {
 			exp_para.put("seed", System.currentTimeMillis() + (long) repeat);

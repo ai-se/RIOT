@@ -212,12 +212,12 @@ public class EMSC {
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
 		// for (String model : Infrastructure.models) {
-		for (String model : new String[] { "j30" }) {
+		for (String model : new String[] { "sci_Inspiral_100" }) {
 			System.out.println("Starting : " + model);
 			HashMap<String, Object> paras = new HashMap<String, Object>();
-			paras.put("algorithm", "MOEAD"); // TODO change here
+			paras.put("algorithm", "NSGAII"); // TODO change here
 			paras.put("dataset", model);
-			paras.put("seed", System.currentTimeMillis());
+			paras.put("seed", 12345L);
 			paras.put("popSize", 50);
 			paras.put("maxEval", 1000);
 			paras.put("arxvSize", 10); // spea2 used only
