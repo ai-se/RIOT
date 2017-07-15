@@ -1,5 +1,7 @@
 package edu.ncsu.algorithms;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
@@ -212,8 +214,7 @@ public class EMSC {
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
 		// for (String model : Infrastructure.models) {
-		for (String model : new String[] { "sci_Inspiral_100" }) {
-			System.out.println("Starting : " + model);
+		for (String model : new String[] { "sci_Inspiral_1000" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("algorithm", "NSGAII"); // TODO change here
 			paras.put("dataset", model);

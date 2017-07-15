@@ -146,9 +146,10 @@ public class VmsProblem extends Problem {
 	@Override
 	public void evaluate(Solution solution) {
 		evalCount += 1;
-		if (evalCount % 100 == 0 || evalCount == 1)
+		if (evalCount % 100 == 0 || evalCount == 1) {
 			System.out.println(
 					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
+		}
 
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = ((VmEncoding) decs[0]).taskInOrder;
