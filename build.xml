@@ -49,10 +49,10 @@
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="guava-22.0.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="w3c-dom.jar"/>
         </jar>
-        <jar destfile="${dir.jarfile}/moeheft.jar">
+        <jar destfile="${dir.jarfile}/moheft.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpEOHEFT"/>
+                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpMOHEFT"/>
                 <attribute name="Class-Path" value="."/>
                 <attribute name="Rsrc-Class-Path" value="./ cloudsim-4.0.jar jmetal4.2.jar guava-22.0.jar w3c-dom.jar"/>
             </manifest>
