@@ -75,8 +75,8 @@ public class DAGCentralSimulator {
 		return null;
 	}
 
-	/**=
-	 * We are now supporting SUBMITTED-IN-ORDER ~~
+	/**
+	 * = We are now supporting SUBMITTED-IN-ORDER ~~
 	 * 
 	 * @param cloudlet
 	 * @param fileTransferTime
@@ -95,7 +95,7 @@ public class DAGCentralSimulator {
 		this.vmInfos.get(myVm).appendWL(cloudlet);
 		Log.printLine(String.format("[----] SUBMIT %s to VM # %d", cloudlet, cloudlet.getVmId()));
 		cloudlet.setCloudletStatus(Cloudlet.READY, -1); // -1 not used
-		
+
 		submittedNum += 1;
 	}
 
@@ -117,16 +117,17 @@ public class DAGCentralSimulator {
 			return false;
 
 		currentTime = CloudSim.getMinTimeBetweenEvents();
-		double previousTime = 0;
+		// double previousTime = 0;
 		while (finishedNum < submittedNum) {
 			// step 1-1 updating executing
-			double timespan = currentTime - previousTime;
+			// double timespan = currentTime - previousTime;
 			for (Vm v : vmlist) {
 				SingleVmInfo vinfo = vmInfos.get(v);
 
 				// Updating executing cloudlet
 				if (vinfo.executing != null) {
-					vinfo.executing.setCloudletFinishedSoFar((long) (vinfo.mips * timespan * Consts.MILLION));
+					vinfo.executing.setCloudletFinishedSoFar(
+							(long) (vinfo.mips * (currentTime - vinfo.executing.getExecStartTime())));
 					if (vinfo.executing.getRemainingCloudletLength() == 0) { // finish
 						taskFinish(vinfo.executing);
 						vinfo.finishList.add(vinfo.executing);
@@ -148,7 +149,7 @@ public class DAGCentralSimulator {
 
 				// try to fetch a new cloudlet
 				for (Task task : vinfo.waitingList) {
-					
+
 					if (dag.isCloudletPrepared(task)) {
 						vinfo.executing = task;
 						taskStarts(task, currentTime);
@@ -163,12 +164,12 @@ public class DAGCentralSimulator {
 				}
 			} // for v
 
-			previousTime = currentTime;
+			// previousTime = currentTime;
 			Double k = clock.higher(currentTime);
 
 			if (k != null)
 				currentTime = k;
-			else{
+			else {
 				currentTime = currentTime + CloudSim.getMinTimeBetweenEvents();
 			}
 		}

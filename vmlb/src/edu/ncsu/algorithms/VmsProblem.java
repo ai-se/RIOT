@@ -242,7 +242,7 @@ public class VmsProblem extends Problem {
 				cost += Infrastructure.getUnitPrice(v) * Math.ceil((end - start) / 3600);
 		}
 
-		// System.out.printf("%.1fs with $%.3f\n", makespan, cost);
+		System.out.printf("%.1fs with $%.3f\n", makespan, cost);
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);
 		long s7 = System.currentTimeMillis();
@@ -276,7 +276,7 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("eprotein", new Random());
+		VmsProblem p = new VmsProblem("sci_Epigenomics_24", new Random());
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < 1; i++) {
 			Solution randS = new Solution(p);

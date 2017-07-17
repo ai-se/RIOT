@@ -218,7 +218,7 @@ public class EMSC {
 			paras.put("dataset", model);
 			paras.put("seed", 12345L);
 			paras.put("popSize", 50);
-			paras.put("maxEval", 1000);
+			paras.put("maxEval", 5000);
 			paras.put("arxvSize", 10); // spea2 used only
 			paras.put("cxProb", 0.6);
 			paras.put("cxRandChangeProb", 0.1);
