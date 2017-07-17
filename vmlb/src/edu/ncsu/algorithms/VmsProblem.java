@@ -2,31 +2,26 @@ package edu.ncsu.algorithms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.core.CloudSim;
 
 import com.google.common.primitives.Ints;
 
-import edu.ncsu.wls.CloudletDAG;
-import edu.ncsu.wls.DAGCentralScheduler;
+import edu.ncsu.wls.DAG;
+import edu.ncsu.wls.DAGCentralSimulator;
 import edu.ncsu.wls.Infrastructure;
 import edu.ncsu.wls.MyCloudSimHelper;
-import edu.ncsu.wls.MyCloudlet;
-import edu.ncsu.wls.OnlineDatacenterBroker;
+import edu.ncsu.wls.Task;
 import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionType;
 import jmetal.core.Variable;
-import jmetal.metaheuristics.moead.Utils;
 import jmetal.util.JMException;
 
 /**
@@ -83,7 +78,7 @@ class VMScheduleSolutionType extends SolutionType {
 
 	@Override
 	public Variable[] createVariables() {
-		int totalV = problem_.cloudletNum;
+		int totalV = problem_.tasksNum;
 		VmEncoding coding = new VmEncoding();
 
 		int[] orders = IntStream.range(0, totalV).toArray();
@@ -117,11 +112,11 @@ class VMScheduleSolutionType extends SolutionType {
 public class VmsProblem extends Problem {
 	private static final long serialVersionUID = 6371615104008697832L;
 	public Random rand;
-	public int cloudletNum;
+	public int tasksNum;
 	private int evalCount;
-	private List<MyCloudlet> cloudletList;
+	private List<Task> tasks;
 
-	private CloudletDAG workflow;
+	private DAG workflow;
 
 	private String name;
 
@@ -130,10 +125,10 @@ public class VmsProblem extends Problem {
 		this.rand = rand;
 		this.name = dataset;
 
-		Object[] tmpInfo = Infrastructure.getCaseCloudlets(this.name, -1);
-		cloudletList = (List<MyCloudlet>) tmpInfo[0];
-		cloudletNum = cloudletList.size();
-		workflow = (CloudletDAG) (tmpInfo[1]);
+		Object[] tmpInfo = Infrastructure.getCaseCloudlets(this.name, 0);
+		tasks = (List<Task>) tmpInfo[0];
+		tasksNum = tasks.size();
+		workflow = (DAG) (tmpInfo[1]);
 
 		this.numberOfVariables_ = 1; // TODO ATTENTION
 		this.numberOfObjectives_ = 2; // TODO change this if needed
@@ -144,6 +139,13 @@ public class VmsProblem extends Problem {
 	}
 
 	@Override
+	public int getNumberOfVariables() {
+		System.err.println("really need this?");
+		System.exit(-1);
+		return tasksNum;
+	};
+
+	@Override
 	public void evaluate(Solution solution) {
 		evalCount += 1;
 		if (evalCount % 100 == 0 || evalCount == 1) {
@@ -151,100 +153,69 @@ public class VmsProblem extends Problem {
 					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
 		}
 
+		Log.disable();
+
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = ((VmEncoding) decs[0]).taskInOrder;
 		int[] task2ins = ((VmEncoding) decs[0]).task2ins;
 		int[] ins2type = ((VmEncoding) decs[0]).ins2type;
-
-		// ****** starting cloudsim simulation
-		long s1 = System.currentTimeMillis();
-
-		Log.disable();
-		// Create Cloudsim server
-		int num_user = 1; // number of cloud users
-		Calendar calendar = Calendar.getInstance();
-		boolean trace_flag = false; // trace events
-
-		CloudSim.init(num_user, calendar, trace_flag, Infrastructure.PEROID_BETWEEN_EVENTS);
-		Infrastructure.createDatacenter(this.cloudletNum);
-		OnlineDatacenterBroker broker = null;
-		try {
-			broker = new OnlineDatacenterBroker("dc_broker");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		int dcBrokerId = broker.getId();
-		long s2 = System.currentTimeMillis();
-
-		// Get dataset
-		Object[] info = Infrastructure.getCaseCloudlets(this.name, broker.getId());
-		@SuppressWarnings("unchecked")
-		List<MyCloudlet> cloudletList = (List<MyCloudlet>) info[0];
-		CloudletDAG workflow = (CloudletDAG) info[1];
-
-		// reset cloudlet to factory config
-		for (MyCloudlet c : cloudletList)
+		// this.printSolution(solution);
+		// reset cloudlet to factory configurations
+		for (Task c : tasks)
 			c.setCloudletFinishedSoFar(0);
+
 		workflow.rmCache();
 
 		if (Ints.contains(task2ins, -1))
 			workflow.turnOnIgnoreDAGMode();
 
-		long s3 = System.currentTimeMillis();
-		// System.err.println(s3 - s2 + " B");
+		// if (!workflow.ignoreDAGmode)
+		// System.out.println("DUBUG");
 
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
-		vmlist = Infrastructure.createVms(dcBrokerId, task2ins, ins2type);
+		vmlist = Infrastructure.createVms(0, task2ins, ins2type);
 
 		// map task to vm
-		for (int var = 0; var < cloudletNum; var++) {
+		for (int var = 0; var < tasksNum; var++) {
 			if (task2ins[var] == -1) {
 				workflow.totalCloudletNum -= 1;
 				continue;
 			}
-			cloudletList.get(var).setVmId(vmlist.get(task2ins[var]).getId());
+			tasks.get(var).setVmId(vmlist.get(task2ins[var]).getId());
 		}
 
-		workflow.calcFileTransferTimes(task2ins, vmlist, cloudletList);
+		workflow.calcFileTransferTimes(task2ins, vmlist, tasks);
 
 		// binding global workflow to vm
-		vmlist.removeAll(Collections.singleton(null)); // remove null in vmlist
-		for (Vm vm : vmlist.subList(0, 1)) { // ATTENTION: NOW SHARE SAME
-												// DAGCENTRALSCHEDULER
-			((DAGCentralScheduler) (vm.getCloudletScheduler())).setCloudletPassport(workflow);
-			((DAGCentralScheduler) (vm.getCloudletScheduler())).setVmList(vmlist);
-		}
+		vmlist.removeAll(Collections.singleton(null)); // remove null
 
-		long s4 = System.currentTimeMillis();
-		// System.err.println(s4 - s3 + " C");
+		DAGCentralSimulator cloudSim = new DAGCentralSimulator();
 
-		// re-range cloudletList according to order
-		List<MyCloudlet> tmp = new ArrayList<MyCloudlet>();
+		// binding dag to simulator
+		cloudSim.setCloudletPassport(workflow);
+		// broker.submitVmList(vmlist);
+		cloudSim.setVmList(vmlist);
 
+		// submit cloudletList according to order
+		// broker.submitCloudletList(tmp);
 		for (int i : order) {
 			if (task2ins[i] != -1)
-				tmp.add(cloudletList.get(i));
+				cloudSim.taskSubmit(tasks.get(i), workflow.getFileTransferTime(tasks.get(i)));
 		}
 
-		broker.submitCloudletList(tmp);
-		broker.submitVmList(vmlist);
+		cloudSim.boot();
 
-		long s5 = System.currentTimeMillis();
-		// System.err.println(s5 - s4 + " D");
+		List<Task> revList = new ArrayList<Task>();
+		for (Task i : tasks)
+			if (i.getStatus() == Cloudlet.SUCCESS)
+				revList.add(i);
 
-		CloudSim.startSimulation();
-		CloudSim.stopSimulation();
-		long s6 = System.currentTimeMillis();
-		// System.err.println(s6 - s5 + " E");
-
-		List<Cloudlet> revList = broker.getCloudletReceivedList();
 		MyCloudSimHelper.printCloudletList(revList);
 
 		if (revList.size() != workflow.totalCloudletNum) {
 			System.err.println("[VmsP] can not simulating all cloudlets!");
-			System.err.println("left # = " + (cloudletList.size() - revList.size()));
+			System.err.println("left # = " + (workflow.totalCloudletNum - revList.size()));
 			MyCloudSimHelper.forcePrintCloudList(revList);
 			System.exit(-1);
 			return;
@@ -252,7 +223,7 @@ public class VmsProblem extends Problem {
 
 		// calculating objectives
 		double makespan = 0;
-		for (Cloudlet c : revList) {
+		for (Task c : revList) {
 			makespan = Math.max(makespan, c.getFinishTime());
 		}
 
@@ -261,7 +232,7 @@ public class VmsProblem extends Problem {
 		for (Vm v : vmlist) {
 			double start = Double.MAX_VALUE;
 			double end = -Double.MAX_VALUE;
-			for (Cloudlet c : revList) {
+			for (Task c : revList) {
 				if (c.getVmId() != v.getId())
 					continue;
 				start = Double.min(start, c.getExecStartTime());
@@ -275,7 +246,6 @@ public class VmsProblem extends Problem {
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);
 		long s7 = System.currentTimeMillis();
-		// System.err.println(s7 - s6 + " F");
 		// System.err.println(System.currentTimeMillis() - s1);
 	}
 
@@ -283,19 +253,12 @@ public class VmsProblem extends Problem {
 		return this.rand.nextInt(bound);
 	}
 
-	public CloudletDAG getWorkflow() {
+	public DAG getWorkflow() {
 		return workflow;
 	}
 
-	public List<MyCloudlet> getCloudletList() {
-		return cloudletList;
-	}
-
-	public List<Cloudlet> getCloudletList2() {
-		List<Cloudlet> l = new ArrayList<Cloudlet>();
-		for (MyCloudlet c : cloudletList)
-			l.add((Cloudlet) c);
-		return l;
+	public List<Task> getTasks() {
+		return tasks;
 	}
 
 	public void printSolution(Solution s) {
@@ -305,20 +268,20 @@ public class VmsProblem extends Problem {
 		int[] task2ins = ((VmEncoding) decs[0]).task2ins;
 		int[] ins2type = ((VmEncoding) decs[0]).ins2type;
 
-		System.out.println(Arrays.toString(order));
-		System.out.println(Arrays.toString(task2ins));
-		System.out.println(Arrays.toString(ins2type));
+		System.out.println("order " + Arrays.toString(order));
+		System.out.println("insta " + Arrays.toString(task2ins));
+		System.out.println("type_ " + Arrays.toString(ins2type));
 		System.out.println("------");
 		System.out.println();
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_Inspiral_100", new Random(15188));
+		VmsProblem p = new VmsProblem("eprotein", new Random());
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 1; i++) {
 			Solution randS = new Solution(p);
 			p.evaluate(randS);
-			System.out.println(i + " done.");
+			System.out.println(i + 1 + " done.");
 		}
 
 		System.out.println("Total time = " + (System.currentTimeMillis() - start) / 1000);

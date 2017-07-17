@@ -1,15 +1,13 @@
 package edu.ncsu.wls;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
-import org.cloudbus.cloudsim.Cloudlet;
+//import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Vm;
-
-import com.google.common.primitives.Ints;
 
 /**
  * 
@@ -20,86 +18,71 @@ import com.google.common.primitives.Ints;
  * 
  */
 
-public class CloudletDAG {
-	private HashMap<Cloudlet, List<Cloudlet>> requiring = new HashMap<Cloudlet, List<Cloudlet>>();
-	private HashMap<Cloudlet, List<Cloudlet>> contributeTo = new HashMap<Cloudlet, List<Cloudlet>>();
-	private HashMap<Cloudlet, HashMap<Cloudlet, Long>> files = new HashMap<Cloudlet, HashMap<Cloudlet, Long>>();
-	private HashMap<Cloudlet, Double> fileTransferTime = new HashMap<Cloudlet, Double>();
-	private boolean ignoreDAGmode = false;
+public class DAG {
+	private HashMap<Task, List<Task>> requiring = new HashMap<Task, List<Task>>();
+	private HashMap<Task, List<Task>> contributeTo = new HashMap<Task, List<Task>>();
+	private HashMap<Task, HashMap<Task, Long>> files = new HashMap<Task, HashMap<Task, Long>>();
+	private HashMap<Task, Double> fileTransferTime = new HashMap<Task, Double>();
+	public boolean ignoreDAGmode = false;
 	private int defultTotalCloudletNum;
 	public int totalCloudletNum = 0;
 
-	// ready 0-notCalc 1-notReady 2-Ready -1-Always ready(no requires)
+	// ready negative-not ready 0-ready
 	private int[] readyed = new int[5000]; // TODO assume 5k cloudlets at max
+	private int[] totalNeed = new int[5000];
 
-	public CloudletDAG() {
+	public DAG() {
 	}
 
 	public void rmCache() {
-		if(ignoreDAGmode){
+		if (ignoreDAGmode) {
 			for (int i = 0; i < totalCloudletNum; i++)
 				readyed[i] = 0;
 		}
-		
-		if (!ignoreDAGmode && IntStream.of(readyed).sum() != 0) // not the first time rmCache
-			for (int i = 0; i < totalCloudletNum; i++)
-				readyed[i] = readyed[i] == -1 ? -1 : 1;
-		this.ignoreDAGmode = false;
+
 		totalCloudletNum = defultTotalCloudletNum;
+		for (int i = 0; i < totalCloudletNum; i++)
+			readyed[i] = totalNeed[i];
+		this.ignoreDAGmode = false;
 	}
 
 	public void turnOnIgnoreDAGMode() {
 		this.ignoreDAGmode = true;
 	}
 
-	public void addCloudWorkflow(Cloudlet from, Cloudlet to) {
+	public void addCloudWorkflow(Task from, Task to) {
 		if (!this.requiring.containsKey(to))
-			this.requiring.put(to, new ArrayList<Cloudlet>());
+			this.requiring.put(to, new ArrayList<Task>());
 		this.requiring.get(to).add(from);
 
 		if (!this.contributeTo.containsKey(from))
-			this.contributeTo.put(from, new ArrayList<Cloudlet>());
+			this.contributeTo.put(from, new ArrayList<Task>());
 		this.contributeTo.get(from).add(to);
+
+		int index = to.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
+		readyed[index] += 1;
+		totalNeed[index] += 1;
 	}
 
-	public void setFilesBetween(Cloudlet from, Cloudlet to, long fileSize) {
+	public void setFilesBetween(Task from, Task to, long fileSize) {
 		if (!files.containsKey(from))
-			files.put(from, new HashMap<Cloudlet, Long>());
+			files.put(from, new HashMap<Task, Long>());
 		files.get(from).put(to, fileSize);
 	}
 
-	public synchronized boolean isCloudletPrepared(Cloudlet cloudlet) {
+	public synchronized boolean isCloudletPrepared(Task cloudlet) {
 		if (ignoreDAGmode)
 			return true;
 
 		int index = cloudlet.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
-
-		switch (readyed[index]) {
-		case 1:
-			return false;
-		case 2:
-			return true;
-		case -1:
-			return true;
-		case 0:
-			if (!this.hasPred(cloudlet)) {
-				readyed[index] = -1;
-				return true;
-			} else {
-				readyed[index] = 1;
-				return false;
-			}
-
-		}
-		return true;
+		return readyed[index] == 0;
 	}
 
-	public synchronized void afterOneCloudletSuccess(Cloudlet cloudlet) {
+	public synchronized void afterOneCloudletSuccess(Task cloudlet) {
 		if (contributeTo.containsKey(cloudlet))
-			for (Cloudlet p : contributeTo.get(cloudlet)) {
+			for (Task p : contributeTo.get(cloudlet)) {
 				int pindex = p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
-				if (readyed[pindex] != -1)
-					readyed[pindex] = 2;
+				readyed[pindex] -= 1;
 			}
 	}
 
@@ -116,16 +99,16 @@ public class CloudletDAG {
 	 * @param ins2type
 	 * @param vmlist
 	 */
-	public void calcFileTransferTimes(int[] task2ins, List<Vm> vmlist, List<MyCloudlet> cList) {
+	public void calcFileTransferTimes(int[] task2ins, List<Vm> vmlist, List<Task> cList) {
 		this.fileTransferTime.clear();
-		for (Cloudlet c : cList)
+		for (Task c : cList)
 			fileTransferTime.put(c, 0.0);
 
 		if (ignoreDAGmode)
 			return;
 
-		for (Cloudlet target : requiring.keySet()) {
-			for (Cloudlet src : requiring.get(target)) {
+		for (Task target : requiring.keySet()) {
+			for (Task src : requiring.get(target)) {
 				int s = cList.indexOf(src);
 				int t = cList.indexOf(target);
 				if (task2ins[s] != task2ins[t]) {
@@ -137,7 +120,7 @@ public class CloudletDAG {
 		} // for src
 	}
 
-	private long getFileTransferSize(Cloudlet from, Cloudlet to) {
+	private long getFileTransferSize(Task from, Task to) {
 		if (!this.files.containsKey(from))
 			return new Random(123456L).nextInt(448484515); // Early version
 		// return 0;
@@ -147,11 +130,11 @@ public class CloudletDAG {
 		return this.files.get(from).get(to);
 	}
 
-	public double getFileTransferTime(Cloudlet c) {
+	public double getFileTransferTime(Task c) {
 		return fileTransferTime.get(c);
 	}
 
-	public boolean hasPred(Cloudlet x) {
+	public boolean hasPred(Task x) {
 		if (ignoreDAGmode)
 			return false;
 
@@ -160,7 +143,7 @@ public class CloudletDAG {
 		return false;
 	}
 
-	public boolean hasSucc(Cloudlet x) {
+	public boolean hasSucc(Task x) {
 		if (ignoreDAGmode)
 			return false;
 
@@ -169,28 +152,28 @@ public class CloudletDAG {
 		return false;
 	}
 
-	public HashMap<Cloudlet, List<Cloudlet>> getRequiring() {
+	public HashMap<Task, List<Task>> getRequiring() {
 		return requiring;
 	}
 
-	public List<Cloudlet> meRequires(Cloudlet me) {
+	public List<Task> meRequires(Task me) {
 		if (ignoreDAGmode || !requiring.containsKey(me))
-			return new ArrayList<Cloudlet>();
+			return new ArrayList<Task>();
 
 		return requiring.get(me);
 	}
 
-	public List<Cloudlet> meContributeTo(Cloudlet me) {
+	public List<Task> meContributeTo(Task me) {
 		if (ignoreDAGmode || !contributeTo.containsKey(me))
-			return new ArrayList<Cloudlet>();
+			return new ArrayList<Task>();
 
 		return contributeTo.get(me);
 	}
 
 	public String toString() {
 		String r = "FLOW\n";
-		for (Cloudlet to : this.requiring.keySet()) {
-			for (Cloudlet from : this.requiring.get(to))
+		for (Task to : this.requiring.keySet()) {
+			for (Task from : this.requiring.get(to))
 				r += (from) + "|";
 			r += "-> " + to + "\n";
 		}

@@ -1,20 +1,11 @@
 package edu.ncsu.wls;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.cloudbus.cloudsim.Datacenter;
-import org.cloudbus.cloudsim.DatacenterCharacteristics;
-import org.cloudbus.cloudsim.Host;
-import org.cloudbus.cloudsim.Pe;
-import org.cloudbus.cloudsim.Storage;
+import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.Vm;
-import org.cloudbus.cloudsim.VmSchedulerSpaceShared;
-import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
-import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Ints;
@@ -125,7 +116,7 @@ public class Infrastructure {
 
 		double sdm = 100;
 
-		DAGCentralScheduler p = new DAGCentralScheduler();
+		CloudletScheduler p = null;
 		list.add(new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium", p));
 		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
 		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
@@ -161,7 +152,7 @@ public class Infrastructure {
 		for (int i = 0; i <= Ints.max(ins); i++)
 			list.add(null);
 
-		DAGCentralScheduler p = new DAGCentralScheduler();
+		CloudletScheduler p = null;
 		for (int index : ins) {
 			if (index == -1 || list.get(index) != null)
 				continue;
@@ -207,7 +198,7 @@ public class Infrastructure {
 
 		LinkedList<Vm> list = new LinkedList<Vm>();
 		for (int i = 0; i < num; i++) {
-			list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, new DAGCentralScheduler()));
+			list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, null));
 		}
 
 		return list;
@@ -275,65 +266,68 @@ public class Infrastructure {
 		return 8; // in aws EC2
 	}
 
-	/**
-	 * Creating data centers
-	 * 
-	 * @return
-	 */
-	public static Datacenter createDatacenter() {
-		return Infrastructure.createDatacenter(10);
-	}
-
-	// TODO entrance to modify Data center configurations
-	public static Datacenter createDatacenter(int reqVmNum) {
-		String name = DATACENTER_NAME;
-		List<Host> hostList = new ArrayList<Host>();
-
-		// each machine are n-core machine
-		List<Pe> peList = new ArrayList<Pe>();
-		peList.add(new Pe(0, new PeProvisionerSimple(Integer.MAX_VALUE)));
-
-		// create (same configured) PMs in a datacenter
-		int hostId = 0;
-		int ram = Integer.MAX_VALUE; // host memory (MB)
-		long storage = Integer.MAX_VALUE; // host storage
-		int bw = Integer.MAX_VALUE;
-
-		for (int i = 0; i < reqVmNum; i++) {
-			hostList.add(new Host(++hostId, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), storage, peList,
-					new VmSchedulerSpaceShared(peList))); // This is our
-															// machine
-		}
-
-		// data center characteristics
-		String arch = "x86"; // system architecture
-		String os = "Linux"; // operating system
-		String vmm = "Xen";
-		double time_zone = 10.0; // time zone this resource located
-		double cost = 3.0; // the cost of using processing in this resource
-		double costPerMem = 0.05; // the cost of using memory in this resource
-		double costPerStorage = 0.001; // the cost of using storage in this
-										// resource
-		double costPerBw = 1.0; // the cost of using bw in this resource
-		LinkedList<Storage> storageList = new LinkedList<Storage>();
-
-		DatacenterCharacteristics characteristics = new DatacenterCharacteristics(arch, os, vmm, hostList, time_zone,
-				cost, costPerMem, costPerStorage, costPerBw);
-
-		// Create a PowerDatacenter object.
-		Datacenter datacenter = null;
-		try {
-			datacenter = new Datacenter(name, characteristics, new StaticRandomVmAllocationPolicy(hostList),
-					storageList, 1);
-			// datacenter = new Datacenter(name, characteristics, new
-			// StaticRandomVmAllocationPolicy(hostList),
-			// storageList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return datacenter;
-	}
+	// /**
+	// * Creating data centers
+	// *
+	// * @return
+	// */
+	// public static Datacenter createDatacenter() {
+	// return Infrastructure.createDatacenter(10);
+	// }
+	//
+	// // TODO entrance to modify Data center configurations
+	// public static Datacenter createDatacenter(int reqVmNum) {
+	// String name = DATACENTER_NAME;
+	// List<Host> hostList = new ArrayList<Host>();
+	//
+	// // each machine are n-core machine
+	// List<Pe> peList = new ArrayList<Pe>();
+	// peList.add(new Pe(0, new PeProvisionerSimple(Integer.MAX_VALUE)));
+	//
+	// // create (same configured) PMs in a datacenter
+	// int hostId = 0;
+	// int ram = Integer.MAX_VALUE; // host memory (MB)
+	// long storage = Integer.MAX_VALUE; // host storage
+	// int bw = Integer.MAX_VALUE;
+	//
+	// for (int i = 0; i < reqVmNum; i++) {
+	// hostList.add(new Host(++hostId, new RamProvisionerSimple(ram), new
+	// BwProvisionerSimple(bw), storage, peList,
+	// new VmSchedulerSpaceShared(peList))); // This is our
+	// // machine
+	// }
+	//
+	// // data center characteristics
+	// String arch = "x86"; // system architecture
+	// String os = "Linux"; // operating system
+	// String vmm = "Xen";
+	// double time_zone = 10.0; // time zone this resource located
+	// double cost = 3.0; // the cost of using processing in this resource
+	// double costPerMem = 0.05; // the cost of using memory in this resource
+	// double costPerStorage = 0.001; // the cost of using storage in this
+	// // resource
+	// double costPerBw = 1.0; // the cost of using bw in this resource
+	// LinkedList<Storage> storageList = new LinkedList<Storage>();
+	//
+	// DatacenterCharacteristics characteristics = new
+	// DatacenterCharacteristics(arch, os, vmm, hostList, time_zone,
+	// cost, costPerMem, costPerStorage, costPerBw);
+	//
+	// // Create a PowerDatacenter object.
+	// Datacenter datacenter = null;
+	// try {
+	// datacenter = new Datacenter(name, characteristics, new
+	// StaticRandomVmAllocationPolicy(hostList),
+	// storageList, 1);
+	// // datacenter = new Datacenter(name, characteristics, new
+	// // StaticRandomVmAllocationPolicy(hostList),
+	// // storageList);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return datacenter;
+	// }
 
 	/**
 	 * Generating the pre-defined study cases Using memo decorator pattern
@@ -351,8 +345,8 @@ public class Infrastructure {
 		int ID = dataset.hashCode() + brokerId;
 
 		if (!archieveCloudLets.containsKey(ID)) {
-			List<MyCloudlet> cloudletList = null;
-			CloudletDAG workflow = null;
+			List<Task> cloudletList = null;
+			DAG workflow = null;
 
 			switch (dataset) {
 			case "fmri":

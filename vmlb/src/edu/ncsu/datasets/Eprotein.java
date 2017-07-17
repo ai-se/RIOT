@@ -9,8 +9,8 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 
-import edu.ncsu.wls.CloudletDAG;
-import edu.ncsu.wls.MyCloudlet;
+import edu.ncsu.wls.DAG;
+import edu.ncsu.wls.Task;
 
 /**
  * Simulating the workflow of paper Mapping of Scientific Workflow within the
@@ -24,13 +24,12 @@ import edu.ncsu.wls.MyCloudlet;
 public class Eprotein implements Dataset {
 	private int idshift;
 	private int userid; // TODO assuming single user at this time
-	private double starttime = 0.1; // TODO Set start time?
-	private Map<String, MyCloudlet> tasks;
-	private CloudletDAG workflow;
+	private Map<String, Task> tasks;
+	private DAG workflow;
 
 	public Eprotein(int userid, int idshift) {
-		tasks = new HashMap<String, MyCloudlet>();
-		workflow = new CloudletDAG();
+		tasks = new HashMap<String, Task>();
+		workflow = new DAG();
 		this.idshift = idshift;
 		this.userid = userid;
 
@@ -38,9 +37,9 @@ public class Eprotein implements Dataset {
 		this.createWorkFlows();
 	}
 
-	public List<MyCloudlet> getCloudletList() {
+	public List<Task> getCloudletList() {
 		Log.printLine("RUNNING at Eprotein getcloudlist...");
-		List<MyCloudlet> cloudletList = new ArrayList<MyCloudlet>();
+		List<Task> cloudletList = new ArrayList<Task>();
 
 		for (String name : this.tasks.keySet())
 			cloudletList.add(tasks.get(name));
@@ -48,20 +47,22 @@ public class Eprotein implements Dataset {
 		return cloudletList;
 	}
 
-	public CloudletDAG getCloudletPassport() {
+	public DAG getCloudletPassport() {
 		return workflow;
 	}
 
-	private MyCloudlet createCloudlet(double workloadInSecs) {
+	private Task createCloudlet(double workloadInSecs) {
 		// cloudlet parameters
 		long length = (long) (1000.0 * workloadInSecs);
-		long fileSize = 300;
-		long outputSize = 300;
-		int pesNumber = 1;
-		UtilizationModel utilizationModel = new UtilizationModelFull();
+		// long fileSize = 300;
+		// long outputSize = 300;
+		// int pesNumber = 1;
+		// UtilizationModel utilizationModel = new UtilizationModelFull();
 
-		MyCloudlet cloudlet = new MyCloudlet(idshift++, length, pesNumber, fileSize, outputSize, utilizationModel,
-				utilizationModel, utilizationModel, starttime);
+		// Task cloudlet = new Task(idshift++, length, pesNumber, fileSize,
+		// outputSize, utilizationModel,
+		// utilizationModel, utilizationModel);
+		Task cloudlet = new Task(idshift++, length);
 		cloudlet.setUserId(userid);
 
 		return cloudlet;

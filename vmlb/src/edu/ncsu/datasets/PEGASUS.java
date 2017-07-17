@@ -19,8 +19,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import edu.ncsu.wls.CloudletDAG;
-import edu.ncsu.wls.MyCloudlet;
+import edu.ncsu.wls.DAG;
+import edu.ncsu.wls.Task;
 
 /**
  * Parser and interpreter of Pegasus Workflow dataset, widely used in Scientific
@@ -33,29 +33,27 @@ public class PEGASUS implements Dataset {
 	private int idshift;
 	private int userid;
 	private String problemName;
-	private double starttime = 0.1; // TODO Set start time?
 
-	private Map<String, MyCloudlet> tasks;
-	private CloudletDAG workflow;
+	private Map<String, Task> tasks;
+	private DAG workflow;
 
 	public PEGASUS(int userid, int idshift, String problemName) {
-		tasks = new LinkedHashMap<String, MyCloudlet>();
-		workflow = new CloudletDAG();
+		tasks = new LinkedHashMap<String, Task>();
+		workflow = new DAG();
 		this.userid = userid;
 		this.idshift = idshift;
 		this.problemName = problemName;
 		this.createTasksAndWorkFlows();
 	}
 
-	private MyCloudlet createCloudlet(double workloadInSecs) {
+	private Task createCloudlet(double workloadInSecs) {
 		// cloudlet parameters
 		long length = (long) (1000.0 * workloadInSecs);
-		long fileSize = 300;
-		long outputSize = 300;
-		int pesNumber = 1;
-		UtilizationModel utilizationModel = new UtilizationModelFull();
-		MyCloudlet cloudlet = new MyCloudlet(idshift++, length, pesNumber, fileSize, outputSize, utilizationModel,
-				utilizationModel, utilizationModel, starttime);
+		// long fileSize = 300;
+		// long outputSize = 300;
+		// int pesNumber = 1;
+		// UtilizationModel utilizationModel = new UtilizationModelFull();
+		Task cloudlet = new Task(idshift++, length);
 		cloudlet.setUserId(userid);
 		return cloudlet;
 	}
@@ -103,7 +101,7 @@ public class PEGASUS implements Dataset {
 			}
 		}
 		// linking entry->..
-		for (MyCloudlet myc : this.getCloudletList()) {
+		for (Task myc : this.getCloudletList()) {
 			if (myc == tasks.get("entry"))
 				continue;
 
@@ -111,7 +109,7 @@ public class PEGASUS implements Dataset {
 				this.workflow.addCloudWorkflow(tasks.get("entry"), myc);
 		}
 		// linking ..->exit
-		for (MyCloudlet myc : this.getCloudletList()) {
+		for (Task myc : this.getCloudletList()) {
 			if (myc == tasks.get("exit"))
 				continue;
 
@@ -159,17 +157,17 @@ public class PEGASUS implements Dataset {
 	}
 
 	@Override
-	public List<MyCloudlet> getCloudletList() {
+	public List<Task> getCloudletList() {
 		// Log.printLine("RUNNING at PEGASUS " + this.problemName + "
 		// getcloudlist...");
-		List<MyCloudlet> cloudletList = new ArrayList<MyCloudlet>();
+		List<Task> cloudletList = new ArrayList<Task>();
 		for (String name : this.tasks.keySet())
 			cloudletList.add(tasks.get(name));
 		return cloudletList;
 	}
 
 	@Override
-	public CloudletDAG getCloudletPassport() {
+	public DAG getCloudletPassport() {
 		return this.workflow;
 	}
 

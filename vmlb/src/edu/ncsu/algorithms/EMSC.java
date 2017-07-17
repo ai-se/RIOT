@@ -1,7 +1,5 @@
 package edu.ncsu.algorithms;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;

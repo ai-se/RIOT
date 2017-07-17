@@ -3,6 +3,7 @@ package edu.ncsu.wls;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
@@ -21,28 +22,29 @@ public class MyCloudSimHelper {
 		return org;
 	}
 
-	public static void forcePrintCloudList(List<Cloudlet> list) {
+	public static void forcePrintCloudList(List<Task> list) {
 		Log.enable();
 		printCloudletList(list);
 	}
 
-	public static void printCloudletList(List<Cloudlet> list) {
+	public static void printCloudletList(List<Task> list) {
 		int size = list.size();
-		Cloudlet cloudlet;
+		Collections.sort(list, Comparator.comparing(Task::getExecStartTime));
+		Task cloudlet;
 		String indent = "    ";
 		// Log.enable();
 		Log.printLine();
 		Log.printLine("========== OUTPUT ==========");
-		Log.printLine("CloudletID\tStatus\tDataCenter\tVM ID\t    Time\t Start Time\t Finish Time");
+		Log.printLine("CloudletID\tStatus\tVM ID\t    Time\t Start Time\t Finish Time");
 
 		DecimalFormat dft = new DecimalFormat("###.##");
 		for (int i = 0; i < size; i++) {
 			cloudlet = list.get(i);
 			Log.print(str("(#" + cloudlet.getCloudletId() + ")  " + cloudlet, 15));
 
-			if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS) {
-				Log.printLine("SUCCESS" + indent + cloudlet.getAllResourceName()[0] + indent + indent + indent
-						+ str(cloudlet.getVmId(), 10) + str(dft.format(cloudlet.getActualCPUTime()), 10) + indent
+			if (cloudlet.getStatus() == Cloudlet.SUCCESS) {
+				Log.printLine("SUCCESS" + indent + str(cloudlet.getVmId(), 10)
+						+ str(dft.format(cloudlet.getActualCPUTime()), 10) + indent
 						+ str(dft.format(cloudlet.getExecStartTime()), 15)
 						+ str(dft.format(cloudlet.getFinishTime()), 6));
 
@@ -58,17 +60,17 @@ public class MyCloudSimHelper {
 	 * 
 	 * @param list
 	 */
-	public static void printCloudletList2(List<Cloudlet> list) {
+	public static void printCloudletList2(List<Task> list) {
 		String indent = "   ";
 		// Log.enable();
 		Log.printLine();
 		Log.printLine("========== OUTPUT ==========");
-		Log.printLine("CloudletID\tStatus\tDataCenter\tVM ID\t    Time\t Start Time\t Finish Time");
+		Log.printLine("CloudletID\tStatus\tVM ID\t    Time\t Start Time\t Finish Time");
 
 		DecimalFormat dft = new DecimalFormat("###.##");
 
 		List<Integer> vmids = new ArrayList<Integer>();
-		for (Cloudlet cloudlet : list) {
+		for (Task cloudlet : list) {
 			if (!vmids.contains(cloudlet.getVmId()))
 				vmids.add(cloudlet.getVmId());
 		}
@@ -76,14 +78,14 @@ public class MyCloudSimHelper {
 		Collections.sort(vmids);
 
 		for (int v : vmids) {
-			for (Cloudlet cloudlet : list) {
+			for (Task cloudlet : list) {
 				if (cloudlet.getVmId() != v)
 					continue;
 				Log.print(str("(#" + cloudlet.getCloudletId() + ")  " + cloudlet, 15));
 
-				if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS) {
-					Log.printLine("SUCCESS" + indent + cloudlet.getAllResourceName()[0] + indent + indent + indent
-							+ str(cloudlet.getVmId(), 10) + str(dft.format(cloudlet.getActualCPUTime()), 10) + indent
+				if (cloudlet.getStatus() == Cloudlet.SUCCESS) {
+					Log.printLine("SUCCESS" + indent + indent + indent + str(cloudlet.getVmId(), 10)
+							+ str(dft.format(cloudlet.getActualCPUTime()), 10) + indent
 							+ str(dft.format(cloudlet.getExecStartTime()), 15)
 							+ str(dft.format(cloudlet.getFinishTime()), 6));
 
