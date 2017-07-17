@@ -81,10 +81,7 @@ class VMScheduleSolutionType extends SolutionType {
 		int totalV = problem_.tasksNum;
 		VmEncoding coding = new VmEncoding();
 
-		int[] orders = IntStream.range(0, totalV).toArray();
-		List<Integer> o = Ints.asList(orders);
-		Collections.shuffle(o);
-		orders = o.stream().mapToInt(i -> i).toArray();
+		int[] orders = problem_.getWorkflow().randTopo(problem_.getTasks(), rand);
 		coding.taskInOrder = orders;
 
 		int[] task2ins = new int[totalV];
@@ -276,7 +273,7 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_Epigenomics_24", new Random());
+		VmsProblem p = new VmsProblem("eprotein", new Random());
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < 1; i++) {
 			Solution randS = new Solution(p);

@@ -47,6 +47,8 @@ import jmetal.util.comparators.CrowdingComparator;
  */
 
 public class NSGAII extends Algorithm {
+	private static final long serialVersionUID = 697933849425623337L;
+
 	/**
 	 * Constructor
 	 * 
@@ -207,7 +209,7 @@ public class NSGAII extends Algorithm {
 
 		// Return the first non-dominated front
 		Ranking ranking = new Ranking(population);
-		ranking.getSubfront(0).printFeasibleFUN("FUN_NSGAII");
+		// ranking.getSubfront(0).printFeasibleFUN("FUN_NSGAII");
 
 		return ranking.getSubfront(0);
 	} // execute

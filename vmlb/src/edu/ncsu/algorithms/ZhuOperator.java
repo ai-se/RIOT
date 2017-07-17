@@ -1,11 +1,13 @@
 package edu.ncsu.algorithms;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.google.common.primitives.Ints;
 
+import edu.ncsu.wls.Task;
 import jmetal.core.Solution;
-import jmetal.core.Variable;
 import jmetal.operators.crossover.Crossover;
 import jmetal.operators.mutation.Mutation;
 import jmetal.util.JMException;
@@ -134,11 +136,13 @@ class ZhuMutation extends Mutation {
 	private static final long serialVersionUID = 3956833626877416282L;
 	private double mutationProbability_;
 	private double bitMutationProbability_;
+	private VmsProblem problem_;
 
 	public ZhuMutation(HashMap<String, Object> parameters) {
 		super(parameters);
 		mutationProbability_ = (double) parameters.get("probability");
 		bitMutationProbability_ = (double) parameters.get("bitMutationProbability");
+		problem_ = (VmsProblem) parameters.get("problem");
 	}
 
 	@Override
@@ -152,21 +156,53 @@ class ZhuMutation extends Mutation {
 			// 2, mutate the orders.
 			// pick two locations, swap them
 			int varLength = order.length;
-			int i = PseudoRandom.randInt(0, varLength - 1);
-			int j = PseudoRandom.randInt(0, varLength - 1);
+			int pos = PseudoRandom.randInt(0, varLength - 1);
+			int start = -1;
+			int end = varLength;
+			List<Task> pred = problem_.getWorkflow().meRequires(problem_.getTasks().get(pos));
+			List<Task> succ = problem_.getWorkflow().meContributeTo(problem_.getTasks().get(pos));
+			for (int i = 0; i < problem_.tasksNum; i++) {
+				if (pred.contains(problem_.getTasks().get(i)))
+					start = Integer.max(start, i);
+				if (succ.contains(problem_.getTasks().get(i)))
+					end = Integer.min(end, i);
+			}
+			start += 1;
+			end -= 1;
+			int to = PseudoRandom.randInt(start, end);
 
-			int tmp = order[i];
-			code.taskInOrder[i] = order[j];
-			code.taskInOrder[j] = tmp;
+			if (to < pos) {
+				for (int i = 0; i < varLength; i++) {
+					if (order[i] < to || order[i] > pos)
+						continue;
+					else if (order[i] == pos)
+						code.taskInOrder[i] = to;
+					else
+						code.taskInOrder[i] += 1;
+				}
+
+			}
+			
+			if (to > pos) {
+				for (int i = 0; i < varLength; i++) {
+					if (order[i] > to || order[i] < pos)
+						continue;
+					else if (order[i] == pos)
+						code.taskInOrder[i] = to;
+					else
+						code.taskInOrder[i] -= 1;
+				}
+
+			}
 
 			// 3, mutate task2ins and ins2type
 			int maxIns = Ints.max(code.task2ins);
 			int maxType = Ints.max(code.ins2type);
 			for (int v = 0; v < varLength; v++) {
 				if (PseudoRandom.randDouble() < bitMutationProbability_)
-					code.task2ins[i] = PseudoRandom.randInt(0, maxIns);
+					code.task2ins[pos] = PseudoRandom.randInt(0, maxIns);
 				if (PseudoRandom.randDouble() < bitMutationProbability_)
-					code.ins2type[i] = PseudoRandom.randInt(0, maxType);
+					code.ins2type[pos] = PseudoRandom.randInt(0, maxType);
 			}
 		}
 		// debugs(solution);
