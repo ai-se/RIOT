@@ -16,7 +16,7 @@ import edu.ncsu.datasets.PEGASUS;
 import edu.ncsu.datasets.PSPLIB;
 import edu.ncsu.datasets.Randomset;
 
-public class Infrastructure {
+public class INFRA {
 	public static final int VM_ID_SHIFT = 0;
 	public static final int CLOUDLET_ID_SHIFT = 0;
 	public static final int PEROID_BETWEEN_EVENTS = 1;
@@ -262,7 +262,7 @@ public class Infrastructure {
 		return unit_price.get(v.getVmm());
 	}
 
-	public static int getAvailableVmTypes() {
+	public static int getAvalVmTypeNum() {
 		return 8; // in aws EC2
 	}
 

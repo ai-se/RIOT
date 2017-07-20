@@ -1,13 +1,14 @@
 package edu.ncsu.algorithms;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
-import com.google.common.primitives.Ints;
-
+import edu.ncsu.wls.DAG;
+import edu.ncsu.wls.INFRA;
 import edu.ncsu.wls.Task;
 import jmetal.core.Solution;
+import jmetal.core.Variable;
 import jmetal.operators.crossover.Crossover;
 import jmetal.operators.mutation.Mutation;
 import jmetal.util.JMException;
@@ -17,103 +18,110 @@ class ZhuCrossover extends Crossover {
 	private static final long serialVersionUID = 8147831803149141403L;
 	private double crossoverProbability_;
 	private double randomChangeProbability_;
+	private VmsProblem problem_;
 
 	public ZhuCrossover(HashMap<String, Object> parameters) {
 		super(parameters);
 		crossoverProbability_ = (Double) parameters.get("probability");
 		randomChangeProbability_ = (Double) parameters.get("randomChangeProbability");
+		problem_ = (VmsProblem) parameters.get("problem");
 	}
 
 	/*
-	 * Implements sect 4.3.1 in Zhu's paper ATTENTION: in this code repo, the
-	 * order can be randomly shuffle, regardless of the workflow-- the
-	 * underlining implement will reorder s.t. it can fit the workflow
-	 * automatically
+	 * Implements sect 4.3.1 in Zhu's paper
 	 * 
 	 * @see jmetal.core.Operator#execute(java.lang.Object)
 	 */
 	@Override
 	public Object execute(Object object) throws JMException {
 		Solution[] parents = (Solution[]) object;
-		Solution[] offspring = new Solution[2];
+		Solution[] o = new Solution[2];
 
-		offspring[0] = new Solution(parents[0]);
-		offspring[1] = new Solution(parents[1]);
+		try {
+			o[0] = new Solution(problem_);
+			o[1] = new Solution(problem_);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
 		if (PseudoRandom.randDouble() < crossoverProbability_) {
 			int varLength = ((VmEncoding) parents[0].getDecisionVariables()[0]).ins2type.length;
 			int cxPoint = PseudoRandom.randInt(1, varLength - 2);
 
-			// 1st step, common single point crossover
-			VmEncoding left = (VmEncoding) offspring[0].getDecisionVariables()[0];
-			VmEncoding right = (VmEncoding) offspring[0].getDecisionVariables()[0];
+			// 1, common single point crossover
+			VmEncoding left = (VmEncoding) parents[0].getDecisionVariables()[0];
+			VmEncoding right = (VmEncoding) parents[0].getDecisionVariables()[0];
+			VmEncoding o0 = ((VmEncoding) o[0].getDecisionVariables()[0]);
+			VmEncoding o1 = ((VmEncoding) o[0].getDecisionVariables()[0]);
 
-			for (int var = 0; var <= cxPoint; var++) {
-				swap(left, right, var);
+			// 2, crossover order
+			List<Integer> aa = new ArrayList<Integer>();
+			List<Integer> bb = new ArrayList<Integer>();
+
+			for (int i = 0; i < cxPoint; i++) {
+				aa.add(right.taskInOrder[i]);
+				bb.add(left.taskInOrder[i]);
 			}
 
-			// 2nd, handle conflict ins2type. See fig 6 in Zhu's paper
-			int[] instance0 = new int[varLength];
-			int[] instance1 = new int[varLength];
-			int[] otypes0 = new int[varLength];
-			int[] otypes1 = new int[varLength];
+			for (int i : left.taskInOrder)
+				if (!aa.contains(i))
+					aa.add(i);
 
-			System.arraycopy(left.task2ins, 0, instance0, 0, instance0.length);
-			System.arraycopy(right.task2ins, 0, instance1, 0, instance1.length);
-			System.arraycopy(left.ins2type, 0, otypes0, 0, otypes0.length);
-			System.arraycopy(right.ins2type, 0, otypes1, 0, otypes1.length);
+			for (int i : right.taskInOrder)
+				if (!bb.contains(i))
+					bb.add(i);
+			for (int i = 0; i < varLength; i++) {
+				o0.taskInOrder[i] = aa.get(i);
+				o1.taskInOrder[i] = bb.get(i);
+			}
 
-			// 2.1 DecideType for offspring[0]
+			// 3, swap task2ins
+			for (int i = 0; i <= cxPoint; i++) {
+				o0.task2ins[i] = right.task2ins[i];
+				o1.task2ins[i] = left.task2ins[i];
+			}
+
+			for (int i = cxPoint + 1; i < varLength; i++) {
+				o0.task2ins[i] = left.task2ins[i];
+				o1.task2ins[i] = right.task2ins[i];
+			}
+
+			// 4.0 Copy ins2type
+			for (int i = 0; i < varLength; i++) {
+				o0.ins2type[i] = left.ins2type[i];
+				o1.ins2type[i] = right.ins2type[i];
+			}
+			// 4.1 DecideType for offspring[0]
 			for (int var = 0; var <= cxPoint; var++) {
-				int nins = instance0[var];
-				int i = contains(instance0, cxPoint + 1, nins);
+				int nins = right.task2ins[var];
+				int i = contains(left.task2ins, cxPoint + 1, nins);
 				if (i == -1) { // just switch
 					if (PseudoRandom.randDouble() > randomChangeProbability_)
-						left.ins2type[nins] = otypes1[nins];
+						o0.ins2type[nins] = right.ins2type[nins];
 					else // random choice
-						left.ins2type[nins] = otypes1[PseudoRandom.randInt(0, varLength - 1)];
+						o0.ins2type[nins] = PseudoRandom.randInt(0, INFRA.getAvalVmTypeNum() - 1);
 				} else { // random choice
-					int s = PseudoRandom.randDouble() < 0.5 ? otypes0[nins] : otypes1[nins];
-					left.ins2type[nins] = s;
+					int s = PseudoRandom.randDouble() < 0.5 ? left.ins2type[nins] : right.ins2type[nins];
+					o0.ins2type[nins] = s;
 				}
 			}
 
-			// 2.2 DecideType for offspring[1]
+			// 4.2 DecideType for offspring[1]
 			for (int var = 0; var <= cxPoint; var++) {
-				int nins = instance1[var];
-				int i = contains(instance1, cxPoint + 1, nins);
+				int nins = left.task2ins[var];
+				int i = contains(right.task2ins, cxPoint + 1, nins);
 				if (i == -1) {
 					if (PseudoRandom.randDouble() > randomChangeProbability_)
-						right.ins2type[nins] = otypes0[nins];
+						o1.ins2type[nins] = left.ins2type[nins];
 					else // set type randomly
-						right.ins2type[nins] = otypes0[PseudoRandom.randInt(0, varLength - 1)];
+						o1.ins2type[nins] = PseudoRandom.randInt(0, INFRA.getAvalVmTypeNum() - 1);
 				} else { // random choice
-					int s = PseudoRandom.randDouble() < 0.5 ? otypes1[nins] : otypes0[nins];
-					right.ins2type[nins] = s;
+					int s = PseudoRandom.randDouble() < 0.5 ? left.ins2type[nins] : right.ins2type[nins];
+					o1.ins2type[nins] = s;
 				} // if i== -1
-			} // for 2.2
-
+			} // for 4.2
 		} // if rand double
-
-		return offspring;
-	}
-
-	/**
-	 * Swap the VALUES or two VmEncoding object. including --order,-- task2ins
-	 * (NO ins2type!!)
-	 * 
-	 * @param s
-	 * @param t
-	 */
-	private void swap(VmEncoding s, VmEncoding t, int index) {
-		// int tmp_s_order = s.getOrder();
-		int tmp_s_task2ins = s.task2ins[index];
-
-		// s.setOrder(t.getOrder());
-		s.task2ins[index] = t.task2ins[index];
-
-		// t.setOrder(tmp_s_order);
-		t.task2ins[index] = tmp_s_task2ins;
+		return o;
 	}
 
 	/**
@@ -148,68 +156,64 @@ class ZhuMutation extends Mutation {
 	@Override
 	public Object execute(Object object) throws JMException {
 		Solution solution = (Solution) object;
-		if (PseudoRandom.randDouble() < mutationProbability_) {
-			// 1, fetch configurations
-			VmEncoding code = (VmEncoding) solution.getDecisionVariables()[0];
-			int[] order = code.taskInOrder;
+		VmEncoding code = (VmEncoding) solution.getDecisionVariables()[0];
+		int varLength = code.taskInOrder.length;
+		List<Task> tasks = problem_.getTasks();
+		DAG dag = problem_.getWorkflow();
 
+		for (int pos = 0; pos < varLength; pos++) {
+			if (PseudoRandom.randDouble() < mutationProbability_)
+				continue;
+			// 1, fetch configurations 
+			int[] order = code.taskInOrder;
 			// 2, mutate the orders.
-			// pick two locations, swap them
-			int varLength = order.length;
-			int pos = PseudoRandom.randInt(0, varLength - 1);
+			// int pos = PseudoRandom.randInt(0, varLength - 1);
 			int start = -1;
 			int end = varLength;
-			List<Task> pred = problem_.getWorkflow().meRequires(problem_.getTasks().get(pos));
-			List<Task> succ = problem_.getWorkflow().meContributeTo(problem_.getTasks().get(pos));
+
 			for (int i = 0; i < problem_.tasksNum; i++) {
-				if (pred.contains(problem_.getTasks().get(i)))
+				if (dag.isEdge(tasks.get(order[i]), tasks.get(order[pos])))
 					start = Integer.max(start, i);
-				if (succ.contains(problem_.getTasks().get(i)))
+				if (dag.isEdge(tasks.get(order[i]), tasks.get(order[pos])))
 					end = Integer.min(end, i);
 			}
+
 			start += 1;
 			end -= 1;
-			int to = PseudoRandom.randInt(start, end);
+			int to = pos;
+
+			if (start < end)
+				to = PseudoRandom.randInt(start, end);
 
 			if (to < pos) {
-				for (int i = 0; i < varLength; i++) {
-					if (order[i] < to || order[i] > pos)
-						continue;
-					else if (order[i] == pos)
-						code.taskInOrder[i] = to;
-					else
-						code.taskInOrder[i] += 1;
-				}
-
-			}
-			
-			if (to > pos) {
-				for (int i = 0; i < varLength; i++) {
-					if (order[i] > to || order[i] < pos)
-						continue;
-					else if (order[i] == pos)
-						code.taskInOrder[i] = to;
-					else
-						code.taskInOrder[i] -= 1;
-				}
-
+				int t = order[pos];
+				for (int i = pos; i > to; i--)
+					code.taskInOrder[i] = order[i - 1];
+				code.taskInOrder[to] = t;
+			} else if (to > pos) {
+				int t = order[pos];
+				for (int i = pos; i < to; i++)
+					code.taskInOrder[i] = order[i + 1];
+				code.taskInOrder[to] = t;
 			}
 
 			// 3, mutate task2ins and ins2type
-			int maxIns = Ints.max(code.task2ins);
-			int maxType = Ints.max(code.ins2type);
+			int maxIns = varLength - 1;
+			int maxType = INFRA.getAvalVmTypeNum() - 1;
 			for (int v = 0; v < varLength; v++) {
 				if (PseudoRandom.randDouble() < bitMutationProbability_)
 					code.task2ins[pos] = PseudoRandom.randInt(0, maxIns);
 				if (PseudoRandom.randDouble() < bitMutationProbability_)
 					code.ins2type[pos] = PseudoRandom.randInt(0, maxType);
 			}
+			// }
 		}
-		// debugs(solution);
+
+		// solution.setDecisionVariables(new Variable[] { code });
 		return solution;
 	}
 }
 
 public class ZhuOperator {
-
+	// THIS CLASS WAS INTENTIONALLY BLANK.
 }

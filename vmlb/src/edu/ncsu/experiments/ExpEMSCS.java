@@ -9,7 +9,7 @@ import java.util.HashMap;
 import org.cloudbus.cloudsim.Log;
 
 import edu.ncsu.algorithms.EMSC;
-import edu.ncsu.wls.Infrastructure;
+import edu.ncsu.wls.INFRA;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 
@@ -30,11 +30,11 @@ public class ExpEMSCS {
 			repeats = Integer.parseInt(args[0]);
 		if (args.length > 1) {
 			if (args[1].equals("small"))
-				models = Infrastructure.smallmodels;
+				models = INFRA.smallmodels;
 			else
 				models = new String[] { args[1] };
 		} else
-			models = Infrastructure.models;
+			models = INFRA.models;
 
 		Log.disable();
 		File file = new File("emsc-spea2.txt");
@@ -43,10 +43,10 @@ public class ExpEMSCS {
 		exp_para.put("popSize", 50);
 		exp_para.put("maxEval", 50 * 1000);
 		exp_para.put("arxvSize", 10); // spea2 used only
-		exp_para.put("cxProb", 0.6);
-		exp_para.put("cxRandChangeProb", 0.1);
-		exp_para.put("mutProb", 0.8);
-		exp_para.put("bitMutProb", 0.4);
+		exp_para.put("cxProb", 1.0);
+		exp_para.put("cxRandChangeProb", 0.6);
+		exp_para.put("mutProb", 0.6);
+		exp_para.put("bitMutProb", 1.0);
 		exp_para.put("algorithm", "SPEA2");
 
 		for (int repeat = 0; repeat < repeats; repeat++) {

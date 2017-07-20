@@ -9,7 +9,7 @@ import java.util.HashMap;
 import org.cloudbus.cloudsim.Log;
 
 import edu.ncsu.algorithms.MOHEFT;
-import edu.ncsu.wls.Infrastructure;
+import edu.ncsu.wls.INFRA;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 
@@ -30,11 +30,11 @@ public class ExpMOHEFT {
 			repeats = Integer.parseInt(args[0]);
 		if (args.length > 1) {
 			if (args[1].equals("small"))
-				models = Infrastructure.smallmodels;
+				models = INFRA.smallmodels;
 			else
 				models = new String[] { args[1] };
 		} else
-			models = Infrastructure.models;
+			models = INFRA.models;
 
 		Log.disable();
 		File file = new File("moheft.txt");

@@ -102,10 +102,11 @@ public class EMSC {
 		parameters.clear();
 		parameters.put("probability", cxProb);
 		parameters.put("randomChangeProbability", cxRandChangeProb);
+		parameters.put("problem", problem_);
 		Crossover crossover = new ZhuCrossover(parameters);
 
 		parameters.clear();
-		parameters.put("probability", mutProb);
+		parameters.put("probability", mutProb == -1.0 ? 1.0 / problem_.tasksNum : mutProb);
 		parameters.put("bitMutationProbability", bitMutProb);
 		parameters.put("problem", problem_);
 		Mutation mutation = new ZhuMutation(parameters);
@@ -149,10 +150,11 @@ public class EMSC {
 		parameters.clear();
 		parameters.put("probability", cxProb);
 		parameters.put("randomChangeProbability", cxRandChangeProb);
+		parameters.put("problem", problem_);
 		Crossover crossover = new ZhuCrossover(parameters);
 
 		parameters.clear();
-		parameters.put("probability", mutProb);
+		parameters.put("probability", mutProb == -1.0 ? 1.0 / problem_.tasksNum : mutProb);
 		parameters.put("bitMutationProbability", bitMutProb);
 		parameters.put("problem", problem_);
 		Mutation mutation = new ZhuMutation(parameters);
@@ -193,10 +195,11 @@ public class EMSC {
 		parameters.clear();
 		parameters.put("probability", cxProb);
 		parameters.put("randomChangeProbability", cxRandChangeProb);
+		parameters.put("problem", problem_);
 		Crossover crossover = new ZhuCrossover(parameters);
 
 		parameters.clear();
-		parameters.put("probability", mutProb);
+		parameters.put("probability", mutProb == -1.0 ? 1.0 / problem_.tasksNum : mutProb);
 		parameters.put("bitMutationProbability", bitMutProb);
 		parameters.put("problem", problem_);
 		Mutation mutation = new ZhuMutation(parameters);
@@ -215,18 +218,18 @@ public class EMSC {
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
 		// for (String model : Infrastructure.models) {
-		for (String model : new String[] { "sci_Inspiral_1000" }) {
+		for (String model : new String[] { "sci_Inspiral_100" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("algorithm", "NSGAII"); // TODO change here
 			paras.put("dataset", model);
 			paras.put("seed", 12345L);
 			paras.put("popSize", 50);
-			paras.put("maxEval", 1000);
+			paras.put("maxEval", 2000);
 			paras.put("arxvSize", 10); // spea2 used only
-			paras.put("cxProb", 0.6);
-			paras.put("cxRandChangeProb", 0.1);
-			paras.put("mutProb", 0.8);
-			paras.put("bitMutProb", 0.4);
+			paras.put("cxProb", 1.0);
+			paras.put("cxRandChangeProb", 0.6);
+			paras.put("mutProb", 0.6);
+			paras.put("bitMutProb", 1.0);
 			long start_time = System.currentTimeMillis();
 			EMSC runner = new EMSC();
 			runner.execute(paras);

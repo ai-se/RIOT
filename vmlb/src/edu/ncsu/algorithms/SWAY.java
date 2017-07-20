@@ -25,6 +25,8 @@ class AlgSway extends Algorithm {
 	@Override
 	public SolutionSet execute() throws JMException, ClassNotFoundException {
 		System.out.println("Framework works");
+		for (int i = 0; i < 100; i++)
+			;
 		return null;
 	}
 

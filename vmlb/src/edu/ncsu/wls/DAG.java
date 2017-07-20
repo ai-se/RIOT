@@ -1,7 +1,6 @@
 package edu.ncsu.wls;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -28,8 +27,8 @@ public class DAG {
 	public int totalCloudletNum = 0;
 
 	// ready negative-not ready 0-ready
-	private int[] readyed = new int[5000]; // TODO assume 5k cloudlets at max
-	private int[] totalNeed = new int[5000];
+	private int[] readyed = new int[1200]; // TODO assume 5k cloudlets at max
+	private int[] totalNeed = new int[1200];
 
 	public DAG() {
 	}
@@ -52,31 +51,27 @@ public class DAG {
 		this.ignoreDAGmode = true;
 	}
 
-	public int[] randTopo(List<Task> tasks, Random rand) {
-		// temporary saving readyed list
-		int[] rSave = new int[defultTotalCloudletNum];
-		System.arraycopy(readyed, 0, rSave, 0, defultTotalCloudletNum);
-		System.arraycopy(totalNeed, 0, readyed, 0, defultTotalCloudletNum);
-
-		List<Task> res = new ArrayList<Task>();
-		while (res.size() < tasks.size()) {
-			List<Task> nexts = new ArrayList<Task>();
-			for (Task t : tasks)
-				if (isCloudletPrepared(t) && !res.contains(t))
-					nexts.add(t);
-			Collections.shuffle(nexts, rand);
-			res.add(nexts.get(0));
-			afterOneCloudletSuccess(nexts.get(0));
-		}
-
-		// recover readyed to outside environment
-		System.arraycopy(rSave, 0, readyed, 0, defultTotalCloudletNum);
-
-		int[] resi = new int[tasks.size()];
-		for (int i = 0; i < tasks.size(); i++)
-			resi[i] = tasks.indexOf(res.get(i));
-		return resi;
-	}
+	// public List<Task> randTopo(List<Task> tasks, Random rand) {
+	// // temporary saving readyed list
+	// int[] rSave = new int[defultTotalCloudletNum];
+	// System.arraycopy(readyed, 0, rSave, 0, defultTotalCloudletNum);
+	// System.arraycopy(totalNeed, 0, readyed, 0, defultTotalCloudletNum);
+	//
+	// List<Task> res = new ArrayList<Task>();
+	// while (res.size() < tasks.size()) {
+	// List<Task> nexts = new ArrayList<Task>();
+	// for (Task t : tasks)
+	// if (isCloudletPrepared(t) && !res.contains(t))
+	// nexts.add(t);
+	// Collections.shuffle(nexts, rand);
+	// res.add(nexts.get(0));
+	// afterOneCloudletSuccess(nexts.get(0));
+	// }
+	//
+	// // recovery readyed to outside environment
+	// System.arraycopy(rSave, 0, readyed, 0, defultTotalCloudletNum);
+	// return res;
+	// }
 
 	public void addCloudWorkflow(Task from, Task to) {
 		if (!this.requiring.containsKey(to))
@@ -87,9 +82,16 @@ public class DAG {
 			this.contributeTo.put(from, new ArrayList<Task>());
 		this.contributeTo.get(from).add(to);
 
-		int index = to.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
+		int index = to.getCloudletId() - INFRA.CLOUDLET_ID_SHIFT;
 		readyed[index] += 1;
 		totalNeed[index] += 1;
+	}
+
+	public boolean isEdge(Task from, Task to) {
+		if (requiring.containsKey(to))
+			return requiring.get(to).contains(from);
+
+		return false;
 	}
 
 	public void setFilesBetween(Task from, Task to, long fileSize) {
@@ -102,14 +104,14 @@ public class DAG {
 		if (ignoreDAGmode)
 			return true;
 
-		int index = cloudlet.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
+		int index = cloudlet.getCloudletId() - INFRA.CLOUDLET_ID_SHIFT;
 		return readyed[index] == 0;
 	}
 
 	public synchronized void afterOneCloudletSuccess(Task cloudlet) {
 		if (contributeTo.containsKey(cloudlet))
 			for (Task p : contributeTo.get(cloudlet)) {
-				int pindex = p.getCloudletId() - Infrastructure.CLOUDLET_ID_SHIFT;
+				int pindex = p.getCloudletId() - INFRA.CLOUDLET_ID_SHIFT;
 				readyed[pindex] -= 1;
 			}
 	}

@@ -15,7 +15,7 @@ import com.google.common.primitives.Ints;
 
 import edu.ncsu.wls.DAG;
 import edu.ncsu.wls.DAGCentralSimulator;
-import edu.ncsu.wls.Infrastructure;
+import edu.ncsu.wls.INFRA;
 import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.Task;
 import jmetal.core.Problem;
@@ -43,8 +43,8 @@ class VmEncoding extends Variable {
 		this.ins2type = ins2type;
 	}
 
-	public VmEncoding() {
-	}
+	// public VmEncoding() {
+	// }
 
 	public VmEncoding(int l) {
 		task2ins = new int[l];
@@ -76,24 +76,26 @@ class VMScheduleSolutionType extends SolutionType {
 		this.rand = rand;
 	}
 
+	/**
+	 * Following Zhu's RandTypeOrIns
+	 */
 	@Override
 	public Variable[] createVariables() {
 		int totalV = problem_.tasksNum;
-		VmEncoding coding = new VmEncoding();
+		VmEncoding coding = new VmEncoding(totalV);
 
-		int[] orders = problem_.getWorkflow().randTopo(problem_.getTasks(), rand);
-		coding.taskInOrder = orders;
+		coding.taskInOrder = IntStream.range(0, totalV).toArray();
 
-		int[] task2ins = new int[totalV];
-		for (int i = 0; i < task2ins.length; i++)
-			task2ins[i] = rand.nextInt(totalV - 1);
-		coding.task2ins = task2ins;
+		if (rand.nextDouble() < 0.5)
+			for (int i = 0; i < totalV; i++)
+				coding.task2ins[i] = 0;
+		else
+			for (int i = 0; i < totalV; i++)
+				coding.task2ins[i] = rand.nextInt(totalV);
 
-		int[] ins2type = new int[totalV];
-		int avalType = Infrastructure.getAvailableVmTypes();
-		for (int i = 0; i < ins2type.length; i++)
-			ins2type[i] = rand.nextInt(avalType);
-		coding.ins2type = ins2type;
+		int t2 = rand.nextInt(INFRA.getAvalVmTypeNum());
+		for (int i = 0; i < totalV; i++)
+			coding.ins2type[i] = t2;
 
 		return new Variable[] { coding };
 	}
@@ -117,12 +119,24 @@ public class VmsProblem extends Problem {
 
 	private String name;
 
+	public static boolean isSameSolution(Solution a, Solution b) {
+		VmEncoding left = (VmEncoding) a.getDecisionVariables()[0];
+		VmEncoding right = (VmEncoding) b.getDecisionVariables()[0];
+
+		for (int i = 0; i < left.task2ins.length; i++)
+			if (left.task2ins[i] != right.task2ins[i] || left.taskInOrder[i] != right.taskInOrder[i]
+					|| left.ins2type[i] != right.ins2type[i])
+				return false;
+
+		return true;
+	}
+
 	@SuppressWarnings("unchecked")
 	public VmsProblem(String dataset, Random rand) {
 		this.rand = rand;
 		this.name = dataset;
 
-		Object[] tmpInfo = Infrastructure.getCaseCloudlets(this.name, 0);
+		Object[] tmpInfo = INFRA.getCaseCloudlets(this.name, 0);
 		tasks = (List<Task>) tmpInfo[0];
 		tasksNum = tasks.size();
 		workflow = (DAG) (tmpInfo[1]);
@@ -147,7 +161,7 @@ public class VmsProblem extends Problem {
 		evalCount += 1;
 		if (evalCount % 100 == 0 || evalCount == 1) {
 			System.out.println(
-					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + " Eval # so far : " + evalCount);
+					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + "  Eval # so far : " + evalCount);
 		}
 
 		Log.disable();
@@ -171,7 +185,7 @@ public class VmsProblem extends Problem {
 
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
-		vmlist = Infrastructure.createVms(0, task2ins, ins2type);
+		vmlist = INFRA.createVms(0, task2ins, ins2type);
 
 		// map task to vm
 		for (int var = 0; var < tasksNum; var++) {
@@ -202,7 +216,6 @@ public class VmsProblem extends Problem {
 		}
 
 		cloudSim.boot();
-
 		List<Task> revList = new ArrayList<Task>();
 		for (Task i : tasks)
 			if (i.getStatus() == Cloudlet.SUCCESS)
@@ -236,10 +249,10 @@ public class VmsProblem extends Problem {
 				end = Double.max(start, c.getFinishTime());
 			}
 			if (end - start > 0)
-				cost += Infrastructure.getUnitPrice(v) * Math.ceil((end - start) / 3600);
+				cost += INFRA.getUnitPrice(v) * Math.ceil((end - start) / 3600);
 		}
 
-		System.out.printf("%.1fs with $%.3f\n", makespan, cost);
+		// System.out.printf("%.1fs with $%.3f\n", makespan, cost);
 		solution.setObjective(0, makespan);
 		solution.setObjective(1, cost);
 		long s7 = System.currentTimeMillis();
@@ -258,7 +271,7 @@ public class VmsProblem extends Problem {
 		return tasks;
 	}
 
-	public void printSolution(Solution s) {
+	public static void printSolution(Solution s) {
 		Variable[] decs = s.getDecisionVariables();
 
 		int[] order = ((VmEncoding) decs[0]).taskInOrder;

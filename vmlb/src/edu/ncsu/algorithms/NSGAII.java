@@ -23,12 +23,17 @@ package edu.ncsu.algorithms;
 
 import java.util.Iterator;
 
-import jmetal.core.*;
+import jmetal.core.Algorithm;
+import jmetal.core.Operator;
+import jmetal.core.Problem;
+import jmetal.core.Solution;
+import jmetal.core.SolutionSet;
 import jmetal.qualityIndicator.QualityIndicator;
 import jmetal.util.Distance;
 import jmetal.util.JMException;
 import jmetal.util.Ranking;
 import jmetal.util.comparators.CrowdingComparator;
+import jmetal.util.comparators.DominanceComparator;
 
 /**
  * Implementation of NSGA-II. This implementation of NSGA-II makes use of a
@@ -124,10 +129,11 @@ public class NSGAII extends Algorithm {
 
 		// Generations
 		while (evaluations < maxEvaluations) {
-
 			// Create the offSpring solutionSet
 			offspringPopulation = new SolutionSet(populationSize);
 			Solution[] parents = new Solution[2];
+			DominanceComparator cmpr = new DominanceComparator();
+
 			for (int i = 0; i < (populationSize / 2); i++) {
 				if (evaluations < maxEvaluations) {
 					// obtain parents
@@ -137,12 +143,12 @@ public class NSGAII extends Algorithm {
 					mutationOperator.execute(offSpring[0]);
 					mutationOperator.execute(offSpring[1]);
 					problem_.evaluate(offSpring[0]);
-					problem_.evaluateConstraints(offSpring[0]);
 					problem_.evaluate(offSpring[1]);
-					problem_.evaluateConstraints(offSpring[1]);
 					offspringPopulation.add(offSpring[0]);
 					offspringPopulation.add(offSpring[1]);
 					evaluations += 2;
+					if (cmpr.compare(offSpring[0], parents[0]) == -1 || cmpr.compare(offSpring[0], parents[1]) == -1)
+						System.err.println("thank you");
 				} // if
 			} // for
 

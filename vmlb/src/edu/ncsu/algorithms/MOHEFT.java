@@ -12,7 +12,7 @@ import java.util.Random;
 import org.cloudbus.cloudsim.Vm;
 
 import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.Infrastructure;
+import edu.ncsu.wls.INFRA;
 import edu.ncsu.wls.Task;
 import jmetal.core.Algorithm;
 import jmetal.core.Problem;
@@ -295,7 +295,7 @@ class MOHEFTcore extends Algorithm {
 	private double unitPrice(Vm v) {
 		List<Vm> tmp = new ArrayList<Vm>();
 		tmp.add(v);
-		return Infrastructure.getUnitPrice(tmp);
+		return INFRA.getUnitPrice(tmp);
 	}
 
 	/**
@@ -356,7 +356,7 @@ class MOHEFTcore extends Algorithm {
 		// 0. Set ups
 		VmsProblem problem = (VmsProblem) problem_;
 		int n = ((Integer) getInputParameter("N")).intValue(); // maxSimultaneousIns
-		List<Vm> avalVmTypes = Infrastructure.createVms(0);
+		List<Vm> avalVmTypes = INFRA.createVms(0);
 
 		// 1. B-Rank
 		Map<Task, Double> rank = this.bRank(problem);
@@ -416,7 +416,7 @@ class MOHEFTcore extends Algorithm {
 		// 0. Set ups
 		int k = ((Integer) getInputParameter("K")).intValue(); // tradeOffSolNum
 		int n = ((Integer) getInputParameter("N")).intValue(); // maxSimultaneousIns
-		List<Vm> avalVmTypes = Infrastructure.createVms(0);
+		List<Vm> avalVmTypes = INFRA.createVms(0);
 
 		List<HEFTScheduler> frontier = new ArrayList<HEFTScheduler>();
 		VmsProblem problem = (VmsProblem) problem_;
@@ -471,7 +471,8 @@ class MOHEFTcore extends Algorithm {
 
 		} // for adding
 
-		SolutionSet finalOptRes = new SolutionSet(k);
+		// SolutionSet finalOptRes = new SolutionSet(k);
+		SolutionSet finalOptRes = new NonDominatedSolutionList();
 
 		for (HEFTScheduler f : frontier) {
 			Solution x = f.translate(problem);
