@@ -1,6 +1,7 @@
 package edu.ncsu.wls;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -51,27 +52,27 @@ public class DAG {
 		this.ignoreDAGmode = true;
 	}
 
-	// public List<Task> randTopo(List<Task> tasks, Random rand) {
-	// // temporary saving readyed list
-	// int[] rSave = new int[defultTotalCloudletNum];
-	// System.arraycopy(readyed, 0, rSave, 0, defultTotalCloudletNum);
-	// System.arraycopy(totalNeed, 0, readyed, 0, defultTotalCloudletNum);
-	//
-	// List<Task> res = new ArrayList<Task>();
-	// while (res.size() < tasks.size()) {
-	// List<Task> nexts = new ArrayList<Task>();
-	// for (Task t : tasks)
-	// if (isCloudletPrepared(t) && !res.contains(t))
-	// nexts.add(t);
-	// Collections.shuffle(nexts, rand);
-	// res.add(nexts.get(0));
-	// afterOneCloudletSuccess(nexts.get(0));
-	// }
-	//
-	// // recovery readyed to outside environment
-	// System.arraycopy(rSave, 0, readyed, 0, defultTotalCloudletNum);
-	// return res;
-	// }
+	public List<Task> randTopo(List<Task> tasks, Random rand) {
+		// temporary saving readyed list
+		int[] rSave = new int[defultTotalCloudletNum];
+		System.arraycopy(readyed, 0, rSave, 0, defultTotalCloudletNum);
+		System.arraycopy(totalNeed, 0, readyed, 0, defultTotalCloudletNum);
+
+		List<Task> res = new ArrayList<Task>();
+		while (res.size() < tasks.size()) {
+			List<Task> nexts = new ArrayList<Task>();
+			for (Task t : tasks)
+				if (isCloudletPrepared(t) && !res.contains(t))
+					nexts.add(t);
+			Collections.shuffle(nexts, rand);
+			res.add(nexts.get(0));
+			afterOneCloudletSuccess(nexts.get(0));
+		}
+
+		// recovery readyed to outside environment
+		System.arraycopy(rSave, 0, readyed, 0, defultTotalCloudletNum);
+		return res;
+	}
 
 	public void addCloudWorkflow(Task from, Task to) {
 		if (!this.requiring.containsKey(to))
