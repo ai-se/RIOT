@@ -87,7 +87,7 @@ class HEFTScheduler {
 		VmEncoding code = (VmEncoding) sol.getDecisionVariables()[0];
 
 		// set orders
-		List<Task> problem_cloudlets = problem.getTasks();
+		List<Task> problem_cloudlets = problem.tasks;
 		for (int i = 0; i < problem_cloudlets.size(); i++) {
 			code.taskInOrder[i] = cloudletsOrder.indexOf(problem_cloudlets.get(i));
 		}
@@ -104,7 +104,6 @@ class HEFTScheduler {
 		for (int i = 0; i < vmTypes.length; i++) {
 			code.ins2type[i] = vmTypes[i];
 		}
-
 		return sol;
 	}
 
@@ -234,8 +233,8 @@ class MOHEFTcore extends Algorithm {
 	 * @param p
 	 * @return the rank. use pointers of cloudlets
 	 */
-	private Map<Task, Double> bRank(VmsProblem p) {
-		List<Task> cloudlets = p.getTasks();
+	public static Map<Task, Double> bRank(VmsProblem p) {
+		List<Task> cloudlets = p.tasks;
 		DAG cp = p.getWorkflow();
 
 		Map<Task, Integer> upwardRank = new HashMap<Task, Integer>();
@@ -288,7 +287,6 @@ class MOHEFTcore extends Algorithm {
 				res.put(i, (deap + (match.indexOf(i) + 0.0) / (match.size() + 1.0)));
 
 		}
-
 		return res;
 	}
 
@@ -359,10 +357,13 @@ class MOHEFTcore extends Algorithm {
 		List<Vm> avalVmTypes = INFRA.createVms(0);
 
 		// 1. B-Rank
-		Map<Task, Double> rank = this.bRank(problem);
+		Map<Task, Double> rank = bRank(problem);
 
 		// 2. Sort cloudlets with b-rank
-		List<Task> sortedCloudlets = problem.getTasks();
+		List<Task> sortedCloudlets = new ArrayList<Task>();
+		for (Task t : problem.tasks)
+			sortedCloudlets.add(t);
+
 		Collections.sort(sortedCloudlets, (Task one, Task other) -> rank.get(one).compareTo(rank.get(other)));
 
 		HEFTScheduler sched = new HEFTScheduler(problem.getWorkflow(), n, sortedCloudlets);
@@ -422,10 +423,13 @@ class MOHEFTcore extends Algorithm {
 		VmsProblem problem = (VmsProblem) problem_;
 
 		// 1. B-Rank
-		Map<Task, Double> rank = this.bRank(problem);
+		Map<Task, Double> rank = bRank(problem);
 
 		// 2. Sort cloudlets with b-rank
-		List<Task> sortedCloudlets = problem.getTasks();
+		List<Task> sortedCloudlets = new ArrayList<Task>();
+		for (Task t : problem.tasks)
+			sortedCloudlets.add(t);
+
 		Collections.sort(sortedCloudlets, (Task one, Task other) -> rank.get(one).compareTo(rank.get(other)));
 
 		for (int i = 0; i < k; i++)

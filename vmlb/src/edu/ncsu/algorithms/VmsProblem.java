@@ -113,7 +113,7 @@ public class VmsProblem extends Problem {
 	public Random rand;
 	public int tasksNum;
 	private int evalCount;
-	private List<Task> tasks;
+	public List<Task> tasks;
 
 	private DAG workflow;
 
@@ -129,6 +129,28 @@ public class VmsProblem extends Problem {
 				return false;
 
 		return true;
+	}
+
+	public void setSolTask2Ins(Solution sol, int[] task2ins) {
+		VmEncoding v = (VmEncoding) sol.getDecisionVariables()[0];
+		for (int i = 0; i < this.tasksNum; i++)
+			v.task2ins[i] = task2ins[i];
+	}
+
+	public void setSolIns2Type(Solution sol, int[] ins2type) {
+		VmEncoding v = (VmEncoding) sol.getDecisionVariables()[0];
+		for (int i = 0; i < this.tasksNum; i++)
+			v.ins2type[i] = ins2type[i];
+	}
+
+	public void setSolTaskInOrder(Solution sol, int[] taskInOrder) {
+		VmEncoding v = (VmEncoding) sol.getDecisionVariables()[0];
+		for (int i = 0; i < this.tasksNum; i++)
+			v.taskInOrder[i] = taskInOrder[i];
+	}
+
+	public static VmEncoding fetchSolDecs(Solution sol) {
+		return (VmEncoding) sol.getDecisionVariables()[0];
 	}
 
 	@SuppressWarnings("unchecked")
@@ -265,10 +287,6 @@ public class VmsProblem extends Problem {
 
 	public DAG getWorkflow() {
 		return workflow;
-	}
-
-	public List<Task> getTasks() {
-		return tasks;
 	}
 
 	public static void printSolution(Solution s) {

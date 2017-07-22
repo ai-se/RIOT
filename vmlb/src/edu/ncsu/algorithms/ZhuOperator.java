@@ -158,7 +158,7 @@ class ZhuMutation extends Mutation {
 		Solution solution = (Solution) object;
 		VmEncoding code = (VmEncoding) solution.getDecisionVariables()[0];
 		int varLength = code.taskInOrder.length;
-		List<Task> tasks = problem_.getTasks();
+		List<Task> tasks = problem_.tasks;
 		DAG dag = problem_.getWorkflow();
 
 		for (int pos = 0; pos < varLength; pos++) {
