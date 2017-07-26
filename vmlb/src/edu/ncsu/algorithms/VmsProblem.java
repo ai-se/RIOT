@@ -37,11 +37,11 @@ class VmEncoding extends Variable {
 	protected int[] ins2type;
 	protected int[] taskInOrder;
 
-	public VmEncoding(int[] taskInOrder, int[] task2ins, int[] ins2type) {
-		this.taskInOrder = taskInOrder;
-		this.task2ins = task2ins;
-		this.ins2type = ins2type;
-	}
+//	public VmEncoding(int[] taskInOrder, int[] task2ins, int[] ins2type) {
+//		this.taskInOrder = taskInOrder;
+//		this.task2ins = task2ins;
+//		this.ins2type = ins2type;
+//	}
 
 	// public VmEncoding() {
 	// }
@@ -54,7 +54,12 @@ class VmEncoding extends Variable {
 
 	@Override
 	public Variable deepCopy() {
-		return new VmEncoding(taskInOrder, task2ins, ins2type);
+		int l = task2ins.length;
+		VmEncoding v = new VmEncoding(l);
+		System.arraycopy(task2ins, 0, v.task2ins, 0, l);
+		System.arraycopy(ins2type, 0, v.ins2type, 0, l);
+		System.arraycopy(taskInOrder, 0, v.taskInOrder, 0, l);
+		return v;
 	}
 
 }
@@ -147,6 +152,12 @@ public class VmsProblem extends Problem {
 		VmEncoding v = (VmEncoding) sol.getDecisionVariables()[0];
 		for (int i = 0; i < this.tasksNum; i++)
 			v.taskInOrder[i] = taskInOrder[i];
+	}
+
+	public Solution deepCopySol(Solution sol) throws ClassNotFoundException {
+		Solution x = new Solution(this);
+		x.setDecisionVariables(new Variable[] { sol.getDecisionVariables()[0].deepCopy() });
+		return x;
 	}
 
 	public static VmEncoding fetchSolDecs(Solution sol) {

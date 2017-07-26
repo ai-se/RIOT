@@ -118,12 +118,12 @@ public class INFRA {
 
 		CloudletScheduler p = null;
 		list.add(new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium", p));
+		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large", p));
 		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
 		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
-		list.add(new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
-		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large", p));
 		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge", p));
-		list.add(new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
+		list.add(new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
+		list.add(new Vm(idShift++, userId, 40 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
 		list.add(new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge", p));
 		return list;
 	}
@@ -161,22 +161,22 @@ public class INFRA {
 				list.set(index, new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium", p));
 				break;
 			case 1:
-				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
-				break;
-			case 2:
-				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
-				break;
-			case 3:
-				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
-				break;
-			case 4:
 				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large", p));
 				break;
-			case 5:
+			case 2:
+				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
+				break;
+			case 3:
+				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
+				break;
+			case 4:
 				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge", p));
 				break;
+			case 5:
+				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
+				break;
 			case 6:
-				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
+				list.set(index, new Vm(idShift++, userId, 40 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
 				break;
 			case 7:
 				list.set(index, new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge", p));

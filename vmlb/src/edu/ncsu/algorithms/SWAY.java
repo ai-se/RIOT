@@ -3,7 +3,6 @@ package edu.ncsu.algorithms;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,16 +12,14 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.google.common.primitives.Ints;
-
 import edu.ncsu.wls.DAG;
+import edu.ncsu.wls.INFRA;
 import edu.ncsu.wls.Task;
 import jmetal.core.Algorithm;
 import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
-import jmetal.util.NonDominatedSolutionList;
 import jmetal.util.PseudoRandom;
 
 /**
@@ -65,11 +62,11 @@ public class SWAY {
 
 		// TODO SWAY algorithm configurations
 		// SolutionSet p = alg.execute();
-		decomposite();
-		return null;
+		return decomposite();
+		// return null;
 	}
 
-	private void decomposite() throws ClassNotFoundException {
+	private SolutionSet decomposite() throws ClassNotFoundException {
 		DAG graph = problem_.getWorkflow();
 		Iterator<Solution> iter;
 
@@ -128,7 +125,7 @@ public class SWAY {
 				}
 			}
 
-			SolutionSet smallSet = new NonDominatedSolutionList();
+			// SolutionSet smallSet = new NonDominatedSolutionList();
 
 			for (int repeat = 0; repeat < 10; repeat++) {
 				// 3 assignment...
@@ -148,9 +145,6 @@ public class SWAY {
 
 				int[] task2ins = new int[problem_.tasksNum];
 				int[] ins2type = new int[problem_.tasksNum];
-				for (int j = 0; j < ins2type.length; j++) {
-					ins2type[j] = 7;
-				}
 				int i = 0;
 				for (Task c : problem_.tasks)
 					task2ins[i++] = toIns.get(c);
@@ -162,26 +156,59 @@ public class SWAY {
 				problem_.setSolIns2Type(sol, ins2type);
 				problem_.setSolTaskInOrder(sol, taskInOrder);
 				problem_.evaluate(sol);
-				smallSet.add(sol);
+				frame.add(sol);
 			} // for repeat
-
-			// add small pareto front to frame
-			iter = smallSet.iterator();
-			while (iter.hasNext())
-				frame.add(iter.next());
-
 		}
 
 		System.err.println(frame.size());
-		iter = frame.iterator();
-		while (iter.hasNext()) {
-			Solution c = iter.next();
-			int[] t = VmsProblem.fetchSolDecs(c).task2ins;
-			System.out.println(Ints.max(t) + 1 + " " + Arrays.toString(t));
-		}
+		// iter = frame.iterator();
+		// while (iter.hasNext()) {
+		// Solution c = iter.next();
+		// int[] t = VmsProblem.fetchSolDecs(c).task2ins;
+		// System.out.println(Ints.max(t) + 1 + " " + Arrays.toString(t));
+		// }
 
-		// 3. most important. sway to set ins2type
-		
+		// 3-0. Experiment brute-force for ins2type
+//		SolutionSet brute = new SolutionSet(1000);
+//		iter = frame.iterator();
+//		while (iter.hasNext()) {
+//			Solution c = iter.next();
+//			int k = Ints.max(VmsProblem.fetchSolDecs(c).task2ins);
+//			if (k != 2)
+//				continue;
+//			for (int r = 0; r < (int) Math.pow(8, k); r++) {
+//				int rr = r;
+//				Solution x = problem_.deepCopySol(c);
+//				int[] ins2type = new int[problem_.tasksNum];
+//				for (int i = 0; i < k; i++) {
+//					ins2type[i] = rr % 8;
+//					rr /= 8;
+//				}
+//				problem_.setSolIns2Type(x, ins2type);
+//				problem_.evaluate(x);
+//				brute.add(x);
+//			}
+//			break;
+//		}
+//
+//		brute.printObjectives();
+//		System.out.println("---");
+//		Ranking rnk = new Ranking(brute);
+//		SolutionSet best = rnk.getSubfront(0);
+//
+//		for (int i = 0; i < best.size(); i++) {
+//			for (int ans = 0; ans < 64; ans++) {
+//				if (best.get(i) == brute.get(ans))
+//					System.out.println(ans);
+//			}
+//		}
+//		System.out.println("___");
+//
+//		Ranking rak = new Ranking(frame.union(brute));
+//		rak.getSubfront(0).printObjectives();
+//		return rak.getSubfront(0);
+		// 3. what's the next?
+		return null;
 	}
 
 	/**
@@ -189,12 +216,12 @@ public class SWAY {
 	 * edu.ncsu.experiments
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		// for (String model : INFRA.models) {
+		 for (String model : INFRA.models) {
 		// System.out.println(model);
-		for (String model : new String[] { "sci_CyberShake_30" }) {
+//		for (String model : new String[] { "sci_Inspiral_30" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("dataset", model);
-			paras.put("seed", 12345L);
+			paras.put("seed", 86769L);
 			long start_time = System.currentTimeMillis();
 			SWAY runner = new SWAY();
 			runner.executeSWAY(paras);
