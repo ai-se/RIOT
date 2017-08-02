@@ -37,7 +37,7 @@ public class ExpSWAY {
 			models = INFRA.models;
 
 		Log.disable();
-		File file = new File("emsc-sway.txt");
+		File file = new File("sway.txt");
 
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
 		for (int repeat = 0; repeat < repeats; repeat++) {

@@ -12,15 +12,18 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.google.common.primitives.Ints;
+
 import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.INFRA;
 import edu.ncsu.wls.Task;
 import jmetal.core.Algorithm;
 import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
+import jmetal.util.NonDominatedSolutionList;
 import jmetal.util.PseudoRandom;
+import jmetal.util.Ranking;
 
 /**
  * 
@@ -48,6 +51,7 @@ class AlgSway extends Algorithm {
 public class SWAY {
 	private VmsProblem problem_;
 	private Random rand_;
+	private String dataset_;
 
 	public SolutionSet executeSWAY(HashMap<String, Object> paras) throws ClassNotFoundException, JMException {
 		return executeSWAY((String) paras.get("dataset"), //
@@ -56,6 +60,7 @@ public class SWAY {
 
 	public SolutionSet executeSWAY(String dataset, long seed) throws ClassNotFoundException, JMException {
 		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
+		this.dataset_ = (String) dataset;
 		this.problem_ = new VmsProblem(dataset, new Random(seed));
 		this.rand_ = new Random(seed);
 		Algorithm alg = new AlgSway(problem_);
@@ -64,6 +69,21 @@ public class SWAY {
 		// SolutionSet p = alg.execute();
 		return decomposite();
 		// return null;
+	}
+
+	private SolutionSet tinyNSGAII() throws JMException, ClassNotFoundException {
+		HashMap<String, Object> paras = new HashMap<String, Object>();
+		paras.put("algorithm", "NSGAII");
+		paras.put("dataset", dataset_);
+		paras.put("seed", rand_.nextLong());
+		paras.put("popSize", 50);
+		paras.put("maxEval", 250);
+		paras.put("cxProb", 1.0);
+		paras.put("cxRandChangeProb", 0.6);
+		paras.put("mutProb", 0.6);
+		paras.put("bitMutProb", 1.0);
+		EMSC runner = new EMSC();
+		return runner.execute(paras);
 	}
 
 	private SolutionSet decomposite() throws ClassNotFoundException {
@@ -79,9 +99,9 @@ public class SWAY {
 			outs.add(graph.meContributeTo(problem_.tasks.get(i)).size());
 		}
 
-		int in_t = (int) ins.toArray()[ins.size() / 2 + 1];
-		int out_t = (int) outs.toArray()[outs.size() / 2 + 1];
-
+		int in_t = (int) ins.toArray()[ins.size() / 3 * 2 + 1];
+		int out_t = (int) outs.toArray()[outs.size() / 3 * 2 + 1];
+		// System.exit(-1);
 		List<Task> criticalTasks = new ArrayList<Task>();
 		for (Task t : problem_.tasks) {
 			if (graph.meContributeTo(t).size() >= out_t || graph.meRequires(t).size() >= in_t
@@ -104,17 +124,19 @@ public class SWAY {
 			taskInOrder[i] = sortedCloudlets.indexOf(problem_.tasks.get(i));
 
 		// 2. idea 102
-
 		Set<Integer> cache = new HashSet<Integer>();
-		SolutionSet frame = new SolutionSet(1000);
+		SolutionSet frame = new SolutionSet(100000);
 		// SolutionSet frame = new NonDominatedSolutionList();
-		for (double p0 = 0.1; p0 <= 0.5; p0 += 0.05) {
-			Map<Task, Double> p = new HashMap<Task, Double>();
+		Map<Task, Double> p = new HashMap<Task, Double>();
+
+		List<String> tips = new ArrayList<String>();
+
+		for (double p0 = 0.0; p0 <= 1.1; p0 += 0.05) {
 			p.clear();
 			for (Task ct : criticalTasks)
-				p.put(ct, p0);
-			for (Task c : ref) { // CT
-				if (p.containsKey(c))
+				p.put(ct, 1.0);
+			for (Task c : ref) {
+				if (p.containsKey(c)) // CT
 					continue;
 				else { // average of prec tasks
 					List<Task> preds = graph.meRequires(c);
@@ -125,90 +147,113 @@ public class SWAY {
 				}
 			}
 
-			// SolutionSet smallSet = new NonDominatedSolutionList();
-
-			for (int repeat = 0; repeat < 10; repeat++) {
-				// 3 assignment...
-				int assingedIns = 0;
-				Map<Task, Integer> toIns = new HashMap<Task, Integer>();
-				for (Task c : ref) {
-					if (rand_.nextDouble() < p.get(c)) { // CT/~CT p:new
-						toIns.put(c, assingedIns++);
-					} else if (criticalTasks.contains(c)) { // CT (1-p):use old
-						toIns.put(c, rand_.nextInt(assingedIns + 1));
-					} else { // ~CT (1-p): inherit from parents
-						List<Task> tmp = graph.meRequires(c);
-						Task inheritFrom = tmp.get(rand_.nextInt(tmp.size()));
-						toIns.put(c, toIns.get(inheritFrom));
-					}
+			// 3 assignment...
+			int assingedIns = 0;
+			Map<Task, Integer> toIns = new HashMap<Task, Integer>();
+			for (Task c : ref) {
+				double tmd = rand_.nextDouble();
+				if (tmd < p.get(c)) { // CT/~CT p:new
+					toIns.put(c, assingedIns++);
+				} else if (criticalTasks.contains(c)) { // CT (1-p):use old
+					toIns.put(c, rand_.nextInt(assingedIns + 1));
+				} else { // ~CT (1-p): inherit from parents
+					List<Task> tmp = graph.meRequires(c);
+					Task inheritFrom = tmp.get(rand_.nextInt(tmp.size()));
+					toIns.put(c, toIns.get(inheritFrom));
 				}
+			}
 
-				int[] task2ins = new int[problem_.tasksNum];
+			int[] task2ins = new int[problem_.tasksNum];
+			int i = 0;
+			for (Task c : problem_.tasks)
+				task2ins[i++] = toIns.get(c);
+
+			if (!cache.add(Arrays.hashCode(task2ins))) { // if repeated
+				continue;
+			}
+
+			// System.err.println(Ints.max(task2ins));
+
+			SolutionSet small = new NonDominatedSolutionList();
+			small.clear();
+
+			for (int px = 0; px < 8; px++) {
 				int[] ins2type = new int[problem_.tasksNum];
-				int i = 0;
-				for (Task c : problem_.tasks)
-					task2ins[i++] = toIns.get(c);
-
-				if (!cache.add(Arrays.hashCode(task2ins))) // just avoid repeats
-					continue;
 				Solution sol = new Solution(problem_);
 				problem_.setSolTask2Ins(sol, task2ins);
+				for (int j = 0; j < ins2type.length; j++)
+					ins2type[j] = px;
 				problem_.setSolIns2Type(sol, ins2type);
 				problem_.setSolTaskInOrder(sol, taskInOrder);
+				tips.add(Ints.max(task2ins) + " :@0@" + px);
 				problem_.evaluate(sol);
 				frame.add(sol);
-			} // for repeat
-		}
+				small.add(sol);
+			}
 
-		System.err.println(frame.size());
-		// iter = frame.iterator();
-		// while (iter.hasNext()) {
-		// Solution c = iter.next();
-		// int[] t = VmsProblem.fetchSolDecs(c).task2ins;
-		// System.out.println(Ints.max(t) + 1 + " " + Arrays.toString(t));
+			// System.out.println(small.size() + " " + Ints.max(task2ins));
+			// small.printObjectives();
+//			boolean updated = true;
+//			while (updated) {
+//				updated = false;
+				for (int rep = 0; rep < 30; rep++) {
+					Solution r1 = small.get(rand_.nextInt(small.size()));
+					Solution r2 = small.get(rand_.nextInt(small.size()));
+					Solution sol = new Solution(problem_);
+					problem_.setSolTask2Ins(sol, task2ins);
+					problem_.setSolIns2Type(sol, hybrid(r1, r2));
+					problem_.setSolTaskInOrder(sol, taskInOrder);
+					problem_.evaluate(sol);
+					// tips.add(Ints.max(task2ins) + " :@2@");
+					frame.add(sol);
+					small.add(sol);
+//				}
+			}
+
+			// System.exit(-1);
+			// for (int px = 0; px < 500; px++) {
+			// int[] ins2type = new int[problem_.tasksNum];
+			// Solution sol = new Solution(problem_);
+			// problem_.setSolTask2Ins(sol, task2ins);
+			// for (int j = 0; j < ins2type.length; j++)
+			// ins2type[j] = rand_.nextInt(8);
+			// problem_.setSolIns2Type(sol, ins2type);
+			// problem_.setSolTaskInOrder(sol, taskInOrder);
+			// problem_.evaluate(sol);
+			// tips.add(Ints.max(task2ins) + " :@2@");
+			// frame.add(sol);
+			// }
+		} // for p0
+
+		System.out.println("====");
+
+		Ranking ranks = new Ranking(frame);
+		SolutionSet eep = ranks.getSubfront(0);
+		eep.sort((s1, s2) -> (int) (((Solution) s1).getObjective(0) - ((Solution) s2).getObjective(0)));
+
+		// for (int j = 0; j < eep.size(); j++) {
+		// for (int i = 0; i < frame.size(); i++) {
+		// if (eep.get(j) == frame.get(i))
+		// System.out.println(tips.get(i));
+		// }
 		// }
 
-		// 3-0. Experiment brute-force for ins2type
-//		SolutionSet brute = new SolutionSet(1000);
-//		iter = frame.iterator();
-//		while (iter.hasNext()) {
-//			Solution c = iter.next();
-//			int k = Ints.max(VmsProblem.fetchSolDecs(c).task2ins);
-//			if (k != 2)
-//				continue;
-//			for (int r = 0; r < (int) Math.pow(8, k); r++) {
-//				int rr = r;
-//				Solution x = problem_.deepCopySol(c);
-//				int[] ins2type = new int[problem_.tasksNum];
-//				for (int i = 0; i < k; i++) {
-//					ins2type[i] = rr % 8;
-//					rr /= 8;
-//				}
-//				problem_.setSolIns2Type(x, ins2type);
-//				problem_.evaluate(x);
-//				brute.add(x);
-//			}
-//			break;
-//		}
-//
-//		brute.printObjectives();
-//		System.out.println("---");
-//		Ranking rnk = new Ranking(brute);
-//		SolutionSet best = rnk.getSubfront(0);
-//
-//		for (int i = 0; i < best.size(); i++) {
-//			for (int ans = 0; ans < 64; ans++) {
-//				if (best.get(i) == brute.get(ans))
-//					System.out.println(ans);
-//			}
-//		}
-//		System.out.println("___");
-//
-//		Ranking rak = new Ranking(frame.union(brute));
-//		rak.getSubfront(0).printObjectives();
-//		return rak.getSubfront(0);
-		// 3. what's the next?
-		return null;
+		System.out.println("====");
+		eep.printObjectives();
+
+		return eep;
+	}
+
+	private int[] hybrid(Solution s1, Solution s2) {
+		int[] a1 = VmsProblem.fetchSolDecs(s1).ins2type;
+		int[] a2 = VmsProblem.fetchSolDecs(s2).ins2type;
+		int[] res = new int[a1.length];
+
+		for (int i = 0; i < res.length; i++) {
+			res[i] = rand_.nextDouble() < 0.5 ? a1[i] : a2[i];
+		}
+
+		return res;
 	}
 
 	/**
@@ -216,12 +261,12 @@ public class SWAY {
 	 * edu.ncsu.experiments
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		 for (String model : INFRA.models) {
+		// for (String model : INFRA.models) {
 		// System.out.println(model);
-//		for (String model : new String[] { "sci_Inspiral_30" }) {
+		for (String model : new String[] { "sci_CyberShake_100" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("dataset", model);
-			paras.put("seed", 86769L);
+			paras.put("seed", System.currentTimeMillis());
 			long start_time = System.currentTimeMillis();
 			SWAY runner = new SWAY();
 			runner.executeSWAY(paras);

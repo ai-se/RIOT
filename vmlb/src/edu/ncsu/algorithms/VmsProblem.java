@@ -37,11 +37,11 @@ class VmEncoding extends Variable {
 	protected int[] ins2type;
 	protected int[] taskInOrder;
 
-//	public VmEncoding(int[] taskInOrder, int[] task2ins, int[] ins2type) {
-//		this.taskInOrder = taskInOrder;
-//		this.task2ins = task2ins;
-//		this.ins2type = ins2type;
-//	}
+	// public VmEncoding(int[] taskInOrder, int[] task2ins, int[] ins2type) {
+	// this.taskInOrder = taskInOrder;
+	// this.task2ins = task2ins;
+	// this.ins2type = ins2type;
+	// }
 
 	// public VmEncoding() {
 	// }
@@ -203,10 +203,10 @@ public class VmsProblem extends Problem {
 		int[] order = ((VmEncoding) decs[0]).taskInOrder;
 		int[] task2ins = ((VmEncoding) decs[0]).task2ins;
 		int[] ins2type = ((VmEncoding) decs[0]).ins2type;
-		// this.printSolution(solution);
+
 		// reset cloudlet to factory configurations
 		for (Task c : tasks)
-			c.setCloudletFinishedSoFar(0);
+			c.setCloudletFinishedSoFar(0L);
 
 		workflow.rmCache();
 
@@ -264,6 +264,7 @@ public class VmsProblem extends Problem {
 			return;
 		}
 
+		// MyCloudSimHelper.forcePrintCloudList(revList);
 		// calculating objectives
 		double makespan = 0;
 		for (Task c : revList) {
@@ -315,11 +316,12 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("eprotein", new Random());
+		VmsProblem p = new VmsProblem("sci_CyberShake_1000", new Random());
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 15; i++) {
 			Solution randS = new Solution(p);
 			p.evaluate(randS);
+			System.out.println(randS.getObjective(0));
 			System.out.println(i + 1 + " done.");
 		}
 

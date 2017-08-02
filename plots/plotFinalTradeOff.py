@@ -116,11 +116,28 @@ with open("../results/moheft.txt", 'r') as f:
         os = line.split(' ')
         newe.add_obj(float(os[0]), float(os[1]))
 
+# Read all SWAY resylts
+with open("../results/sway.txt", 'r') as f:
+    content = f.read()
+    for line in content.split('\n'):
+        if line.startswith('#'):
+            if newe:
+                AllExps.append(newe)
+            continue
+        if line.startswith('*'):
+            d = line.split(' ')
+            newe = Exp('SWAY', d[1], int(d[2]))
+            continue
+        if len(line) == 0:
+            continue
+        os = line.split(' ')
+        newe.add_obj(float(os[0]), float(os[1]))
+
 # ploting
 models = set([i.model for i in AllExps])
-algs = ['EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # pls put MOHEFT at the end
-colors = ['red', 'blue', 'darkmagenta', 'orange']
-markers = ['s', 'x', 'p', '^']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
+algs = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # pls put MOHEFT at the end
+colors = ['darkgreen', 'red', 'blue', 'darkmagenta', 'orange'] # https://matplotlib.org/examples/color/named_colors.html
+markers = ['d', 's', 'x', 'p', '^']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
 
 
 def jitter(x, y, drawed):

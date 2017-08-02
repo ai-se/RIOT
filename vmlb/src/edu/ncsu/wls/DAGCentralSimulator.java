@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.Consts;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
@@ -88,7 +87,7 @@ public class DAGCentralSimulator {
 		// updating the file transfer time
 		fileTransferTime = dag.getFileTransferTime(cloudlet);
 		double extraSize = myVm.getMips() * fileTransferTime;
-		long length = cloudlet.getCloudletLength();
+		long length = cloudlet.defCloudletL;
 		length += extraSize;
 		cloudlet.setCloudletLength(length);
 

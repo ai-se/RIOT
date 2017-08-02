@@ -14,6 +14,7 @@ public class Task {
 	private double execStartTime;
 	private double finishTime;
 	private long cloudletLength;
+	public long defCloudletL;
 	private int status;
 	protected int vmId;
 	private final Resource res;
@@ -22,6 +23,7 @@ public class Task {
 		this.id = cloudletId;
 		this.cloudletLength = cloudletLength;
 		this.res = new Resource();
+		this.defCloudletL = cloudletLength;
 	}
 
 	/**
@@ -60,6 +62,7 @@ public class Task {
 		if (cloudletLength <= 0) {
 			return false;
 		}
+
 		this.cloudletLength = cloudletLength;
 		return true;
 	}
@@ -191,6 +194,7 @@ public class Task {
 	}
 
 	public long getCloudletLength() {
+		// return this.defCloudletL;
 		return this.cloudletLength;
 	}
 
