@@ -22,122 +22,11 @@
 #  THE SOFTWARE.
 
 from __future__ import division
-# from matplotlib import gridspec
+from utils import read_all_data
 import matplotlib.pyplot as plt
 import numpy as np
 import math
 import pdb
-
-
-class Exp:
-    def __init__(self, alg, model, runtime):
-        self.time = runtime
-        if model.startswith('sci_'):  # removing the tag
-            model = model[4:]
-        self.model = model
-        self.alg = alg
-        self.objs = []
-
-    def add_obj(self, obj1, obj2):
-        self.objs.append([obj1, obj2])
-
-    def __str__(self):
-        return self.model + " " + str(len(self.objs))
-
-
-AllExps = list()
-newe = None
-
-# Read all NSGAII results
-with open("../results/emsc-nsgaii.txt", 'r') as f:
-    content = f.read()
-    for line in content.split('\n'):
-        if line.startswith('#'):
-            if newe:
-                AllExps.append(newe)
-            continue
-        if line.startswith('*'):
-            d = line.split(' ')
-            newe = Exp('EMSC-NSGAII', d[1], int(d[2]))
-            continue
-        if len(line) == 0:
-            continue
-        os = line.split(' ')
-        newe.add_obj(float(os[0]), float(os[1]))
-
-# Read all SPEA2 results
-with open("../results/emsc-spea2.txt", 'r') as f:
-    content = f.read()
-    for line in content.split('\n'):
-        if line.startswith('#'):
-            if newe:
-                AllExps.append(newe)
-            continue
-        if line.startswith('*'):
-            d = line.split(' ')
-            newe = Exp('EMSC-SPEA2', d[1], int(d[2]))
-            continue
-        if len(line) == 0:
-            continue
-        os = line.split(' ')
-        newe.add_obj(float(os[0]), float(os[1]))
-
-# Read all MOEAD results
-with open("../results/emsc-moead.txt", 'r') as f:
-    content = f.read()
-    for line in content.split('\n'):
-        if line.startswith('#'):
-            if newe:
-                AllExps.append(newe)
-            continue
-        if line.startswith('*'):
-            d = line.split(' ')
-            newe = Exp('EMSC-MOEA/D', d[1], int(d[2]))
-            continue
-        if len(line) == 0:
-            continue
-        os = line.split(' ')
-        newe.add_obj(float(os[0]), float(os[1]))
-
-# Read all MOHEFT results
-with open("../results/moheft.txt", 'r') as f:
-    content = f.read()
-    for line in content.split('\n'):
-        if line.startswith('#'):
-            if newe:
-                AllExps.append(newe)
-            continue
-        if line.startswith('*'):
-            d = line.split(' ')
-            newe = Exp('MOHEFT', d[1], int(d[2]))
-            continue
-        if len(line) == 0:
-            continue
-        os = line.split(' ')
-        newe.add_obj(float(os[0]), float(os[1]))
-
-# Read all SWAY resylts
-with open("../results/sway.txt", 'r') as f:
-    content = f.read()
-    for line in content.split('\n'):
-        if line.startswith('#'):
-            if newe:
-                AllExps.append(newe)
-            continue
-        if line.startswith('*'):
-            d = line.split(' ')
-            newe = Exp('SWAY', d[1], int(d[2]))
-            continue
-        if len(line) == 0:
-            continue
-        os = line.split(' ')
-        newe.add_obj(float(os[0]), float(os[1]))
-
-# ploting
-models = set([i.model for i in AllExps])
-algs = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # pls put MOHEFT at the end
-colors = ['darkgreen', 'red', 'blue', 'darkmagenta', 'orange'] # https://matplotlib.org/examples/color/named_colors.html
-markers = ['d', 's', 'x', 'p', '^']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
 
 
 def jitter(x, y, drawed):
@@ -148,6 +37,13 @@ def jitter(x, y, drawed):
             return math.pow(10, (math.log10(a) + 0.01)), math.pow(10, (math.log10(b) + 0.01))
     return x, y
 
+
+AllExps = read_all_data()
+models = set([i.model for i in AllExps])
+algs = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # pls put MOHEFT at the end
+colors = ['darkgreen', 'red', 'blue', 'darkmagenta',
+          'orange']  # https://matplotlib.org/examples/color/named_colors.html
+markers = ['d', 's', 'x', 'p', '^']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
 
 for model in models:
     plt.clf()

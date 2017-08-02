@@ -64,4 +64,4 @@ for m in models:
     y_offset += im.size[1] + 10
     x_offset = 0
 
-new_im.save(folder + 'combine.png')
+new_im.save('../results/combined/combine.png')

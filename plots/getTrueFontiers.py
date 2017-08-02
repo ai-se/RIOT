@@ -25,36 +25,20 @@
 from __future__ import division, print_function
 from pareto import eps_sort
 from lxml import etree
+from utils import Exp
 import sys
 import glob
 import pdb
 
 """
 Combining Pareto frontier
-Reporting igd, spread, hypervolume, runtime
 """
 
 frontier_DS = ['../results/', ]  # '../results/arxivR/07-30-17/'
 
 
-class Exp:
-    def __init__(self, alg, model, runtime):
-        self.time = runtime
-        if model.startswith('sci_'):  # removing the tag
-            model = model[4:]
-        self.model = model
-        self.alg = alg
-        self.objs = []
-
-    def add_obj(self, obj1, obj2):
-        self.objs.append([obj1, obj2])
-
-    def __str__(self):
-        return self.model + " " + str(len(self.objs))
-
-
 def update_true_frontier():
-    AllExps = list()
+    histortRecords = list()
 
     files = list()
     for i in frontier_DS:
@@ -66,7 +50,7 @@ def update_true_frontier():
             for line in content.split('\n'):
                 if line.startswith('#'):
                     if newe:
-                        AllExps.append(newe)
+                        histortRecords.append(newe)
                     continue
                 if line.startswith('*'):
                     d = line.split(' ')
@@ -77,16 +61,13 @@ def update_true_frontier():
                 os = line.split(' ')
                 newe.add_obj(float(os[0]), float(os[1]))
 
-    models = set()
-    for d in AllExps:
-        models.add(d.model)
-    models = list(models)
+    models = list(set([d.model for d in histortRecords]))
 
     # calculating the frontier <two objectives. both to minimize>
     root = etree.Element('frontiers')
 
     for model in models:
-        exps = filter(lambda i: i.model == model, AllExps)
+        exps = filter(lambda i: i.model == model, histortRecords)
         objs = list()
         for exp in exps:
             objs.extend(exp.objs)
@@ -103,10 +84,11 @@ def update_true_frontier():
 
         root.append(child)
 
-    with open('../results/FRONTIER.xml', 'w') as f:
+    with open('../results/combined/trues.xml', 'w') as f:
         f.write(etree.tostring(root, pretty_print=True))
 
-    print("Frontiers Recreated!", file=sys.stderr)
+    print("Frontiers Recreated!", file=sys.stderr)  # done
+
 
 if __name__ == '__main__':
     update_true_frontier()
