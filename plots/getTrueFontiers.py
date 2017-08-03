@@ -23,12 +23,14 @@
 
 
 from __future__ import division, print_function
-from pareto import eps_sort
-from lxml import etree
-from utils import Exp
-import sys
+
 import glob
-import pdb
+import sys
+
+from lxml import etree
+
+from assPkg.pareto import eps_sort
+from utils import Exp
 
 """
 Combining Pareto frontier
