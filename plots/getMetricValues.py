@@ -43,8 +43,8 @@ algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # p
 
 
 def format_obj_list(objs):
-    # return objs
-    return [[math.log10(i[0]), i[1]] for i in objs]
+    return objs
+    # return [[math.log10(i[0]), i[1]] for i in objs]
 
 
 def get_true_pf(model):
@@ -200,7 +200,7 @@ def report():
             ss = get_spread(exps, model)
             ss = ['%.3f' % i for i in ss]
 
-            cchild = etree.Element("sec")
+            cchild = etree.Element("rec")
             cchild.set("alg", alg)
             cchild.set("spread", " ".join(ss))
 
@@ -221,7 +221,7 @@ def report():
             ss = get_igd(exps, model)
             ss = ['%.3f' % i for i in ss]
 
-            cchild = etree.Element("sec")
+            cchild = etree.Element("rec")
             cchild.set("alg", alg)
             cchild.set("igd", " ".join(ss))
 
@@ -242,7 +242,7 @@ def report():
             ss = get_hv(exps, model)
             ss = ['%.3f' % i for i in ss]
 
-            cchild = etree.Element("sec")
+            cchild = etree.Element("rec")
             cchild.set("alg", alg)
             cchild.set("hypervolume", " ".join(ss))
 

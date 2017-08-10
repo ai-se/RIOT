@@ -20,6 +20,7 @@ import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.Task;
 import jmetal.core.Problem;
 import jmetal.core.Solution;
+import jmetal.core.SolutionSet;
 import jmetal.core.SolutionType;
 import jmetal.core.Variable;
 import jmetal.util.JMException;
@@ -188,6 +189,11 @@ public class VmsProblem extends Problem {
 		System.exit(-1);
 		return tasksNum;
 	};
+
+	public void evaluateSet(SolutionSet set) {
+		for (int i = 0; i < set.size(); i++)
+			this.evaluate(set.get(i));
+	}
 
 	@Override
 	public void evaluate(Solution solution) {
