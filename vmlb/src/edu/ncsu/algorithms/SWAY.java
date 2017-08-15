@@ -243,7 +243,7 @@ public class SWAY {
 			}
 
 			// System.err.println(Ints.max(task2ins));
-			for (int px = 0; px < 8; px++) {
+			for (int px = 0; px < 1; px++) {
 				int[] ins2type = new int[problem_.tasksNum];
 				Solution sol = new Solution(problem_);
 				problem_.setSolTask2Ins(sol, task2ins);
@@ -261,57 +261,100 @@ public class SWAY {
 	}
 
 	private SolutionSet better(SolutionSet frame) throws ClassNotFoundException {
-		System.err.println(frame.size());
-		DominanceComparator cmpr = new DominanceComparator();
-		SolutionSet betterFound = new SolutionSet(10000);
-
-		for (int diaI = 0; diaI < frame.size(); diaI++) {
+		SolutionSet res = new NonDominatedSolutionList();
+		SolutionSet anchors = new SolutionSet(40);
+		SolutionSet randoms = new SolutionSet(500);
+		int vms = INFRA.getAvalVmTypeNum();
+		
+		for(int diaI = 0; diaI < frame.size(); diaI++){
+			anchors.clear();
+			randoms.clear();
+			// creating anchors
 			Solution org = frame.get(diaI);
-			betterFound.add(org);
-			SolutionSet neis = neighbors(org, 5);
-			// problem_.evaluateSet(neis);
-			Iterator<Solution> iter = neis.iterator();
-			int vn = Ints.max(VmsProblem.fetchSolDecs(org).task2ins) + 1;
-			while (iter.hasNext()) {
-				Solution tmps = iter.next();
-				if (cmpr.compare(org, tmps) > 0) {
-					// // binary searching
-					int[] right = tillEnd(org, tmps);
-					int[] left = VmsProblem.fetchSolDecs(org).ins2type;
-					while (true) {
-						int[] med = medianVec(left, right, vn);
-						if (med == null) {
-							break;
-						}
-						problem_.setSolIns2Type(tmps, med);
-						if (cmpr.compare(tmps, org) == -1) {
-							left = med;
-							// System.out.print("left->");
-						} else {
-							right = med;
-							// System.out.print("right->");
-						}
-					}
-					betterFound.add(tmps);
-				} // if cmpr
-			} // while iter
-		} // for diaI
-
-		// System.err.println(betterFound.size());
-		// System.out.println("====");
-		// betterFound.printObjectives();
-		Ranking rnk = new Ranking(betterFound);
-		SolutionSet first = rnk.getSubfront(0);
-		int stillin = 0;
-		for (int i = 0; i < frame.size(); i++)
-			for(int j = 0; j < first.size(); j++)
-				if(frame.get(i) == first.get(j)){
-					stillin += 1;
-					break;
-				}
-		System.err.println("Frame size = " + frame.size());
-		System.err.println("Still in = " + stillin + "|| new found = " + (first.size() - stillin));
-		return betterFound;
+			int[] order= problem_.fetchSolDecs(org).taskInOrder;
+			int[] task2ins = problem_.fetchSolDecs(org).task2ins;
+			
+			// case 1 iso
+			for (int inst = 0; inst < INFRA.getAvalVmTypeNum(); inst++){
+				Solution iso = new Solution(problem_);
+				problem_.setSolTask2Ins(iso, task2ins);
+				problem_.setSolTaskInOrder(iso, order);
+				int[] ins2type = new int[problem_.tasksNum];
+				for(int tmpi =0; tmpi <= Ints.max(task2ins); tmpi++)
+					ins2type[tmpi] = inst;
+				problem_.setSolIns2Type(iso, ins2type);
+				
+				anchors.add(iso);
+			}
+			
+			// case 2 random assignment
+			for (int i = 0;i < 20; i++){
+				Solution rnd = new Solution(problem_);
+				problem_.setSolTask2Ins(rnd, task2ins);
+				problem_.setSolTaskInOrder(rnd, order);
+				int[] ins2type = new int[problem_.tasksNum];
+				for(int tmpi =0; tmpi <= Ints.max(task2ins); tmpi++)
+					ins2type[tmpi] = rand_.nextInt(vms);
+				problem_.setSolIns2Type(rnd, ins2type);
+				
+				anchors.add(rnd);
+			}
+		}
+		
+		
+		return null;
+		// System.err.println(frame.size());
+		// DominanceComparator cmpr = new DominanceComparator();
+		// SolutionSet betterFound = new SolutionSet(10000);
+		//
+		// for (int diaI = 0; diaI < frame.size(); diaI++) {
+		// Solution org = frame.get(diaI);
+		// betterFound.add(org);
+		// SolutionSet neis = neighbors(org, 5);
+		// // problem_.evaluateSet(neis);
+		// Iterator<Solution> iter = neis.iterator();
+		// int vn = Ints.max(VmsProblem.fetchSolDecs(org).task2ins) + 1;
+		// while (iter.hasNext()) {
+		// Solution tmps = iter.next();
+		// if (cmpr.compare(org, tmps) > 0) {
+		// // // binary searching
+		// int[] right = tillEnd(org, tmps);
+		// int[] left = VmsProblem.fetchSolDecs(org).ins2type;
+		// while (true) {
+		// int[] med = medianVec(left, right, vn);
+		// if (med == null) {
+		// break;
+		// }
+		// problem_.setSolIns2Type(tmps, med);
+		// if (cmpr.compare(tmps, org) == -1) {
+		// left = med;
+		// // System.out.print("left->");
+		// } else {
+		// right = med;
+		// // System.out.print("right->");
+		// }
+		// }
+		// betterFound.add(tmps);
+		// } // if cmpr
+		// } // while iter
+		// } // for diaI
+		//
+		// // System.err.println(betterFound.size());
+		// // System.out.println("====");
+		// // betterFound.printObjectives();
+		// Ranking rnk = new Ranking(betterFound);
+		// SolutionSet first = rnk.getSubfront(0);
+		// int stillin = 0;
+		// for (int i = 0; i < frame.size(); i++)
+		// for(int j = 0; j < first.size(); j++)
+		// if(frame.get(i) == first.get(j)){
+		// stillin += 1;
+		// break;
+		// }
+		// System.err.println("Frame size = " + frame.size());
+		// System.err.println("Still in = " + stillin + "|| new found = " +
+		// (first.size() - stillin));
+		// return betterFound;
 	}
 
 	/**

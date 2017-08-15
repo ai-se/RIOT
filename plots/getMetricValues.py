@@ -39,12 +39,12 @@ from utils import read_all_data
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
 
-algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # pls put MOHEFT at the end
+algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'SANITY']  # pls put MOHEFT at the end
 
 
 def format_obj_list(objs):
-    return objs
-    # return [[math.log10(i[0]), i[1]] for i in objs]
+    # return objs
+    return [[math.log10(i[0]), i[1]] for i in objs]
 
 
 def get_true_pf(model):

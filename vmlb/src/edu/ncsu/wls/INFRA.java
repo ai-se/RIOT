@@ -14,7 +14,6 @@ import edu.ncsu.datasets.Eprotein;
 import edu.ncsu.datasets.FMRI;
 import edu.ncsu.datasets.PEGASUS;
 import edu.ncsu.datasets.PSPLIB;
-import edu.ncsu.datasets.Randomset;
 
 public class INFRA {
 	public static final int VM_ID_SHIFT = 0;
@@ -120,8 +119,8 @@ public class INFRA {
 		list.add(new Vm(idShift++, userId, 3.75 * sdm, pesNumber, ram, 85196800, size, "m3.medium", p));
 		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 35196800, size, "m4.large", p));
 		list.add(new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
-		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
 		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge", p));
+		list.add(new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
 		list.add(new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
 		list.add(new Vm(idShift++, userId, 40 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
 		list.add(new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge", p));
@@ -167,19 +166,19 @@ public class INFRA {
 				list.set(index, new Vm(idShift++, userId, 7.5 * sdm, pesNumber, ram, 85196800, size, "m3.large", p));
 				break;
 			case 3:
-				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
-				break;
-			case 4:
 				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 68196800, size, "m4.xlarge", p));
 				break;
+			case 4:
+				list.set(index, new Vm(idShift++, userId, 15 * sdm, pesNumber, ram, 131072000, size, "m3.xlarge", p));
+				break;
 			case 5:
-				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
+				list.set(index, new Vm(idShift++, userId, 40 * sdm, pesNumber, ram, 131072000, size, "m3.2xlarge", p));
 				break;
 			case 6:
-				list.set(index, new Vm(idShift++, userId, 40 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
+				list.set(index, new Vm(idShift++, userId, 30 * sdm, pesNumber, ram, 131072000, size, "m4.2xlarge", p));
 				break;
 			case 7:
-				list.set(index, new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 18196800, size, "m4.4xlarge", p));
+				list.set(index, new Vm(idShift++, userId, 45 * sdm, pesNumber, ram, 181968000, size, "m4.4xlarge", p));
 				break;
 			}
 		}
@@ -359,11 +358,11 @@ public class INFRA {
 				cloudletList = eprotein.getCloudletList();
 				workflow = eprotein.getCloudletPassport();
 				break;
-			case "random":
-				Randomset rset = new Randomset(brokerId, CLOUDLET_ID_SHIFT, 10);
-				cloudletList = rset.getCloudletList();
-				workflow = rset.getCloudletPassport();
-				break;
+			// case "random":
+			// Randomset rset = new Randomset(brokerId, CLOUDLET_ID_SHIFT, 10);
+			// cloudletList = rset.getCloudletList();
+			// workflow = rset.getCloudletPassport();
+			// break;
 			case "j30_1":
 			case "j30":
 				PSPLIB psp1 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_1", 30);

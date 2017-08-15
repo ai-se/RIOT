@@ -113,7 +113,7 @@ def read_all_data():
             os = line.split(' ')
             newe.add_obj(float(os[0]), float(os[1]))
 
-    # Read all SWAY resylts
+    # Read all SWAY results
     with open("../results/sway.txt", 'r') as f:
         content = f.read()
         for line in content.split('\n'):
@@ -124,6 +124,23 @@ def read_all_data():
             if line.startswith('*'):
                 d = line.split(' ')
                 newe = Exp('SWAY', d[1], int(d[2]))
+                continue
+            if len(line) == 0:
+                continue
+            os = line.split(' ')
+            newe.add_obj(float(os[0]), float(os[1]))
+
+    # Read all Sanity Check results
+    with open("../results/sanity.txt", 'r') as f:
+        content = f.read()
+        for line in content.split('\n'):
+            if line.startswith('#'):
+                if newe:
+                    currentExpDatas.append(newe)
+                continue
+            if line.startswith('*'):
+                d = line.split(' ')
+                newe = Exp('SANITY', d[1], int(d[2]))
                 continue
             if len(line) == 0:
                 continue
