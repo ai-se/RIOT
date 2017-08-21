@@ -9,6 +9,8 @@ import java.util.Random;
 //import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Vm;
 
+import jmetal.util.PseudoRandom;
+
 /**
  * 
  * @author jianfeng
@@ -144,6 +146,10 @@ public class DAG {
 				int t = cList.indexOf(target);
 				if (task2ins[s] != task2ins[t]) {
 					long bw = Long.min(vmlist.get(task2ins[s]).getBw(), vmlist.get(task2ins[t]).getBw());
+					if (!INFRA.staticMode)
+						bw += (long) (bw
+								* PseudoRandom.randDouble(-1 * INFRA.bandwidthFluctuation, INFRA.bandwidthFluctuation));
+
 					double time = fileTransferTime.get(src) + this.getFileTransferSize(src, target) / bw;
 					fileTransferTime.put(src, time);
 				} // if type not equal

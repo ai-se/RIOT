@@ -11,12 +11,44 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
+import jmetal.util.PseudoRandom;
+
 /**
  * Dynamic adding cloudlet is NOT supported at this time.
  * 
  * @author jianfeng
  *
  */
+
+class Trigger {
+	public Map<Task, Double> expectedTime = new HashMap<Task, Double>();
+	public Map<Task, Long> alreadyFinsh = new HashMap<Task, Long>();
+	private int abnormal = 0;
+	
+
+	public void clear() {
+		this.expectedTime.clear();
+		this.alreadyFinsh.clear();
+		abnormal = 0;
+	}
+
+	public void registerTaskExp(Task s, double time) {
+		this.expectedTime.put(s, time);
+	}
+
+	public void registerFinsh(Task s, double realFinishTime) {
+		double exp = this.expectedTime.get(s);
+		if (Math.abs(realFinishTime - exp) / exp > 0.15)  // TODO change parameter here
+			this.abnormal += 1;
+	}
+	
+	public boolean triggerPause(){ 
+		if (abnormal >= this.expectedTime.size() * 0.25)  // TODO change parameter here
+			return true;
+		return false;
+	}
+	
+}
 
 class SingleVmInfo {
 	public Vm v;
@@ -88,6 +120,8 @@ public class DAGCentralSimulator {
 		fileTransferTime = dag.getFileTransferTime(cloudlet);
 		double extraSize = myVm.getMips() * fileTransferTime;
 		long length = cloudlet.defCloudletL;
+		if (!INFRA.staticMode)
+			length += (long) (length * PseudoRandom.randDouble(-1 * INFRA.workflodError, INFRA.workflodError));
 		length += extraSize;
 		cloudlet.setCloudletLength(length);
 
@@ -125,8 +159,12 @@ public class DAGCentralSimulator {
 
 				// Updating executing cloudlet
 				if (vinfo.executing != null) {
+					double mips = vinfo.mips;
+					if (!INFRA.staticMode)
+						mips += mips * PseudoRandom.randDouble(-1 * INFRA.cpuFluctuation, INFRA.cpuFluctuation);
+
 					vinfo.executing.setCloudletFinishedSoFar(
-							(long) (vinfo.mips * (currentTime - vinfo.executing.getExecStartTime())));
+							(long) (mips * (currentTime - vinfo.executing.getExecStartTime())));
 					if (vinfo.executing.getRemainingCloudletLength() == 0) { // finish
 						taskFinish(vinfo.executing);
 						vinfo.finishList.add(vinfo.executing);
@@ -159,7 +197,11 @@ public class DAGCentralSimulator {
 				// find a new cloudlet to exec. rm it from WL
 				if (vinfo.executing != null) {
 					vinfo.waitingList.remove(vinfo.executing);
-					clock.add(currentTime + vinfo.executing.getCloudletLength() / vinfo.mips);
+					double mips = vinfo.mips;
+					if (!INFRA.staticMode)
+						mips += mips * PseudoRandom.randDouble(-1 * INFRA.cpuFluctuation, INFRA.cpuFluctuation);
+
+					clock.add(currentTime + vinfo.executing.getCloudletLength() / mips);
 				}
 			} // for v
 

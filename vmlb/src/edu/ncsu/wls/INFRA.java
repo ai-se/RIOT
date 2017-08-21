@@ -20,6 +20,11 @@ public class INFRA {
 	public static final int CLOUDLET_ID_SHIFT = 0;
 	public static final int PEROID_BETWEEN_EVENTS = 1;
 	public static final String DATACENTER_NAME = "AWS_EC2";
+	public static double bandwidthFluctuation = 0.3;
+	public static double cpuFluctuation = 0.24;
+	public static double workflodError = 0.3;
+	public static boolean staticMode = true;
+	
 	// public static final String[] models = new String[] { "fmri", "eprotein",
 	// "j30_1", "j30_2", "j60_1", "j60_2",
 	// "j90_1", "j90_2", "j120_1", "j120_2" };

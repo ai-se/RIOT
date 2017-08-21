@@ -29,6 +29,8 @@ import numpy
 import sys
 import pdb
 import debug
+from scipy.stats import ttest_ind
+import scipy
 
 algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'SANITY']
 modelref = ['Montage', 'Epigenomics', 'Inspiral', 'CyberShake', 'Sipht']
@@ -45,6 +47,8 @@ def get_data_by_tag(tag):
 
 
 def get_runtime_csv():
+    algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']
+
     # f1 = open('../results/combined/runtime.csv', 'w+')
     f1 = sys.stdout
     data = get_data_by_tag("runtimes")
@@ -141,6 +145,17 @@ def get_igd_csv():
         print(','.join([model] + times), file=f1)
 
 
+def wilconTest(x, y):
+    # if len(x) < 5 or len(y) < 5 or len(x) != len(y):
+    avg1 = sum(x) / len(x)
+    avg2 = sum(y) / len(y)
+    if avg1 > avg2:
+        avg1, avg2 = avg2, avg1
+    return avg2 / avg1 > 1.05
+
+    # return scipy.stats.wilcoxon(x, y)[1] > 0.05
+
+
 def rq2_in_latex():
     hv_data = get_data_by_tag("hypervolumes")
     spread_data = get_data_by_tag("spreads")
@@ -150,6 +165,10 @@ def rq2_in_latex():
     models = sorted(models, key=lambda n: (modelref.index(n.split('_')[0]), int(n.split('_')[1])))
 
     for model in models:
+        unforn1 = False
+        unforn2 = False
+        unforn3 = False
+
         # hvs
         d = [i for i in hv_data.getchildren() if i.get('name') == model][0]
         hvr = list()
@@ -157,6 +176,15 @@ def rq2_in_latex():
             hvx = [i for i in d.getchildren() if i.get('alg') == alg][0].get('hypervolume').split(' ')
             hvx = [float(i) for i in hvx]
             hvr.append(median(hvx))
+            if alg == 'SWAY':
+                q75, q25 = numpy.percentile(hvx, [75, 25])
+                iqrh = q75 - q25
+                iqrh = max(iqrh, .01)
+                iqrh = ('%.2f' % iqrh)[1:]
+
+        if hvr[0] / (sum(hvr[1:4]) / 3) < 0.9:
+            unforn1 = True
+
         if hvr[-1] < 0.1:
             hvr[-1] = 0.1
         # tmp_h = [str(round(i / hvr[-1], 2)) for i in hvr[:-1]]
@@ -171,6 +199,15 @@ def rq2_in_latex():
             spx = [float(i) for i in spx]
             spr.append(median(spx))
 
+            if alg == 'SWAY':
+                q75, q25 = numpy.percentile(spr, [75, 25])
+                iqrs = q75 - q25
+                iqrs = max(iqrs, .01)
+                iqrs = ('%.2f' % iqrs)[1:]
+
+        if spr[0] / (sum(spr[1:4]) / 3) > 1.15:
+            unforn2 = True
+
         # tmp_s = [str(round(i / spr[-1], 2)) for i in spr[:-1]]
         # spr = tmp_s
         spr = [str(round(i, 2)) for i in spr]
@@ -182,13 +219,24 @@ def rq2_in_latex():
             ix = [i for i in d.getchildren() if i.get('alg') == alg][0].get('igd').split(' ')
             ix = [float(i) for i in ix]
             ir.append(median(ix))
+            if alg == 'SWAY':
+                q75, q25 = numpy.percentile(ix, [75, 25])
+                iqri = q75 - q25
+                iqri = max(iqri, .01)
+                iqri = ('%.2f' % iqri)[1:]
+
+        if ir[0] / (sum(ir[1:4]) / 3) > 1.15:
+            unforn3 = True
 
         # tmp_i = [str(round(i / ir[-1], 2)) for i in ir[:-1]]
         # ir = tmp_i
         ir = [str(round(i, 2)) for i in ir]
 
-        printseq = [model.replace('_', ' '), hvr[0], '/'.join(hvr[1:4]), hvr[4], spr[0], '/'.join(spr[1:4]), spr[4],
-                    ir[0],
+        printseq = [model.replace('_', ' '),
+                    '\\s' + ('s' if unforn1 else '') + 'val{%s}{%s}' % (hvr[0], iqrh), '/'.join(hvr[1:4]), hvr[4],
+                    '\\s' + ('s' if unforn2 else '') + 'val{%s}{%s}' % (spr[0], iqrs),
+                    '/'.join(spr[1:4]), spr[4],
+                    '\\s' + ('s' if unforn3 else '') + 'val{%s}{%s}' % (ir[0], iqri),
                     '/'.join(ir[1:4]), ir[4]]
 
         print(' & '.join(printseq) + '\\\\')
