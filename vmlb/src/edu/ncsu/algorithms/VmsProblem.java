@@ -3,12 +3,13 @@ package edu.ncsu.algorithms;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 
 import com.google.common.primitives.Ints;
@@ -20,7 +21,6 @@ import edu.ncsu.wls.MyCloudSimHelper;
 import edu.ncsu.wls.Task;
 import jmetal.core.Problem;
 import jmetal.core.Solution;
-import jmetal.core.SolutionSet;
 import jmetal.core.SolutionType;
 import jmetal.core.Variable;
 import jmetal.util.JMException;
@@ -120,9 +120,9 @@ public class VmsProblem extends Problem {
 	public int tasksNum;
 	private int evalCount;
 	public List<Task> tasks;
+	public Map<Integer, Double> lstTaskExp;
 
 	private DAG workflow;
-
 	private String name;
 
 	public static boolean isSameSolution(Solution a, Solution b) {
@@ -179,6 +179,7 @@ public class VmsProblem extends Problem {
 		this.numberOfObjectives_ = 2; // TODO change this if needed
 
 		this.solutionType_ = new VMScheduleSolutionType(this, rand);
+		this.lstTaskExp = new HashMap<Integer, Double>();
 
 		this.evalCount = 0;
 	}
@@ -190,11 +191,6 @@ public class VmsProblem extends Problem {
 		return tasksNum;
 	};
 
-	public void evaluateSet(SolutionSet set) {
-		for (int i = 0; i < set.size(); i++)
-			this.evaluate(set.get(i));
-	}
-
 	@Override
 	public void evaluate(Solution solution) {
 		evalCount += 1;
@@ -203,7 +199,7 @@ public class VmsProblem extends Problem {
 					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + "  Eval # so far : " + evalCount);
 		}
 
-		Log.disable();
+		// Log.disable();
 
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = ((VmEncoding) decs[0]).taskInOrder;
@@ -253,12 +249,18 @@ public class VmsProblem extends Problem {
 			if (task2ins[i] != -1)
 				cloudSim.taskSubmit(tasks.get(i), workflow.getFileTransferTime(tasks.get(i)));
 		}
-
+		
+		if (!INFRA.staticMode)
+			cloudSim.SetExpecTime(lstTaskExp);
 		cloudSim.boot();
 		List<Task> revList = new ArrayList<Task>();
-		for (Task i : tasks)
-			if (i.getStatus() == Cloudlet.SUCCESS)
+		this.lstTaskExp.clear();
+		for (Task i : tasks) {
+			if (i.getStatus() == Cloudlet.SUCCESS) {
 				revList.add(i);
+				lstTaskExp.put(i.id, i.getFinishTime());
+			}
+		}
 
 		MyCloudSimHelper.printCloudletList(revList);
 
@@ -322,15 +324,14 @@ public class VmsProblem extends Problem {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
-		VmsProblem p = new VmsProblem("sci_CyberShake_1000", new Random());
-		long start = System.currentTimeMillis();
-		for (int i = 0; i < 15; i++) {
-			Solution randS = new Solution(p);
-			p.evaluate(randS);
-			System.out.println(randS.getObjective(0));
-			System.out.println(i + 1 + " done.");
-		}
-
-		System.out.println("Total time = " + (System.currentTimeMillis() - start) / 1000);
+		VmsProblem p = new VmsProblem("sci_CyberShake_30", new Random());
+		
+		INFRA.staticMode = true;
+		Solution randS = new Solution(p);
+		p.evaluate(randS);
+		System.out.println(p.lstTaskExp);
+		INFRA.staticMode = false;
+		Solution againSol = p.deepCopySol(randS);
+		p.evaluate(againSol);
 	}
 }

@@ -75,7 +75,7 @@ for model in models:
 
         if alg != 'MOHEFT' or not x or np.mean(x) <= math.log10(
                 currentM):  # dont show if extremely bad or no results in MOHEFT
-            ax.plot(x, y, c=color, label=alg if alg != 'SWAY' else 'SBWS', marker=mk, ls='--', linewidth=0.8)
+            ax.plot(x, y, c=color, label=alg if alg != 'SWAY' else 'Our method', marker=mk, ls='--', linewidth=0.8)
             if not x and alg == 'MOHEFT':
                 plt.text((currentM) * 0.8, currentN * 0.8, 'Model too large for MOHEFT', fontsize=9,
                          color='gray')
@@ -88,6 +88,7 @@ for model in models:
 
         ax.set_xlabel('makespan')
         ax.set_ylabel('cost')
+        ax.set_aspect(1.5)
 
         plt.legend(loc=0)
         plt.title(model)
