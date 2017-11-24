@@ -22,7 +22,7 @@ public class DAG {
 	private HashMap<Task, List<Task>> contributeTo = new HashMap<Task, List<Task>>();
 	private HashMap<Task, HashMap<Task, Long>> files = new HashMap<Task, HashMap<Task, Long>>();
 	private HashMap<Task, Double> fileTransferTime = new HashMap<Task, Double>();
-	public boolean ignoreDAGmode = false;
+	// public boolean ignoreDAGmode = false;
 	private int defultTotalCloudletNum;
 	public int totalCloudletNum = 0;
 
@@ -34,22 +34,10 @@ public class DAG {
 	}
 
 	public void rmCache() {
-		if (ignoreDAGmode) {
-			for (int i = 0; i < totalCloudletNum; i++)
-				readyed[i] = 0;
-		}
-
 		totalCloudletNum = defultTotalCloudletNum;
-		// for (int i = 0; i < totalCloudletNum; i++)
-		// readyed[i] = totalNeed[i];
 		System.arraycopy(totalNeed, 0, readyed, 0, defultTotalCloudletNum);
 
-		this.ignoreDAGmode = false;
 	}
-
-	// public void turnOnIgnoreDAGMode() {
-	// this.ignoreDAGmode = true;
-	// }
 
 	public List<Task> randTopo(List<Task> tasks, Random rand) {
 		// temporary saving readyed list
@@ -68,7 +56,7 @@ public class DAG {
 			afterOneCloudletSuccess(nexts.get(0));
 		}
 
-		// recovery readyed to outside environment
+		// recovery ready to outside environment
 		System.arraycopy(rSave, 0, readyed, 0, defultTotalCloudletNum);
 		return res;
 	}
@@ -101,9 +89,6 @@ public class DAG {
 	}
 
 	public synchronized boolean isCloudletPrepared(Task cloudlet) {
-		if (ignoreDAGmode)
-			return true;
-
 		int index = cloudlet.getCloudletId();
 		return readyed[index] == 0;
 	}
@@ -134,9 +119,6 @@ public class DAG {
 		for (Task c : cList)
 			fileTransferTime.put(c, 0.0);
 
-		if (ignoreDAGmode)
-			return;
-
 		for (Task target : requiring.keySet()) {
 			for (Task src : requiring.get(target)) {
 				int s = cList.indexOf(src);
@@ -165,18 +147,12 @@ public class DAG {
 	}
 
 	public boolean hasPred(Task x) {
-		if (ignoreDAGmode)
-			return false;
-
 		if (requiring.containsKey(x) && requiring.get(x).size() > 0)
 			return true;
 		return false;
 	}
 
 	public boolean hasSucc(Task x) {
-		if (ignoreDAGmode)
-			return false;
-
 		if (contributeTo.containsKey(x) && contributeTo.get(x).size() > 0)
 			return true;
 		return false;
@@ -187,14 +163,14 @@ public class DAG {
 	}
 
 	public List<Task> meRequires(Task me) {
-		if (ignoreDAGmode || !requiring.containsKey(me))
+		if (!requiring.containsKey(me))
 			return new ArrayList<Task>();
 
 		return requiring.get(me);
 	}
 
 	public List<Task> meContributeTo(Task me) {
-		if (ignoreDAGmode || !contributeTo.containsKey(me))
+		if (!contributeTo.containsKey(me))
 			return new ArrayList<Task>();
 
 		return contributeTo.get(me);

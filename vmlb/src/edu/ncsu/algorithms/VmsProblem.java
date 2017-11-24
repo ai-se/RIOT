@@ -203,12 +203,6 @@ public class VmsProblem extends Problem {
 
 		workflow.rmCache();
 
-		if (Ints.contains(task2ins, -1))
-			workflow.turnOnIgnoreDAGMode();
-
-		// if (!workflow.ignoreDAGmode)
-		// System.out.println("DUBUG");
-
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
 		vmlist = INFRA.createVms(task2ins, ins2type);
