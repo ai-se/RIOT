@@ -35,11 +35,11 @@ public class PEGASUS implements Dataset {
 	private String problemName;
 
 	private Map<String, Task> tasks;
-	private DAG workflow;
+	private DAG dag;
 
 	public PEGASUS(int userid, String problemName) {
 		tasks = new LinkedHashMap<String, Task>();
-		workflow = new DAG();
+		dag = new DAG();
 		this.userid = userid;
 		this.problemName = problemName;
 		this.createTasksAndWorkFlows();
@@ -97,7 +97,7 @@ public class PEGASUS implements Dataset {
 			for (int j = 0; j < flowInfo.getElementsByTagName("parent").getLength(); j++) {
 				Element parente = (Element) flowInfo.getElementsByTagName("parent").item(j);
 				String parent = parente.getAttribute("ref");
-				this.workflow.addCloudWorkflow(tasks.get(parent), tasks.get(child));
+				this.dag.addCloudWorkflow(tasks.get(parent), tasks.get(child));
 			}
 		}
 		// linking entry->..
@@ -105,16 +105,16 @@ public class PEGASUS implements Dataset {
 			if (myc == tasks.get("entry"))
 				continue;
 
-			if (!this.workflow.hasPred(myc))
-				this.workflow.addCloudWorkflow(tasks.get("entry"), myc);
+			if (!this.dag.hasPred(myc))
+				this.dag.addCloudWorkflow(tasks.get("entry"), myc);
 		}
 		// linking ..->exit
 		for (Task myc : this.getCloudletList()) {
 			if (myc == tasks.get("exit"))
 				continue;
 
-			if (!this.workflow.hasSucc(myc))
-				this.workflow.addCloudWorkflow(myc, tasks.get("exit"));
+			if (!this.dag.hasSucc(myc))
+				this.dag.addCloudWorkflow(myc, tasks.get("exit"));
 		}
 
 		// step 3 updating the files transferred between tasks
@@ -145,13 +145,13 @@ public class PEGASUS implements Dataset {
 
 			if (fromid == null)
 				fromid = "entry";
-			this.workflow.setFilesBetween(tasks.get(fromid), tasks.get(toid), fileSize.get(file));
+			this.dag.setFilesBetween(tasks.get(fromid), tasks.get(toid), fileSize.get(file));
 		}
 
 		for (String file : outputTo.keySet()) {
 			if (useAsInput.get(file) == null) {
 				String fromid = outputTo.get(file);
-				this.workflow.setFilesBetween(tasks.get(fromid), tasks.get("exit"), fileSize.get(file));
+				this.dag.setFilesBetween(tasks.get(fromid), tasks.get("exit"), fileSize.get(file));
 			}
 		}
 	}
@@ -168,7 +168,7 @@ public class PEGASUS implements Dataset {
 
 	@Override
 	public DAG getDAG() {
-		return this.workflow;
+		return this.dag;
 	}
 
 	public static void main(String[] args) {

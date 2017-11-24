@@ -120,7 +120,7 @@ public class DAGCentralSimulator {
 		Vm myVm = getVmById(cloudlet.getVmId());
 
 		// updating the file transfer time
-		fileTransferTime = dag.getFileTransferTime(cloudlet);
+		fileTransferTime = dag.fileTransferTime.get(cloudlet);
 		double extraSize = myVm.getMips() * fileTransferTime;
 		long length = cloudlet.defCloudletL;
 		length += extraSize;

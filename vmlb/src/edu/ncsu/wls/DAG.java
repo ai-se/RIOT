@@ -8,11 +8,14 @@ import java.util.Random;
 
 import org.cloudbus.cloudsim.Vm;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 /**
  * 
  * @author jianfeng
  *
- *         CloudletPassport is used for controlling global workingflow of
+ *         CloudletPassport is used for controlling global working flow of
  *         cloudlets Used as a member in any CloudletScheduler
  * 
  */
@@ -20,46 +23,42 @@ import org.cloudbus.cloudsim.Vm;
 public class DAG {
 	private HashMap<Task, List<Task>> requiring = new HashMap<Task, List<Task>>();
 	private HashMap<Task, List<Task>> contributeTo = new HashMap<Task, List<Task>>();
-	private HashMap<Task, HashMap<Task, Long>> files = new HashMap<Task, HashMap<Task, Long>>();
-	private HashMap<Task, Double> fileTransferTime = new HashMap<Task, Double>();
-	// public boolean ignoreDAGmode = false;
+	private Table<Task, Task, Long> files = HashBasedTable.create(); // from,to,file-size
+	public HashMap<Task, Double> fileTransferTime = new HashMap<Task, Double>();
 	private int defultTotalCloudletNum;
 	public int totalCloudletNum = 0;
 
 	// ready negative-not ready 0-ready
-	private int[] readyed = new int[1200]; // TODO assume 5k cloudlets at max
+	private int[] ready = new int[1200]; // TODO assume 1200 cloudlets at max
 	private int[] totalNeed = new int[1200];
-
-	public DAG() {
-	}
 
 	public void rmCache() {
 		totalCloudletNum = defultTotalCloudletNum;
-		System.arraycopy(totalNeed, 0, readyed, 0, defultTotalCloudletNum);
+		System.arraycopy(totalNeed, 0, ready, 0, defultTotalCloudletNum);
 
 	}
 
-	public List<Task> randTopo(List<Task> tasks, Random rand) {
-		// temporary saving readyed list
-		int[] rSave = new int[defultTotalCloudletNum];
-		System.arraycopy(readyed, 0, rSave, 0, defultTotalCloudletNum);
-		System.arraycopy(totalNeed, 0, readyed, 0, defultTotalCloudletNum);
-
-		List<Task> res = new ArrayList<Task>();
-		while (res.size() < tasks.size()) {
-			List<Task> nexts = new ArrayList<Task>();
-			for (Task t : tasks)
-				if (isCloudletPrepared(t) && !res.contains(t))
-					nexts.add(t);
-			Collections.shuffle(nexts, rand);
-			res.add(nexts.get(0));
-			afterOneCloudletSuccess(nexts.get(0));
-		}
-
-		// recovery ready to outside environment
-		System.arraycopy(rSave, 0, readyed, 0, defultTotalCloudletNum);
-		return res;
-	}
+	// public List<Task> randTopo(List<Task> tasks, Random rand) {
+	// // temporary saving ready list
+	// int[] rSave = new int[defultTotalCloudletNum];
+	// System.arraycopy(ready, 0, rSave, 0, defultTotalCloudletNum);
+	// System.arraycopy(totalNeed, 0, ready, 0, defultTotalCloudletNum);
+	//
+	// List<Task> res = new ArrayList<Task>();
+	// while (res.size() < tasks.size()) {
+	// List<Task> nexts = new ArrayList<Task>();
+	// for (Task t : tasks)
+	// if (isCloudletPrepared(t) && !res.contains(t))
+	// nexts.add(t);
+	// Collections.shuffle(nexts, rand);
+	// res.add(nexts.get(0));
+	// afterOneCloudletSuccess(nexts.get(0));
+	// }
+	//
+	// // recovery ready to outside environment
+	// System.arraycopy(rSave, 0, ready, 0, defultTotalCloudletNum);
+	// return res;
+	// }
 
 	public void addCloudWorkflow(Task from, Task to) {
 		if (!this.requiring.containsKey(to))
@@ -71,7 +70,7 @@ public class DAG {
 		this.contributeTo.get(from).add(to);
 
 		int index = to.getCloudletId();
-		readyed[index] += 1;
+		ready[index] += 1;
 		totalNeed[index] += 1;
 	}
 
@@ -83,21 +82,19 @@ public class DAG {
 	}
 
 	public void setFilesBetween(Task from, Task to, long fileSize) {
-		if (!files.containsKey(from))
-			files.put(from, new HashMap<Task, Long>());
-		files.get(from).put(to, fileSize);
+		files.put(from, to, fileSize);
 	}
 
 	public synchronized boolean isCloudletPrepared(Task cloudlet) {
 		int index = cloudlet.getCloudletId();
-		return readyed[index] == 0;
+		return ready[index] == 0;
 	}
 
 	public synchronized void afterOneCloudletSuccess(Task cloudlet) {
 		if (contributeTo.containsKey(cloudlet))
 			for (Task p : contributeTo.get(cloudlet)) {
 				int pindex = p.getCloudletId();
-				readyed[pindex] -= 1;
+				ready[pindex] -= 1;
 			}
 	}
 
@@ -123,27 +120,13 @@ public class DAG {
 			for (Task src : requiring.get(target)) {
 				int s = cList.indexOf(src);
 				int t = cList.indexOf(target);
-				if (task2ins[s] != task2ins[t]) {
+				if (task2ins[s] != task2ins[t] && files.contains(src, target)) {
 					long bw = Long.min(vmlist.get(task2ins[s]).getBw(), vmlist.get(task2ins[t]).getBw());
-					double time = fileTransferTime.get(src) + this.getFileTransferSize(src, target) / bw;
+					double time = fileTransferTime.get(src) + files.get(src, target) / bw;
 					fileTransferTime.put(src, time);
-				} // if type not equal
+				} // if type not equal and have file to transfer
 			} // for target
 		} // for src
-	}
-
-	private long getFileTransferSize(Task from, Task to) {
-		if (!this.files.containsKey(from))
-			return new Random(123456L).nextInt(448484515); // Early version
-		// return 0;
-		if (!this.files.get(from).containsKey(to))
-			return 0; // no files to transferring
-
-		return this.files.get(from).get(to);
-	}
-
-	public double getFileTransferTime(Task c) {
-		return fileTransferTime.get(c);
 	}
 
 	public boolean hasPred(Task x) {

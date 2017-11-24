@@ -41,17 +41,6 @@ public class Task {
 		public double submissionTime = 0.0;
 
 		/**
-		 * The time this Cloudlet resides in a CloudResource (from arrival time
-		 * until departure time, that may include waiting time).
-		 */
-		public double wallClockTime = 0.0;
-
-		/**
-		 * The total time the Cloudlet spent being executed in a CloudResource.
-		 */
-		public double actualCPUTime = 0.0;
-
-		/**
 		 * Cloudlet's length finished so far.
 		 */
 		public long finishedSoFar = 0;
@@ -121,33 +110,6 @@ public class Task {
 	}
 
 	/**
-	 * Sets the Cloudlet's execution parameters. These parameters are set by the
-	 * CloudResource before departure or sending back to the original Cloudlet's
-	 * owner.
-	 *
-	 * @param wallTime
-	 *            the time of this Cloudlet resides in a CloudResource (from
-	 *            arrival time until departure time).
-	 * @param actualTime
-	 *            the total execution time of this Cloudlet in a CloudResource.
-	 *
-	 * @see Resource#wallClockTime
-	 * @see Resource#actualCPUTime
-	 *
-	 * @pre wallTime >= 0.0
-	 * @pre actualTime >= 0.0
-	 * @post $none
-	 */
-	public void setExecParam(final double wallTime, final double actualTime) {
-		if (wallTime < 0.0 || actualTime < 0.0) {
-			return;
-		}
-
-		res.wallClockTime = wallTime;
-		res.actualCPUTime = actualTime;
-	}
-
-	/**
 	 * if newStatus is Cloudlet.SUCCESS then please provide currentTime
 	 * 
 	 * @param newStatus
@@ -194,7 +156,6 @@ public class Task {
 	}
 
 	public long getCloudletLength() {
-		// return this.defCloudletL;
 		return this.cloudletLength;
 	}
 

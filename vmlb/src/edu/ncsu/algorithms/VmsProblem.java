@@ -113,7 +113,7 @@ public class VmsProblem extends Problem {
 	public List<Task> tasks;
 	public Map<Integer, Double> lstTaskExp;
 
-	private DAG workflow;
+	private DAG dag;
 	private String name;
 
 	public static boolean isSameSolution(Solution a, Solution b) {
@@ -164,7 +164,7 @@ public class VmsProblem extends Problem {
 		Object[] tmpInfo = INFRA.getCaseCloudlets(this.name, 0);
 		tasks = (List<Task>) tmpInfo[0];
 		tasksNum = tasks.size();
-		workflow = (DAG) (tmpInfo[1]);
+		dag = (DAG) (tmpInfo[1]);
 
 		this.numberOfVariables_ = 1; // TODO ATTENTION
 		this.numberOfObjectives_ = 2; // TODO change this if needed
@@ -201,7 +201,7 @@ public class VmsProblem extends Problem {
 		for (Task c : tasks)
 			c.setCloudletFinishedSoFar(0L);
 
-		workflow.rmCache();
+		dag.rmCache();
 
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
@@ -210,13 +210,13 @@ public class VmsProblem extends Problem {
 		// map task to vm
 		for (int var = 0; var < tasksNum; var++) {
 			if (task2ins[var] == -1) {
-				workflow.totalCloudletNum -= 1;
+				dag.totalCloudletNum -= 1;
 				continue;
 			}
 			tasks.get(var).setVmId(vmlist.get(task2ins[var]).getId());
 		}
 
-		workflow.calcFileTransferTimes(task2ins, vmlist, tasks);
+		dag.calcFileTransferTimes(task2ins, vmlist, tasks);
 
 		// binding global workflow to vm
 		vmlist.removeAll(Collections.singleton(null)); // remove null
@@ -224,7 +224,7 @@ public class VmsProblem extends Problem {
 		DAGCentralSimulator cloudSim = new DAGCentralSimulator();
 
 		// binding dag to simulator
-		cloudSim.setCloudletPassport(workflow);
+		cloudSim.setCloudletPassport(dag);
 		// broker.submitVmList(vmlist);
 		cloudSim.setVmList(vmlist);
 
@@ -232,7 +232,7 @@ public class VmsProblem extends Problem {
 		// broker.submitCloudletList(tmp);
 		for (int i : order) {
 			if (task2ins[i] != -1)
-				cloudSim.taskSubmit(tasks.get(i), workflow.getFileTransferTime(tasks.get(i)));
+				cloudSim.taskSubmit(tasks.get(i), dag.fileTransferTime.get(tasks.get(i)));
 		}
 
 		cloudSim.boot();
@@ -247,9 +247,9 @@ public class VmsProblem extends Problem {
 
 		MyCloudSimHelper.printCloudletList(revList);
 
-		if (revList.size() != workflow.totalCloudletNum) {
+		if (revList.size() != dag.totalCloudletNum) {
 			System.err.println("[VmsP] can not simulating all cloudlets!");
-			System.err.println("left # = " + (workflow.totalCloudletNum - revList.size()));
+			System.err.println("left # = " + (dag.totalCloudletNum - revList.size()));
 			MyCloudSimHelper.forcePrintCloudList(revList);
 			System.exit(-1);
 			return;
@@ -289,7 +289,7 @@ public class VmsProblem extends Problem {
 	}
 
 	public DAG getWorkflow() {
-		return workflow;
+		return dag;
 	}
 
 	public static void printSolution(Solution s) {
