@@ -23,7 +23,6 @@ public class INFRA {
 	public static double bandwidthFluctuation = 0.3;
 	public static double cpuFluctuation = 0.24;
 	public static double workflodError = 0.3;
-	public static boolean staticMode = true;
 	
 	// public static final String[] models = new String[] { "fmri", "eprotein",
 	// "j30_1", "j30_2", "j60_1", "j60_2",
@@ -53,60 +52,6 @@ public class INFRA {
 	 * @return
 	 */
 	private static List<Vm> createEC2Vms(int userId) {
-		// int idShift = VM_ID_SHIFT;
-		// long size, bw;
-		// int ram, mips, pesNumber;
-		// String vmm;
-		// // Creates a container to store VMs. This list is passed to the
-		// broker
-		// // later
-		// LinkedList<Vm> list = new LinkedList<Vm>();
-		//
-		// // create VMs
-		// // VM Parameters
-		// size = 10000; // image size (MB)
-		// ram = 4096; // vm memory (MB)
-		// mips = 225;
-		// bw = 1000;
-		// pesNumber = 2; // number of cpus
-		// vmm = "t2.medium"; // VMM name
-		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
-		// vmm, new DAGCentralScheduler()));
-		//
-		// // =========================
-		// size = 8000; // image size (MB)
-		// ram = 4096; // vm memory (MB)
-		// mips = 150;
-		// bw = 1000;
-		// pesNumber = 1; // number of cpus
-		// vmm = "t2.small"; // VMM name
-		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
-		// vmm, new DAGCentralScheduler()));
-		//
-		// // =========================
-		// size = 8000; // image size (MB)
-		// ram = 4096; // vm memory (MB)
-		// mips = 150;
-		// bw = 1000;
-		// pesNumber = 1; // number of cpus
-		// vmm = "t2.small"; // VMM name
-		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
-		// vmm, new DAGCentralScheduler()));
-		//
-		// // =============
-		// size = 10000; // image size (MB)
-		// ram = 4 * 1024; // vm memory (MB)
-		// mips = 200;
-		// bw = 1500;
-		// pesNumber = 1; // number of cpus
-		// vmm = "m3.medium"; // VMM name
-		// list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
-		// vmm, new DAGCentralScheduler()));
-		// // list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size,
-		// // vmm, new DAGCloudletSchedulerSpaceShared()));
-		//
-		// return list;
-
 		int idShift = VM_ID_SHIFT;
 		long size;
 		int ram, pesNumber;
@@ -270,68 +215,6 @@ public class INFRA {
 		return 8; // in aws EC2
 	}
 
-	// /**
-	// * Creating data centers
-	// *
-	// * @return
-	// */
-	// public static Datacenter createDatacenter() {
-	// return Infrastructure.createDatacenter(10);
-	// }
-	//
-	// // TODO entrance to modify Data center configurations
-	// public static Datacenter createDatacenter(int reqVmNum) {
-	// String name = DATACENTER_NAME;
-	// List<Host> hostList = new ArrayList<Host>();
-	//
-	// // each machine are n-core machine
-	// List<Pe> peList = new ArrayList<Pe>();
-	// peList.add(new Pe(0, new PeProvisionerSimple(Integer.MAX_VALUE)));
-	//
-	// // create (same configured) PMs in a datacenter
-	// int hostId = 0;
-	// int ram = Integer.MAX_VALUE; // host memory (MB)
-	// long storage = Integer.MAX_VALUE; // host storage
-	// int bw = Integer.MAX_VALUE;
-	//
-	// for (int i = 0; i < reqVmNum; i++) {
-	// hostList.add(new Host(++hostId, new RamProvisionerSimple(ram), new
-	// BwProvisionerSimple(bw), storage, peList,
-	// new VmSchedulerSpaceShared(peList))); // This is our
-	// // machine
-	// }
-	//
-	// // data center characteristics
-	// String arch = "x86"; // system architecture
-	// String os = "Linux"; // operating system
-	// String vmm = "Xen";
-	// double time_zone = 10.0; // time zone this resource located
-	// double cost = 3.0; // the cost of using processing in this resource
-	// double costPerMem = 0.05; // the cost of using memory in this resource
-	// double costPerStorage = 0.001; // the cost of using storage in this
-	// // resource
-	// double costPerBw = 1.0; // the cost of using bw in this resource
-	// LinkedList<Storage> storageList = new LinkedList<Storage>();
-	//
-	// DatacenterCharacteristics characteristics = new
-	// DatacenterCharacteristics(arch, os, vmm, hostList, time_zone,
-	// cost, costPerMem, costPerStorage, costPerBw);
-	//
-	// // Create a PowerDatacenter object.
-	// Datacenter datacenter = null;
-	// try {
-	// datacenter = new Datacenter(name, characteristics, new
-	// StaticRandomVmAllocationPolicy(hostList),
-	// storageList, 1);
-	// // datacenter = new Datacenter(name, characteristics, new
-	// // StaticRandomVmAllocationPolicy(hostList),
-	// // storageList);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//
-	// return datacenter;
-	// }
 
 	/**
 	 * Generating the pre-defined study cases Using memo decorator pattern
@@ -356,12 +239,12 @@ public class INFRA {
 			case "fmri":
 				FMRI fmri = new FMRI(brokerId, CLOUDLET_ID_SHIFT);
 				cloudletList = fmri.getCloudletList();
-				workflow = fmri.getCloudletPassport();
+				workflow = fmri.getDAG();
 				break;
 			case "eprotein":
 				Eprotein eprotein = new Eprotein(brokerId, CLOUDLET_ID_SHIFT);
 				cloudletList = eprotein.getCloudletList();
-				workflow = eprotein.getCloudletPassport();
+				workflow = eprotein.getDAG();
 				break;
 			// case "random":
 			// Randomset rset = new Randomset(brokerId, CLOUDLET_ID_SHIFT, 10);
@@ -372,50 +255,50 @@ public class INFRA {
 			case "j30":
 				PSPLIB psp1 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_1", 30);
 				cloudletList = psp1.getCloudletList();
-				workflow = psp1.getCloudletPassport();
+				workflow = psp1.getDAG();
 				break;
 			case "j30_2":
 				PSPLIB psp11 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_2", 30);
 				cloudletList = psp11.getCloudletList();
-				workflow = psp11.getCloudletPassport();
+				workflow = psp11.getDAG();
 				break;
 			case "j60_1":
 			case "j60":
 				PSPLIB psp2 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_1", 60);
 				cloudletList = psp2.getCloudletList();
-				workflow = psp2.getCloudletPassport();
+				workflow = psp2.getDAG();
 				break;
 			case "j60_2":
 				PSPLIB psp22 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_2", 60);
 				cloudletList = psp22.getCloudletList();
-				workflow = psp22.getCloudletPassport();
+				workflow = psp22.getDAG();
 				break;
 			case "j90_1":
 			case "j90":
 				PSPLIB psp3 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_1", 90);
 				cloudletList = psp3.getCloudletList();
-				workflow = psp3.getCloudletPassport();
+				workflow = psp3.getDAG();
 				break;
 			case "j90_2":
 				PSPLIB psp32 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_2", 90);
 				cloudletList = psp32.getCloudletList();
-				workflow = psp32.getCloudletPassport();
+				workflow = psp32.getDAG();
 				break;
 			case "j120_1":
 				PSPLIB psp4 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_1", 120);
 				cloudletList = psp4.getCloudletList();
-				workflow = psp4.getCloudletPassport();
+				workflow = psp4.getDAG();
 				break;
 			case "j120_2":
 				PSPLIB psp42 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_2", 120);
 				cloudletList = psp42.getCloudletList();
-				workflow = psp42.getCloudletPassport();
+				workflow = psp42.getDAG();
 				break;
 			default:
 				if (dataset.startsWith("sci_")) { // case Scientific Workflow
 					PEGASUS sciF = new PEGASUS(brokerId, CLOUDLET_ID_SHIFT, dataset.substring(4));
 					cloudletList = sciF.getCloudletList();
-					workflow = sciF.getCloudletPassport();
+					workflow = sciF.getDAG();
 				} else {
 					System.err.println("Check the dataset name");
 					System.exit(-1);

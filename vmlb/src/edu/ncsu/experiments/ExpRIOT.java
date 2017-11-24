@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import org.cloudbus.cloudsim.Log;
 
-import edu.ncsu.algorithms.SWAY;
+import edu.ncsu.algorithms.RIOT;
 import edu.ncsu.wls.INFRA;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
@@ -21,7 +21,7 @@ import jmetal.util.JMException;
  *
  */
 
-public class ExpSWAY {
+public class ExpRIOT {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, JMException {
 		int repeats = 1;
 		String[] models;
@@ -47,7 +47,7 @@ public class ExpSWAY {
 				exp_para.put("dataset", s);
 
 				long startTime = System.currentTimeMillis();
-				SolutionSet res = new SWAY().executeSWAY(exp_para);
+				SolutionSet res = new RIOT().executeSWAY(exp_para);
 
 				String output = "";
 				output += ("* " + s + " " + (System.currentTimeMillis() - startTime) / 1000 + "\n");

@@ -53,7 +53,7 @@ public class PSPLIB implements Dataset {
 		return cloudletList;
 	}
 
-	public DAG getCloudletPassport() {
+	public DAG getDAG() {
 		return workflow;
 	}
 

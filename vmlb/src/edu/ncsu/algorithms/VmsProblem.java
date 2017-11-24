@@ -38,15 +38,6 @@ class VmEncoding extends Variable {
 	protected int[] ins2type;
 	protected int[] taskInOrder;
 
-	// public VmEncoding(int[] taskInOrder, int[] task2ins, int[] ins2type) {
-	// this.taskInOrder = taskInOrder;
-	// this.task2ins = task2ins;
-	// this.ins2type = ins2type;
-	// }
-
-	// public VmEncoding() {
-	// }
-
 	public VmEncoding(int l) {
 		task2ins = new int[l];
 		ins2type = new int[l];
@@ -249,9 +240,7 @@ public class VmsProblem extends Problem {
 			if (task2ins[i] != -1)
 				cloudSim.taskSubmit(tasks.get(i), workflow.getFileTransferTime(tasks.get(i)));
 		}
-		
-		if (!INFRA.staticMode)
-			cloudSim.SetExpecTime(lstTaskExp);
+
 		cloudSim.boot();
 		List<Task> revList = new ArrayList<Task>();
 		this.lstTaskExp.clear();
@@ -325,13 +314,8 @@ public class VmsProblem extends Problem {
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		VmsProblem p = new VmsProblem("sci_CyberShake_30", new Random());
-		
-		INFRA.staticMode = true;
 		Solution randS = new Solution(p);
 		p.evaluate(randS);
-		System.out.println(p.lstTaskExp);
-		INFRA.staticMode = false;
-		Solution againSol = p.deepCopySol(randS);
-		p.evaluate(againSol);
+		VmsProblem.printSolution(randS);
 	}
 }

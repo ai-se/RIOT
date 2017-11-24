@@ -30,7 +30,6 @@ class Trigger {
 		abnormal = 0;
 	}
 
-
 	public void registerFinsh(Task s, double realFinishTime) {
 		double exp = this.expectedTime.get(s.id);
 		if (Math.abs(realFinishTime - exp) / exp > 0.15) // TODO change
@@ -53,7 +52,7 @@ class SingleVmInfo {
 	public List<Task> waitingList;
 	public List<Task> finishList;
 	public Task executing;
-	
+
 	public SingleVmInfo(Vm v) {
 		this.v = v;
 		this.mips = v.getMips();
@@ -124,8 +123,6 @@ public class DAGCentralSimulator {
 		fileTransferTime = dag.getFileTransferTime(cloudlet);
 		double extraSize = myVm.getMips() * fileTransferTime;
 		long length = cloudlet.defCloudletL;
-		if (!INFRA.staticMode)
-			length += (long) (length * PseudoRandom.randDouble(-1 * INFRA.workflodError, INFRA.workflodError));
 		length += extraSize;
 		cloudlet.setCloudletLength(length);
 
@@ -142,8 +139,6 @@ public class DAGCentralSimulator {
 		task.setCloudletStatus(Cloudlet.SUCCESS, nowClock);
 		this.dag.afterOneCloudletSuccess(task);
 		finishedNum += 1;
-		if (!INFRA.staticMode)
-			trigger.registerFinsh(task, nowClock);
 	}
 
 	private void taskStarts(Task task, double nowClock) {
@@ -166,9 +161,6 @@ public class DAGCentralSimulator {
 				// Updating executing cloudlet
 				if (vinfo.executing != null) {
 					double mips = vinfo.mips;
-					if (!INFRA.staticMode)
-						mips += mips * PseudoRandom.randDouble(-1 * INFRA.cpuFluctuation, INFRA.cpuFluctuation);
-
 					vinfo.executing.setCloudletFinishedSoFar(
 							(long) (mips * (currentTime - vinfo.executing.getExecStartTime())));
 					if (vinfo.executing.getRemainingCloudletLength() == 0) { // finish
@@ -177,7 +169,7 @@ public class DAGCentralSimulator {
 						vinfo.executing = null;
 
 						// determine whether we should pause
-						if (!INFRA.staticMode && trigger.shouldtriggerPause()) {
+						if (trigger.shouldtriggerPause()) {
 							for (Vm cc : this.vmlist) {
 								SingleVmInfo info = this.vmInfos.get(cc);
 								info.waitingList.clear();
@@ -216,9 +208,6 @@ public class DAGCentralSimulator {
 				if (vinfo.executing != null) {
 					vinfo.waitingList.remove(vinfo.executing);
 					double mips = vinfo.mips;
-					if (!INFRA.staticMode)
-						mips += mips * PseudoRandom.randDouble(-1 * INFRA.cpuFluctuation, INFRA.cpuFluctuation);
-
 					clock.add(currentTime + vinfo.executing.getCloudletLength() / mips);
 				}
 			} // for v

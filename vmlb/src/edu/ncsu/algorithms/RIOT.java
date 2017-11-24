@@ -31,10 +31,10 @@ import jmetal.util.Ranking;
  *
  */
 
-class AlgSway extends Algorithm {
+class AlgRiot extends Algorithm {
 	private static final long serialVersionUID = 7491441804538378626L;
 
-	public AlgSway(Problem problem) {
+	public AlgRiot(Problem problem) {
 		super(problem);
 	}
 
@@ -48,7 +48,7 @@ class AlgSway extends Algorithm {
 
 }
 
-public class SWAY {
+public class RIOT {
 	private VmsProblem problem_;
 	private Random rand_;
 	private String dataset_;
@@ -63,7 +63,7 @@ public class SWAY {
 		this.dataset_ = (String) dataset;
 		this.problem_ = new VmsProblem(dataset, new Random(seed));
 		this.rand_ = new Random(seed);
-		Algorithm alg = new AlgSway(problem_);
+		Algorithm alg = new AlgRiot(problem_);
 
 		// TODO SWAY algorithm configurations
 		// SolutionSet p = alg.execute();
@@ -336,7 +336,7 @@ public class SWAY {
 			paras.put("dataset", model);
 			paras.put("seed", System.currentTimeMillis());
 			long start_time = System.currentTimeMillis();
-			SWAY runner = new SWAY();
+			RIOT runner = new RIOT();
 			runner.executeSWAY(paras);
 			System.out.println("EXEC TIME = " + (System.currentTimeMillis() - start_time) / 1000);
 		}

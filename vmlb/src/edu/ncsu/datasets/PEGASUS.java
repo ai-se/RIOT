@@ -167,13 +167,13 @@ public class PEGASUS implements Dataset {
 	}
 
 	@Override
-	public DAG getCloudletPassport() {
+	public DAG getDAG() {
 		return this.workflow;
 	}
 
 	public static void main(String[] args) {
 		PEGASUS test = new PEGASUS(0, 0, "Inspiral_100");
 		 System.out.println(test.getCloudletList());
-		 System.out.println(test.getCloudletPassport());
+		 System.out.println(test.getDAG());
 	}
 }

@@ -47,7 +47,7 @@ public class Eprotein implements Dataset {
 		return cloudletList;
 	}
 
-	public DAG getCloudletPassport() {
+	public DAG getDAG() {
 		return workflow;
 	}
 

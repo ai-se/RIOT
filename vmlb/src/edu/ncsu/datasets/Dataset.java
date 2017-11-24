@@ -7,5 +7,5 @@ import edu.ncsu.wls.Task;
 
 public interface Dataset {
 	public List<Task> getCloudletList();
-	public DAG getCloudletPassport();
+	public DAG getDAG();
 }
