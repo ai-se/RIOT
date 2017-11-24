@@ -14,11 +14,11 @@ import org.cloudbus.cloudsim.Vm;
 
 import com.google.common.primitives.Ints;
 
-import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.DAGCentralSimulator;
-import edu.ncsu.wls.INFRA;
-import edu.ncsu.wls.MyCloudSimHelper;
-import edu.ncsu.wls.Task;
+import edu.ncsu.model.DAG;
+import edu.ncsu.model.DAGCentralSimulator;
+import edu.ncsu.model.INFRA;
+import edu.ncsu.model.MyCloudSimHelper;
+import edu.ncsu.model.Task;
 import jmetal.core.Problem;
 import jmetal.core.Solution;
 import jmetal.core.SolutionType;

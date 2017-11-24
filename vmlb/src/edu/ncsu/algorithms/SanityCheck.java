@@ -3,7 +3,7 @@ package edu.ncsu.algorithms;
 import java.util.HashMap;
 import java.util.Random;
 
-import edu.ncsu.wls.INFRA;
+import edu.ncsu.model.INFRA;
 import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;

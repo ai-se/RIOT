@@ -12,8 +12,8 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 
-import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.Task;
+import edu.ncsu.model.DAG;
+import edu.ncsu.model.Task;
 
 /**
  * Simulating the workflow in PSPLIB Reference

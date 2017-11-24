@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.INFRA;
-import edu.ncsu.wls.Task;
+import edu.ncsu.model.DAG;
+import edu.ncsu.model.INFRA;
+import edu.ncsu.model.Task;
 import jmetal.core.Solution;
 import jmetal.core.Variable;
 import jmetal.operators.crossover.Crossover;

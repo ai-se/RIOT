@@ -1,4 +1,4 @@
-package edu.ncsu.wls;
+package edu.ncsu.model;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

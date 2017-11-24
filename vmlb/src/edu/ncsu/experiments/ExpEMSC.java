@@ -9,7 +9,7 @@ import java.util.HashMap;
 import org.cloudbus.cloudsim.Log;
 
 import edu.ncsu.algorithms.EMSC;
-import edu.ncsu.wls.INFRA;
+import edu.ncsu.model.INFRA;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 

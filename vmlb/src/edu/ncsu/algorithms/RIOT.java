@@ -13,9 +13,9 @@ import java.util.TreeSet;
 
 import com.google.common.primitives.Ints;
 
-import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.INFRA;
-import edu.ncsu.wls.Task;
+import edu.ncsu.model.DAG;
+import edu.ncsu.model.INFRA;
+import edu.ncsu.model.Task;
 import jmetal.core.Algorithm;
 import jmetal.core.Problem;
 import jmetal.core.Solution;

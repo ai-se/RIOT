@@ -19,8 +19,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.Task;
+import edu.ncsu.model.DAG;
+import edu.ncsu.model.Task;
 
 /**
  * Parser and interpreter of Pegasus Workflow dataset, widely used in Scientific

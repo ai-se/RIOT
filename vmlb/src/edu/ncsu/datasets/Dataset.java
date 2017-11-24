@@ -2,8 +2,8 @@ package edu.ncsu.datasets;
 
 import java.util.List;
 
-import edu.ncsu.wls.DAG;
-import edu.ncsu.wls.Task;
+import edu.ncsu.model.DAG;
+import edu.ncsu.model.Task;
 
 public interface Dataset {
 	public List<Task> getCloudletList();
