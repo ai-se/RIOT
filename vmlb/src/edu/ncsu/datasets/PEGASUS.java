@@ -30,18 +30,17 @@ import edu.ncsu.wls.Task;
  *
  */
 public class PEGASUS implements Dataset {
-	private int idshift;
+	private int idshift = 0;
 	private int userid;
 	private String problemName;
 
 	private Map<String, Task> tasks;
 	private DAG workflow;
 
-	public PEGASUS(int userid, int idshift, String problemName) {
+	public PEGASUS(int userid, String problemName) {
 		tasks = new LinkedHashMap<String, Task>();
 		workflow = new DAG();
 		this.userid = userid;
-		this.idshift = idshift;
 		this.problemName = problemName;
 		this.createTasksAndWorkFlows();
 	}
@@ -85,9 +84,10 @@ public class PEGASUS implements Dataset {
 			String id = jobInfo.getAttribute("id");
 			tasks.put(id, createCloudlet(runtime));
 		}
-		
-		// ATTENTION HERE!! must make sure the exec time for entry > minSimTime (0.1)
-		tasks.put("entry", createCloudlet(10)); 
+
+		// ATTENTION HERE!! must make sure the exec time for entry > minSimTime
+		// (0.1)
+		tasks.put("entry", createCloudlet(10));
 		tasks.put("exit", createCloudlet(1));
 
 		// step 2 create workflows
@@ -172,8 +172,8 @@ public class PEGASUS implements Dataset {
 	}
 
 	public static void main(String[] args) {
-		PEGASUS test = new PEGASUS(0, 0, "Inspiral_100");
-		 System.out.println(test.getCloudletList());
-		 System.out.println(test.getDAG());
+		PEGASUS test = new PEGASUS(0, "Inspiral_100");
+		System.out.println(test.getCloudletList());
+		System.out.println(test.getDAG());
 	}
 }

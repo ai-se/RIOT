@@ -10,38 +10,39 @@ import org.cloudbus.cloudsim.Vm;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Ints;
 
-import edu.ncsu.datasets.Eprotein;
-import edu.ncsu.datasets.FMRI;
 import edu.ncsu.datasets.PEGASUS;
-import edu.ncsu.datasets.PSPLIB;
 
 public class INFRA {
-	public static final int VM_ID_SHIFT = 0;
-	public static final int CLOUDLET_ID_SHIFT = 0;
 	public static final int PEROID_BETWEEN_EVENTS = 1;
 	public static final String DATACENTER_NAME = "AWS_EC2";
 	public static double bandwidthFluctuation = 0.3;
 	public static double cpuFluctuation = 0.24;
 	public static double workflodError = 0.3;
-	
-	// public static final String[] models = new String[] { "fmri", "eprotein",
-	// "j30_1", "j30_2", "j60_1", "j60_2",
-	// "j90_1", "j90_2", "j120_1", "j120_2" };
+	public static ImmutableMap<String, Double> unit_price;
+	public static final String[] models, smallmodels;
+	static {
+		unit_price = ImmutableMap.<String, Double> builder().put("m1.small", 0.06) //
+				.put("m3.medium", 0.067) //
+				.put("m3.large", 0.133) //
+				.put("m3.xlarge", 0.266) //
+				.put("m3.2xlarge", 0.532) //
+				.put("m4.large", 0.1) //
+				.put("m4.xlarge", 0.2) //
+				.put("m4.2xlarge", 0.4) //
+				.put("m4.4xlarge", 0.8) //
+				.build();
 
-	public static final String[] models = new String[] { //
-			"sci_Montage_25", "sci_Montage_50", "sci_Montage_100", "sci_Montage_1000", //
-			"sci_Epigenomics_24", "sci_Epigenomics_46", "sci_Epigenomics_100", "sci_Epigenomics_997", //
-			"sci_CyberShake_30", "sci_CyberShake_50", "sci_CyberShake_100", "sci_CyberShake_1000", //
-			"sci_Sipht_30", "sci_Sipht_60", "sci_Sipht_100", "sci_Sipht_1000", //
-			"sci_Inspiral_30", "sci_Inspiral_50", "sci_Inspiral_100", "sci_Inspiral_1000" };
+		models = new String[] { //
+				"sci_Montage_25", "sci_Montage_50", "sci_Montage_100", "sci_Montage_1000", //
+				"sci_Epigenomics_24", "sci_Epigenomics_46", "sci_Epigenomics_100", "sci_Epigenomics_997", //
+				"sci_CyberShake_30", "sci_CyberShake_50", "sci_CyberShake_100", "sci_CyberShake_1000", //
+				"sci_Sipht_30", "sci_Sipht_60", "sci_Sipht_100", "sci_Sipht_1000", //
+				"sci_Inspiral_30", "sci_Inspiral_50", "sci_Inspiral_100", "sci_Inspiral_1000" };
 
-	public static final String[] smallmodels = new String[] { "sci_Montage_25", "sci_Montage_50", "sci_Montage_100",
-			"sci_Epigenomics_24", "sci_Epigenomics_46", "sci_Epigenomics_100", "sci_CyberShake_30", "sci_CyberShake_50",
-			"sci_CyberShake_100", "sci_Sipht_30", "sci_Sipht_60", "sci_Inspiral_30", "sci_Inspiral_50" };
-
-	// public static final String[] models = new String[] { "sci_Montage_25",
-	// "sci_Epigenomics_24", "sci_CyberShake_30",
-	// "sci_Sipht_30", "sci_Inspiral_30", "sci_Inspiral_50" };
+		smallmodels = new String[] { "sci_Montage_25", "sci_Montage_50", "sci_Montage_100", "sci_Epigenomics_24",
+				"sci_Epigenomics_46", "sci_Epigenomics_100", "sci_CyberShake_30", "sci_CyberShake_50",
+				"sci_CyberShake_100", "sci_Sipht_30", "sci_Sipht_60", "sci_Inspiral_30", "sci_Inspiral_50" };
+	}
 
 	/**
 	 * Creating Amazon EC2 virtual machines
@@ -51,8 +52,9 @@ public class INFRA {
 	 * @param idShift
 	 * @return
 	 */
-	private static List<Vm> createEC2Vms(int userId) {
-		int idShift = VM_ID_SHIFT;
+	private static List<Vm> createEC2Vms() {
+		int userId = 0;
+		int idShift = 0;
 		long size;
 		int ram, pesNumber;
 
@@ -84,8 +86,9 @@ public class INFRA {
 	 * @param ins2type
 	 * @return
 	 */
-	private static List<Vm> createAWSVms(int userId, int[] ins, int[] ins2type) {
-		int idShift = VM_ID_SHIFT;
+	private static List<Vm> createAWSVms(int[] ins, int[] ins2type) {
+		int userId = 0;
+		int idShift = 0;
 		long size;
 		int ram, pesNumber;
 
@@ -135,33 +138,12 @@ public class INFRA {
 		return list;
 	}
 
-	@SuppressWarnings("unused")
-	private static List<Vm> createEqualVms(int userId, int num) {
-		int idShift = VM_ID_SHIFT;
-		long size = 10000; // image size(MB)
-		int ram = 1024; // vm memory (MB)
-		int mips = 250;
-		long bw = 1000;
-		int pesNumber = 2; // number of cpus
-		String vmm = "xen"; // VMM name
-
-		LinkedList<Vm> list = new LinkedList<Vm>();
-		for (int i = 0; i < num; i++) {
-			list.add(new Vm(idShift++, userId, mips, pesNumber, ram, bw, size, vmm, null));
-		}
-
-		return list;
+	public static List<Vm> createVms() {
+		return createEC2Vms();
 	}
 
-	// TODO entrance to modify VM configurations
-	public static List<Vm> createVms(int userId) {
-		// return createAWSVms(userId);
-		return createEC2Vms(userId);
-		// return createEqualVms(userId, 4);
-	}
-
-	public static List<Vm> createVms(int userId, int[] ins, int[] ins2type) {
-		return createAWSVms(userId, ins, ins2type);
+	public static List<Vm> createVms(int[] ins, int[] ins2type) {
+		return createAWSVms(ins, ins2type);
 	}
 
 	/**
@@ -174,47 +156,21 @@ public class INFRA {
 	 * @return
 	 */
 	public static double getUnitPrice(List<Vm> vmlist) {
-		// TODO add more prices
-		ImmutableMap<String, Double> unit_price = ImmutableMap.<String, Double> builder().put("m1.small", 0.06) //
-				.put("m3.medium", 0.067) //
-				.put("m3.large", 0.133) //
-				.put("m3.xlarge", 0.266) //
-				.put("m3.2xlarge", 0.532) //
-				.put("m4.large", 0.1) //
-				.put("m4.xlarge", 0.2) //
-				.put("m4.2xlarge", 0.4) //
-				.put("m4.4xlarge", 0.8) //
-				.build();
-
 		double res = 0;
 		for (Vm v : vmlist) {
-			res += unit_price.get(v.getVmm());
-			// System.out.println(v.getVmm());
+			res += INFRA.getUnitPrice(v);
 		}
-		// System.out.println(res);
 		return res;
 
 	}
 
 	public static double getUnitPrice(Vm v) {
-		ImmutableMap<String, Double> unit_price = ImmutableMap.<String, Double> builder().put("m1.small", 0.06) //
-				.put("m3.medium", 0.067) //
-				.put("m3.large", 0.133) //
-				.put("m3.xlarge", 0.266) //
-				.put("m3.2xlarge", 0.532) //
-				.put("m4.large", 0.1) //
-				.put("m4.xlarge", 0.2) //
-				.put("m4.2xlarge", 0.4) //
-				.put("m4.4xlarge", 0.8) //
-				.build();
-
-		return unit_price.get(v.getVmm());
+		return INFRA.unit_price.get(v.getVmm());
 	}
 
 	public static int getAvalVmTypeNum() {
 		return 8; // in aws EC2
 	}
-
 
 	/**
 	 * Generating the pre-defined study cases Using memo decorator pattern
@@ -236,67 +192,9 @@ public class INFRA {
 			DAG workflow = null;
 
 			switch (dataset) {
-			case "fmri":
-				FMRI fmri = new FMRI(brokerId, CLOUDLET_ID_SHIFT);
-				cloudletList = fmri.getCloudletList();
-				workflow = fmri.getDAG();
-				break;
-			case "eprotein":
-				Eprotein eprotein = new Eprotein(brokerId, CLOUDLET_ID_SHIFT);
-				cloudletList = eprotein.getCloudletList();
-				workflow = eprotein.getDAG();
-				break;
-			// case "random":
-			// Randomset rset = new Randomset(brokerId, CLOUDLET_ID_SHIFT, 10);
-			// cloudletList = rset.getCloudletList();
-			// workflow = rset.getCloudletPassport();
-			// break;
-			case "j30_1":
-			case "j30":
-				PSPLIB psp1 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_1", 30);
-				cloudletList = psp1.getCloudletList();
-				workflow = psp1.getDAG();
-				break;
-			case "j30_2":
-				PSPLIB psp11 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j301_2", 30);
-				cloudletList = psp11.getCloudletList();
-				workflow = psp11.getDAG();
-				break;
-			case "j60_1":
-			case "j60":
-				PSPLIB psp2 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_1", 60);
-				cloudletList = psp2.getCloudletList();
-				workflow = psp2.getDAG();
-				break;
-			case "j60_2":
-				PSPLIB psp22 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j601_2", 60);
-				cloudletList = psp22.getCloudletList();
-				workflow = psp22.getDAG();
-				break;
-			case "j90_1":
-			case "j90":
-				PSPLIB psp3 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_1", 90);
-				cloudletList = psp3.getCloudletList();
-				workflow = psp3.getDAG();
-				break;
-			case "j90_2":
-				PSPLIB psp32 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j901_2", 90);
-				cloudletList = psp32.getCloudletList();
-				workflow = psp32.getDAG();
-				break;
-			case "j120_1":
-				PSPLIB psp4 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_1", 120);
-				cloudletList = psp4.getCloudletList();
-				workflow = psp4.getDAG();
-				break;
-			case "j120_2":
-				PSPLIB psp42 = new PSPLIB(brokerId, CLOUDLET_ID_SHIFT, "j1201_2", 120);
-				cloudletList = psp42.getCloudletList();
-				workflow = psp42.getDAG();
-				break;
 			default:
 				if (dataset.startsWith("sci_")) { // case Scientific Workflow
-					PEGASUS sciF = new PEGASUS(brokerId, CLOUDLET_ID_SHIFT, dataset.substring(4));
+					PEGASUS sciF = new PEGASUS(brokerId, dataset.substring(4));
 					cloudletList = sciF.getCloudletList();
 					workflow = sciF.getDAG();
 				} else {

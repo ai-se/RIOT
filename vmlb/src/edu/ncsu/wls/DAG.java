@@ -6,10 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-//import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Vm;
-
-import jmetal.util.PseudoRandom;
 
 /**
  * 
@@ -50,9 +47,9 @@ public class DAG {
 		this.ignoreDAGmode = false;
 	}
 
-	public void turnOnIgnoreDAGMode() {
-		this.ignoreDAGmode = true;
-	}
+	// public void turnOnIgnoreDAGMode() {
+	// this.ignoreDAGmode = true;
+	// }
 
 	public List<Task> randTopo(List<Task> tasks, Random rand) {
 		// temporary saving readyed list
@@ -85,7 +82,7 @@ public class DAG {
 			this.contributeTo.put(from, new ArrayList<Task>());
 		this.contributeTo.get(from).add(to);
 
-		int index = to.getCloudletId() - INFRA.CLOUDLET_ID_SHIFT;
+		int index = to.getCloudletId();
 		readyed[index] += 1;
 		totalNeed[index] += 1;
 	}
@@ -107,14 +104,14 @@ public class DAG {
 		if (ignoreDAGmode)
 			return true;
 
-		int index = cloudlet.getCloudletId() - INFRA.CLOUDLET_ID_SHIFT;
+		int index = cloudlet.getCloudletId();
 		return readyed[index] == 0;
 	}
 
 	public synchronized void afterOneCloudletSuccess(Task cloudlet) {
 		if (contributeTo.containsKey(cloudlet))
 			for (Task p : contributeTo.get(cloudlet)) {
-				int pindex = p.getCloudletId() - INFRA.CLOUDLET_ID_SHIFT;
+				int pindex = p.getCloudletId();
 				readyed[pindex] -= 1;
 			}
 	}

@@ -354,7 +354,7 @@ class MOHEFTcore extends Algorithm {
 		// 0. Set ups
 		VmsProblem problem = (VmsProblem) problem_;
 		int n = ((Integer) getInputParameter("N")).intValue(); // maxSimultaneousIns
-		List<Vm> avalVmTypes = INFRA.createVms(0);
+		List<Vm> avalVmTypes = INFRA.createVms();
 
 		// 1. B-Rank
 		Map<Task, Double> rank = bRank(problem);
@@ -417,7 +417,7 @@ class MOHEFTcore extends Algorithm {
 		// 0. Set ups
 		int k = ((Integer) getInputParameter("K")).intValue(); // tradeOffSolNum
 		int n = ((Integer) getInputParameter("N")).intValue(); // maxSimultaneousIns
-		List<Vm> avalVmTypes = INFRA.createVms(0);
+		List<Vm> avalVmTypes = INFRA.createVms();
 
 		List<HEFTScheduler> frontier = new ArrayList<HEFTScheduler>();
 		VmsProblem problem = (VmsProblem) problem_;

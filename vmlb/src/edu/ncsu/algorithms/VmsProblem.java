@@ -211,7 +211,7 @@ public class VmsProblem extends Problem {
 
 		// Create vm list
 		List<Vm> vmlist = new ArrayList<Vm>();
-		vmlist = INFRA.createVms(0, task2ins, ins2type);
+		vmlist = INFRA.createVms(task2ins, ins2type);
 
 		// map task to vm
 		for (int var = 0; var < tasksNum; var++) {
