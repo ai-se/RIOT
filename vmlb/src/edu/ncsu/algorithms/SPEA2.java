@@ -40,7 +40,7 @@ import jmetal.util.Spea2Fitness;
  */
 
 public class SPEA2 extends Algorithm {
-
+	private static final long serialVersionUID = -5518608361053521092L;
 	/**
 	 * Defines the number of tournaments for creating the mating pool
 	 */

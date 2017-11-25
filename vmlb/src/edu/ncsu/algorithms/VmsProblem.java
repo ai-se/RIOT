@@ -224,7 +224,7 @@ public class VmsProblem extends Problem {
 		DAGCentralSimulator cloudSim = new DAGCentralSimulator();
 
 		// binding dag to simulator
-		cloudSim.setCloudletPassport(dag);
+		cloudSim.setCloudletDAG(dag);
 		// broker.submitVmList(vmlist);
 		cloudSim.setVmList(vmlist);
 

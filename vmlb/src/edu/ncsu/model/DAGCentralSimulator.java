@@ -11,8 +11,6 @@ import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.core.CloudSim;
 
-import jmetal.util.PseudoRandom;
-
 /**
  * Dynamic adding cloudlet is NOT supported at this time.
  * 
@@ -20,32 +18,39 @@ import jmetal.util.PseudoRandom;
  *
  */
 
-class Trigger {
-	public Map<Integer, Double> expectedTime = new HashMap<Integer, Double>();
-	public List<Vm> lastNewList;
-	private int abnormal = 0;
+//class Trigger {
+//	public Map<Integer, Double> expectedTime = new HashMap<Integer, Double>();
+//	public List<Vm> lastNewList;
+//	private int abnormal = 0;
+//
+//	public void clear() {
+//		this.expectedTime.clear();
+//		abnormal = 0;
+//	}
+//
+//	public void registerFinsh(Task s, double realFinishTime) {
+//		double exp = this.expectedTime.get(s.id);
+//		if (Math.abs(realFinishTime - exp) / exp > 0.15) // TODO change
+//															// parameter here
+//			this.abnormal += 1;
+//	}
+//
+//	public boolean shouldtriggerPause() {
+//		if (abnormal >= this.expectedTime.size() * 0.25) // TODO change
+//															// parameter here
+//			return true;
+//		return false;
+//	}
+//
+//}
 
-	public void clear() {
-		this.expectedTime.clear();
-		abnormal = 0;
-	}
-
-	public void registerFinsh(Task s, double realFinishTime) {
-		double exp = this.expectedTime.get(s.id);
-		if (Math.abs(realFinishTime - exp) / exp > 0.15) // TODO change
-															// parameter here
-			this.abnormal += 1;
-	}
-
-	public boolean shouldtriggerPause() {
-		if (abnormal >= this.expectedTime.size() * 0.25) // TODO change
-															// parameter here
-			return true;
-		return false;
-	}
-
-}
-
+/**
+ * Recording the information of ONE single vm including waiting-list,
+ * finish-list and mips executing = current running task.
+ * 
+ * @author jianfeng
+ *
+ */
 class SingleVmInfo {
 	public Vm v;
 	public double mips;
@@ -69,6 +74,12 @@ class SingleVmInfo {
 	}
 }
 
+/**
+ * Extendable CloudSim Simulator.
+ * 
+ * @author jianfeng
+ *
+ */
 public class DAGCentralSimulator {
 	private DAG dag;
 	private List<Vm> vmlist;
@@ -78,21 +89,21 @@ public class DAGCentralSimulator {
 	private int finishedNum;
 	private double currentTime;
 
-	private Trigger trigger;
+	// private Trigger trigger;
 
 	public DAGCentralSimulator() {
 		clock = new TreeSet<Double>();
 		vmInfos = new HashMap<Vm, SingleVmInfo>();
 		submittedNum = 0;
 		finishedNum = 0;
-		trigger = new Trigger();
+		// trigger = new Trigger();
 	}
 
-	public void SetExpecTime(Map<Integer, Double> expectedTime) {
-		this.trigger.expectedTime = expectedTime;
-	}
+	// public void SetExpecTime(Map<Integer, Double> expectedTime) {
+	// this.trigger.expectedTime = expectedTime;
+	// }
 
-	public void setCloudletPassport(DAG cp) {
+	public void setCloudletDAG(DAG cp) {
 		this.dag = cp;
 	}
 
@@ -110,7 +121,7 @@ public class DAGCentralSimulator {
 	}
 
 	/**
-	 * = We are now supporting SUBMITTED-IN-ORDER ~~
+	 * We are now supporting SUBMITTED-IN-ORDER ~~
 	 * 
 	 * @param cloudlet
 	 * @param fileTransferTime
@@ -128,7 +139,8 @@ public class DAGCentralSimulator {
 
 		this.vmInfos.get(myVm).appendWL(cloudlet);
 		Log.printLine(String.format("[----] SUBMIT %s to VM # %d", cloudlet, cloudlet.getVmId()));
-		cloudlet.setCloudletStatus(Cloudlet.READY, -1); // -1 not used
+		cloudlet.setCloudletStatus(Cloudlet.READY, -1); // second parameter -1
+														// is not used
 
 		submittedNum += 1;
 	}
@@ -151,10 +163,9 @@ public class DAGCentralSimulator {
 			return false;
 
 		currentTime = CloudSim.getMinTimeBetweenEvents();
-		// double previousTime = 0;
+
 		while (finishedNum < submittedNum) {
 			// step 1-1 updating executing
-			// double timespan = currentTime - previousTime;
 			for (Vm v : vmlist) {
 				SingleVmInfo vinfo = vmInfos.get(v);
 
@@ -168,16 +179,17 @@ public class DAGCentralSimulator {
 						vinfo.finishList.add(vinfo.executing);
 						vinfo.executing = null;
 
-						// determine whether we should pause
-						if (trigger.shouldtriggerPause()) {
-							for (Vm cc : this.vmlist) {
-								SingleVmInfo info = this.vmInfos.get(cc);
-								info.waitingList.clear();
-								if (info.executing != null && info.executing
-										.getCloudletFinishedSoFar() < info.executing.getCloudletLength() * 0.3)
-									info.executing = null;
-							}
-						}
+						// // determine whether we should pause
+						// if (trigger.shouldtriggerPause()) {
+						// for (Vm cc : this.vmlist) {
+						// SingleVmInfo info = this.vmInfos.get(cc);
+						// info.waitingList.clear();
+						// if (info.executing != null && info.executing
+						// .getCloudletFinishedSoFar() <
+						// info.executing.getCloudletLength() * 0.3)
+						// info.executing = null;
+						// }
+						// }
 
 					} // if execing done
 				} // if has exec cloudlet
@@ -212,7 +224,6 @@ public class DAGCentralSimulator {
 				}
 			} // for v
 
-			// previousTime = currentTime;
 			Double k = clock.higher(currentTime);
 
 			if (k != null)
