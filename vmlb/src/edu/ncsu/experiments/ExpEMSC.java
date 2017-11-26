@@ -53,6 +53,8 @@ public class ExpEMSC {
 		if (args.length > 1) {
 			if (args[1].equals("small"))
 				models = INFRA.smallmodels;
+			else if (args[1].equals("all"))
+				models = INFRA.models;
 			else
 				models = new String[] { args[1] };
 		} else

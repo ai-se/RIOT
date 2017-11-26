@@ -74,7 +74,7 @@ public class RIOT {
 
 
 	private List<Task> findCritical() {
-		DAG graph = problem_.getWorkflow();
+		DAG graph = problem_.getDAG();
 
 		// 1. find critical tasks
 		Set<Integer> ins = new TreeSet<Integer>();
@@ -117,7 +117,7 @@ public class RIOT {
 	}
 
 	private SolutionSet decomposite() throws ClassNotFoundException {
-		DAG graph = problem_.getWorkflow();
+		DAG graph = problem_.getDAG();
 		List<Task> criticalTasks = findCritical();
 		List<Task> ref = graph.randTopo(problem_.tasks, rand_);
 

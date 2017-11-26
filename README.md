@@ -1,1 +1,30 @@
-# sway_vm_lb
+# RIOT: a Novel Stochastic Meethod for Rapidly Configuring Cloud-Based Workflow
+
+## Files Organization
+- LICENSE: This project is under MIT License
+- build.xml: For maven build
+- plots: Source code for concluding / ploting results, implementing in Python
+- vmlb: Source code and models for RIOT, implementing in Java
+- results: Saved results
+
+## Building the project
+- install Apache Maven. See [here](https://maven.apache.org/install.html) 
+- build the java project  
+```ant build```
+- run corresponding jar file
+
+## Executing jar files
+- Executing EMSC algorithms
+```java -jar emsc.jar ARGS1 ARGS2 ARGS3```
+ARGS1 = number of repeats
+ARGS2 = model name/small/all
+ARGS3 = algorithm. nsgaii/spea2/moead
+
+- Executing RIOT algorithms
+```java -jar riot.jar```
+
+- Changing internal parameters?!
+See src in package edu.ncsu.experiments
+
+## Statistical Analysis
+Doc to write

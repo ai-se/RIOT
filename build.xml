@@ -7,67 +7,25 @@
     <property name="dir.workspace" value="${dir.buildfile}"/>
     <property name="dir.jarfile" value="/Users/jianfeng/Desktop"/>
     <target name="create_run_jar">
-        <jar destfile="${dir.jarfile}/emscn.jar">
+        <jar destfile="${dir.jarfile}/emsc.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpEMSCN"/>
+                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpEMSC"/>
                 <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ cloudsim-4.0.jar jmetal4.2.jar guava-22.0.jar w3c-dom.jar"/>
+                <attribute name="Rsrc-Class-Path" value="./ cloudsim-4.0.jar guava-22.0.jar jmetal4.2.jar w3c-dom.jar"/>
             </manifest>
             <zipfileset src="jar-in-jar-loader.zip"/>
             <fileset dir="${dir.workspace}/vmlb/target/classes"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="cloudsim-4.0.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="jmetal4.2.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="guava-22.0.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="w3c-dom.jar"/>
-        </jar>
-        <jar destfile="${dir.jarfile}/emscm.jar">
-            <manifest>
-                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpEMSCM"/>
-                <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ cloudsim-4.0.jar jmetal4.2.jar guava-22.0.jar w3c-dom.jar"/>
-            </manifest>
-            <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="${dir.workspace}/vmlb/target/classes"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="cloudsim-4.0.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="jmetal4.2.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="guava-22.0.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="w3c-dom.jar"/>
-        </jar>
-        <jar destfile="${dir.jarfile}/emscs.jar">
-            <manifest>
-                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpEMSCS"/>
-                <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ cloudsim-4.0.jar jmetal4.2.jar guava-22.0.jar w3c-dom.jar"/>
-            </manifest>
-            <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="${dir.workspace}/vmlb/target/classes"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="cloudsim-4.0.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="jmetal4.2.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="guava-22.0.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="w3c-dom.jar"/>
-        </jar>
-        <jar destfile="${dir.jarfile}/moheft.jar">
-            <manifest>
-                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpMOHEFT"/>
-                <attribute name="Class-Path" value="."/>
-                <attribute name="Rsrc-Class-Path" value="./ cloudsim-4.0.jar jmetal4.2.jar guava-22.0.jar w3c-dom.jar"/>
-            </manifest>
-            <zipfileset src="jar-in-jar-loader.zip"/>
-            <fileset dir="${dir.workspace}/vmlb/target/classes"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="cloudsim-4.0.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="jmetal4.2.jar"/>
-            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="guava-22.0.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="w3c-dom.jar"/>
         </jar>
 
-        <jar destfile="${dir.jarfile}/sway.jar">
+        <jar destfile="${dir.jarfile}/riot.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpSWAY"/>
+                <attribute name="Rsrc-Main-Class" value="edu.ncsu.experiments.ExpRIOT"/>
                 <attribute name="Class-Path" value="."/>
                 <attribute name="Rsrc-Class-Path" value="./ cloudsim-4.0.jar jmetal4.2.jar guava-22.0.jar w3c-dom.jar"/>
             </manifest>

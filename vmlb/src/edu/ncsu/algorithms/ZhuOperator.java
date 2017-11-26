@@ -8,7 +8,6 @@ import edu.ncsu.model.DAG;
 import edu.ncsu.model.INFRA;
 import edu.ncsu.model.Task;
 import jmetal.core.Solution;
-import jmetal.core.Variable;
 import jmetal.operators.crossover.Crossover;
 import jmetal.operators.mutation.Mutation;
 import jmetal.util.JMException;
@@ -159,7 +158,7 @@ class ZhuMutation extends Mutation {
 		VmEncoding code = (VmEncoding) solution.getDecisionVariables()[0];
 		int varLength = code.taskInOrder.length;
 		List<Task> tasks = problem_.tasks;
-		DAG dag = problem_.getWorkflow();
+		DAG dag = problem_.getDAG();
 
 		for (int pos = 0; pos < varLength; pos++) {
 			if (PseudoRandom.randDouble() < mutationProbability_)
@@ -215,5 +214,5 @@ class ZhuMutation extends Mutation {
 }
 
 public class ZhuOperator {
-	// THIS CLASS WAS INTENTIONALLY BLANK.
+	// THIS CLASS WAS INTENTIONALLY LEFT BLANK.
 }

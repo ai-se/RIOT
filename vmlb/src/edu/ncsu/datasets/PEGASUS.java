@@ -61,7 +61,9 @@ public class PEGASUS implements Dataset {
 	 * Scan the xml file, parse it.
 	 */
 	private void createTasksAndWorkFlows() {
-		File fXmlFile = new File("src/edu/ncsu/datasets/pegasus/" + this.problemName + ".xml");
+		ClassLoader cl = getClass().getClassLoader();
+		File fXmlFile = new File(
+				cl.getResource("edu/ncsu/datasets/pegasus/" + this.problemName + ".xml").getFile());
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		Document doc;
 		NodeList jobNodes = null;

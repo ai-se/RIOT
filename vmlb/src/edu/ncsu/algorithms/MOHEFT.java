@@ -235,7 +235,7 @@ class MOHEFTcore extends Algorithm {
 	 */
 	public static Map<Task, Double> bRank(VmsProblem p) {
 		List<Task> cloudlets = p.tasks;
-		DAG cp = p.getWorkflow();
+		DAG cp = p.getDAG();
 
 		Map<Task, Integer> upwardRank = new HashMap<Task, Integer>();
 
@@ -291,9 +291,7 @@ class MOHEFTcore extends Algorithm {
 	}
 
 	private double unitPrice(Vm v) {
-		List<Vm> tmp = new ArrayList<Vm>();
-		tmp.add(v);
-		return INFRA.getUnitPrice(tmp);
+		return INFRA.getUnitPrice(v);
 	}
 
 	/**
@@ -366,7 +364,7 @@ class MOHEFTcore extends Algorithm {
 
 		Collections.sort(sortedCloudlets, (Task one, Task other) -> rank.get(one).compareTo(rank.get(other)));
 
-		HEFTScheduler sched = new HEFTScheduler(problem.getWorkflow(), n, sortedCloudlets);
+		HEFTScheduler sched = new HEFTScheduler(problem.getDAG(), n, sortedCloudlets);
 
 		for (Task adding : sortedCloudlets) {
 			int leftCNum = sortedCloudlets.size() - sortedCloudlets.indexOf(adding);
@@ -433,7 +431,7 @@ class MOHEFTcore extends Algorithm {
 		Collections.sort(sortedCloudlets, (Task one, Task other) -> rank.get(one).compareTo(rank.get(other)));
 
 		for (int i = 0; i < k; i++)
-			frontier.add(new HEFTScheduler(problem.getWorkflow(), n, sortedCloudlets));
+			frontier.add(new HEFTScheduler(problem.getDAG(), n, sortedCloudlets));
 
 		for (Task adding : sortedCloudlets) {
 			int leftCNum = sortedCloudlets.size() - sortedCloudlets.indexOf(adding);

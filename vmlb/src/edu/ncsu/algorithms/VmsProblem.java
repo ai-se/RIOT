@@ -10,9 +10,8 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.cloudbus.cloudsim.Cloudlet;
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
-
-import com.google.common.primitives.Ints;
 
 import edu.ncsu.model.DAG;
 import edu.ncsu.model.DAGCentralSimulator;
@@ -190,7 +189,7 @@ public class VmsProblem extends Problem {
 					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + "  Eval # so far : " + evalCount);
 		}
 
-		// Log.disable();
+		Log.disable();
 
 		Variable[] decs = solution.getDecisionVariables();
 		int[] order = ((VmEncoding) decs[0]).taskInOrder;
@@ -288,7 +287,7 @@ public class VmsProblem extends Problem {
 		return this.rand.nextInt(bound);
 	}
 
-	public DAG getWorkflow() {
+	public DAG getDAG() {
 		return dag;
 	}
 
@@ -308,8 +307,11 @@ public class VmsProblem extends Problem {
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		VmsProblem p = new VmsProblem("sci_CyberShake_30", new Random());
-		Solution randS = new Solution(p);
-		p.evaluate(randS);
-		VmsProblem.printSolution(randS);
+		for (int i = 0; i < 40; i++){
+			Solution sol = new Solution(p);
+			p.evaluate(sol);
+			System.out.print(sol.getObjective(0) + " ");
+			System.out.println(sol.getObjective(1));
+		}
 	}
 }
