@@ -1,4 +1,4 @@
-# RIOT: a Novel Stochastic Meethod for Rapidly Configuring Cloud-Based Workflow
+# RIOT: a Novel Stochastic Method for Rapidly Configuring Cloud-Based Workflow
 
 ## Files Organization
 - LICENSE: This project is under MIT License
@@ -13,15 +13,17 @@
 ```ant build```
 - run corresponding jar file
 
-## Executing jar files
-- Executing EMSC algorithms
-```java -jar emsc.jar ARGS1 ARGS2 ARGS3```
-ARGS1 = number of repeats
-ARGS2 = model name/small/all
+## Executing jar files  
+- Executing EMSC algorithms  
+```java -jar emsc.jar ARGS1 ARGS2 ARGS3```  
+ARGS1 = number of repeats  
+ARGS2 = model name/small/all  
 ARGS3 = algorithm. nsgaii/spea2/moead
 
-- Executing RIOT algorithms
-```java -jar riot.jar```
+- Executing RIOT algorithms  
+```java -jar riot.jar ARGS1 ARGS2```  
+ARGS1 = number of repeats  
+ARGS2 = model name/small/all
 
 - Changing internal parameters?!
 See src in package edu.ncsu.experiments

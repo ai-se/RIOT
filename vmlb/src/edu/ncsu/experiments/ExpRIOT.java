@@ -37,7 +37,7 @@ public class ExpRIOT {
 			models = INFRA.models;
 
 		Log.disable();
-		File file = new File("sway.txt");
+		File file = new File("riot.txt");
 
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
 		for (int repeat = 0; repeat < repeats; repeat++) {

@@ -28,7 +28,7 @@ public class ExpEMSC {
 
 	static {
 		general_para.put("popSize", 50);
-		general_para.put("maxEval", 50 * 5);
+		general_para.put("maxEval", 50 * 1000);
 		general_para.put("cxProb", 1.0);
 		general_para.put("cxRandChangeProb", 0.6);
 		general_para.put("mutProb", 0.6);

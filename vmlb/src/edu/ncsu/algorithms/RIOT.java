@@ -317,7 +317,7 @@ public class RIOT {
 	 * edu.ncsu.experiments
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		for (String model : new String[] { "sci_CyberShake_1000" }) {
+		for (String model : new String[] { "sci_CyberShake_30" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("dataset", model);
 			paras.put("seed", System.currentTimeMillis());
