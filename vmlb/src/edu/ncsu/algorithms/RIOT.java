@@ -103,9 +103,7 @@ class AlgRiot extends Algorithm {
 		SolutionSet frame = new SolutionSet(100000);
 		Map<Task, Double> p = new HashMap<Task, Double>();
 
-		// List<String> tips = new ArrayList<String>();
-
-		for (double p0 = 0.0; p0 <= 1.0; p0 += 0.1) {
+		for (double p0 = 0.0; p0 <= 1.0; p0 += 0.05) {
 			p.clear();
 			for (Task ct : criticalTasks)
 				p.put(ct, 1.0);
@@ -154,7 +152,6 @@ class AlgRiot extends Algorithm {
 					ins2type[j] = px;
 				problem_.setSolIns2Type(sol, ins2type);
 				problem_.setSolTaskInOrder(sol, taskInOrder);
-				// tips.add(Ints.max(task2ins) + " :@0@" + px);
 				problem_.evaluate(sol);
 				frame.add(sol);
 			}
@@ -164,50 +161,35 @@ class AlgRiot extends Algorithm {
 
 	private SolutionSet better(SolutionSet frame) throws ClassNotFoundException {
 		SolutionSet res = new NonDominatedSolutionList();
-		// SolutionSet anchors = new SolutionSet(40);
+		SolutionSet anchors = new SolutionSet(40);
 		SolutionSet randoms = new SolutionSet(500);
 		int vms = INFRA.getAvalVmTypeNum();
 
 		for (int diaI = 0; diaI < frame.size(); diaI++) {
-			// anchors.clear();
+			anchors.clear();
 			randoms.clear();
 
-			// creating anchors
 			Solution org = frame.get(diaI);
 			int[] order = VmsProblem.fetchSolDecs(org).taskInOrder;
 			int[] task2ins = VmsProblem.fetchSolDecs(org).task2ins;
 
-			// // case 1 iso
-			// for (int inst = 0; inst < INFRA.getAvalVmTypeNum(); inst++) {
-			// Solution iso = new Solution(problem_);
-			// problem_.setSolTask2Ins(iso, task2ins);
-			// problem_.setSolTaskInOrder(iso, order);
-			// int[] ins2type = new int[problem_.tasksNum];
-			// for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
-			// ins2type[tmpi] = inst;
-			// problem_.setSolIns2Type(iso, ins2type);
-			//
-			// anchors.add(iso);
-			// }
+			// case 1 random assignment
+			for (int i = 0; i < 30; i++) {
+				Solution rnd = new Solution(problem_);
+				problem_.setSolTask2Ins(rnd, task2ins);
+				problem_.setSolTaskInOrder(rnd, order);
+				int[] ins2type = new int[problem_.tasksNum];
+				for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
+					ins2type[tmpi] = rand_.nextInt(vms);
+				problem_.setSolIns2Type(rnd, ins2type);
+				anchors.add(rnd);
+			}
 
-			// case 2 random assignment
-			// for (int i = 0; i < 20; i++) {
-			// Solution rnd = new Solution(problem_);
-			// problem_.setSolTask2Ins(rnd, task2ins);
-			// problem_.setSolTaskInOrder(rnd, order);
-			// int[] ins2type = new int[problem_.tasksNum];
-			// for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
-			// ins2type[tmpi] = rand_.nextInt(vms);
-			// problem_.setSolIns2Type(rnd, ins2type);
-			//
-			// anchors.add(rnd);
-			// }
+			// evaluating anchors
+			for (int i = 0; i < anchors.size(); i++)
+				problem_.evaluate(anchors.get(i));
 
-			// // evaluating anchors
-			// for (int i = 0; i < anchors.size(); i++)
-			// problem_.evaluate(anchors.get(i));
-
-			// creating randoms
+			// creating random
 			for (int i = 0; i < 200; i++) {
 				Solution rnd = new Solution(problem_);
 				problem_.setSolTask2Ins(rnd, task2ins);
@@ -216,7 +198,6 @@ class AlgRiot extends Algorithm {
 				for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
 					ins2type[tmpi] = rand_.nextInt(vms);
 				problem_.setSolIns2Type(rnd, ins2type);
-
 				randoms.add(rnd);
 			}
 
@@ -238,7 +219,7 @@ class AlgRiot extends Algorithm {
 
 				int[] myc = VmsProblem.fetchSolDecs(rnd).ins2type;
 				for (int j = 0; j < anchors.size(); j++) {
-					int dd = dist(AC[j], myc);
+					int dd = dist(getVector(AC[j], myc));
 					if (dd < s) {
 						s = dd;
 						shortest = anchors.get(j);
@@ -250,16 +231,18 @@ class AlgRiot extends Algorithm {
 				}
 
 				// fast estimate objectives
-				float fact = dist(VmsProblem.fetchSolDecs(shortest).ins2type, myc)
-						/ dist(VmsProblem.fetchSolDecs(furthest).ins2type, myc);
-				if (!sign(myc, shortest, furthest))
-					fact *= -1;
+				int[] NP = getVector(shortest, rnd);
+				int[] NF = getVector(shortest, furthest);
+				int d_NF = dist(NF);
+				float fact = dotProduct(NP, NF) / (d_NF * d_NF);
 
-				rnd.setObjective(0,
-						shortest.getObjective(0) + fact * (furthest.getObjective(0) - shortest.getObjective(0)));
-				rnd.setObjective(1,
-						shortest.getObjective(1) + fact * (furthest.getObjective(1) - shortest.getObjective(1)));
-			} // for i in randoms
+				for (int o : new int[] { 0, 1 }) {
+					double o_N = shortest.getObjective(o);
+					double o_F = furthest.getObjective(o);
+					rnd.setObjective(o, o_N - fact * (o_N - o_F));
+				}
+
+			} // for i in random
 
 			Ranking rnk = new Ranking(randoms.union(anchors));
 			SolutionSet ests = rnk.getSubfront(0);
@@ -267,37 +250,48 @@ class AlgRiot extends Algorithm {
 				problem_.evaluate(ests.get(i));
 				res.add(ests.get(i));
 			}
+
 		}
 
 		return res;
 	}
 
-	private boolean sign(int[] C, Solution n, Solution f) {
-		int[] nf = new int[C.length];
-		int[] nc = new int[C.length];
-
-		int[] n_confg = VmsProblem.fetchSolDecs(n).ins2type;
-		int[] f_confg = VmsProblem.fetchSolDecs(f).ins2type;
-
-		for (int i = 0; i < C.length; i++) {
-			nf[i] = f_confg[i] - n_confg[i];
-			nc[i] = C[i] - n_confg[i];
-		}
-
-		int r = 0;
-		for (int i = 0; i < C.length; i++)
-			r += nf[i] * nc[i];
-
-		return r >= 0;
+	private int[] getVector(int[] A, int B[]) {
+		int l = Math.min(A.length, B.length);
+		int[] res = Arrays.copyOf(B, l);
+		for (int i = 0; i < res.length; i++)
+			res[i] -= A[i];
+		return res;
 	}
 
-	private int dist(int[] a, int[] b) {
+	private int[] getVector(Solution sol1, Solution sol2) {
+		int[] A = VmsProblem.fetchSolDecs(sol1).ins2type;
+		int[] B = VmsProblem.fetchSolDecs(sol2).ins2type;
+		int[] res = Arrays.copyOf(B, B.length);
+		for (int i = 0; i < res.length; i++)
+			res[i] -= A[i];
+		return res;
+	}
+
+	/*
+	 * Using Euclidean distance
+	 */
+	private int dist(int[] a) {
 		int res = 0;
-		for (int i = 0; i < Ints.min(a.length, b.length); i++)
-			res += Math.abs(a[i] - b[i]);
-		return res;
+		for (int i : a)
+			res += i * i;
+		return (int) Math.sqrt(res);
 	}
 
+	/*
+	 * Dot Product of two vector
+	 */
+	private int dotProduct(int[] a, int[] b) {
+		int res = 0;
+		for (int i = 0; i < a.length; i++)
+			res += a[i] * b[i];
+		return res;
+	}
 }
 
 public class RIOT {
@@ -323,7 +317,7 @@ public class RIOT {
 	 * edu.ncsu.experiments
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		for (String model : new String[] { "sci_CyberShake_50" }) {
+		for (String model : new String[] { "sci_CyberShake_1000" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("dataset", model);
 			paras.put("seed", System.currentTimeMillis());
