@@ -33,6 +33,8 @@ import jmetal.util.Ranking;
 
 class AlgRiot extends Algorithm {
 	private static final long serialVersionUID = 7491441804538378626L;
+	private VmsProblem problem_;
+	private Random rand_;
 
 	public AlgRiot(Problem problem) {
 		super(problem);
@@ -40,38 +42,12 @@ class AlgRiot extends Algorithm {
 
 	@Override
 	public SolutionSet execute() throws JMException, ClassNotFoundException {
-		System.out.println("Framework works");
-		for (int i = 0; i < 100; i++)
-			;
-		return null;
+		problem_ = (VmsProblem) this.getInputParameter("VmsProblem");
+		rand_ = new Random((Long) this.getInputParameter("seed"));
+		SolutionSet p = this.better(this.decomposite());
+		p.printObjectives();
+		return p;
 	}
-
-}
-
-public class RIOT {
-	private VmsProblem problem_;
-	private Random rand_;
-	private String dataset_;
-
-	public SolutionSet executeSWAY(HashMap<String, Object> paras) throws ClassNotFoundException, JMException {
-		return executeSWAY((String) paras.get("dataset"), //
-				(long) paras.get("seed"));
-	}
-
-	public SolutionSet executeSWAY(String dataset, long seed) throws ClassNotFoundException, JMException {
-		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
-		this.dataset_ = (String) dataset;
-		this.problem_ = new VmsProblem(dataset, new Random(seed));
-		this.rand_ = new Random(seed);
-		Algorithm alg = new AlgRiot(problem_);
-
-		// TODO SWAY algorithm configurations
-		// SolutionSet p = alg.execute();
-		SolutionSet firstStage = decomposite();
-
-		return better(firstStage);
-	}
-
 
 	private List<Task> findCritical() {
 		DAG graph = problem_.getDAG();
@@ -127,9 +103,9 @@ public class RIOT {
 		SolutionSet frame = new SolutionSet(100000);
 		Map<Task, Double> p = new HashMap<Task, Double>();
 
-		List<String> tips = new ArrayList<String>();
+		// List<String> tips = new ArrayList<String>();
 
-		for (double p0 = 0.0; p0 <= 1.1; p0 += 0.05) {
+		for (double p0 = 0.0; p0 <= 1.0; p0 += 0.1) {
 			p.clear();
 			for (Task ct : criticalTasks)
 				p.put(ct, 1.0);
@@ -170,7 +146,6 @@ public class RIOT {
 				continue;
 			}
 
-			// System.err.println(Ints.max(task2ins));
 			for (int px = 0; px < 1; px++) {
 				int[] ins2type = new int[problem_.tasksNum];
 				Solution sol = new Solution(problem_);
@@ -179,23 +154,22 @@ public class RIOT {
 					ins2type[j] = px;
 				problem_.setSolIns2Type(sol, ins2type);
 				problem_.setSolTaskInOrder(sol, taskInOrder);
-				tips.add(Ints.max(task2ins) + " :@0@" + px);
+				// tips.add(Ints.max(task2ins) + " :@0@" + px);
 				problem_.evaluate(sol);
 				frame.add(sol);
 			}
 		} // for p0
-
 		return frame;
 	}
 
 	private SolutionSet better(SolutionSet frame) throws ClassNotFoundException {
 		SolutionSet res = new NonDominatedSolutionList();
-		SolutionSet anchors = new SolutionSet(40);
+		// SolutionSet anchors = new SolutionSet(40);
 		SolutionSet randoms = new SolutionSet(500);
 		int vms = INFRA.getAvalVmTypeNum();
 
 		for (int diaI = 0; diaI < frame.size(); diaI++) {
-			anchors.clear();
+			// anchors.clear();
 			randoms.clear();
 
 			// creating anchors
@@ -203,35 +177,35 @@ public class RIOT {
 			int[] order = VmsProblem.fetchSolDecs(org).taskInOrder;
 			int[] task2ins = VmsProblem.fetchSolDecs(org).task2ins;
 
-			// case 1 iso
-			for (int inst = 0; inst < INFRA.getAvalVmTypeNum(); inst++) {
-				Solution iso = new Solution(problem_);
-				problem_.setSolTask2Ins(iso, task2ins);
-				problem_.setSolTaskInOrder(iso, order);
-				int[] ins2type = new int[problem_.tasksNum];
-				for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
-					ins2type[tmpi] = inst;
-				problem_.setSolIns2Type(iso, ins2type);
-
-				anchors.add(iso);
-			}
+			// // case 1 iso
+			// for (int inst = 0; inst < INFRA.getAvalVmTypeNum(); inst++) {
+			// Solution iso = new Solution(problem_);
+			// problem_.setSolTask2Ins(iso, task2ins);
+			// problem_.setSolTaskInOrder(iso, order);
+			// int[] ins2type = new int[problem_.tasksNum];
+			// for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
+			// ins2type[tmpi] = inst;
+			// problem_.setSolIns2Type(iso, ins2type);
+			//
+			// anchors.add(iso);
+			// }
 
 			// case 2 random assignment
-			for (int i = 0; i < 20; i++) {
-				Solution rnd = new Solution(problem_);
-				problem_.setSolTask2Ins(rnd, task2ins);
-				problem_.setSolTaskInOrder(rnd, order);
-				int[] ins2type = new int[problem_.tasksNum];
-				for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
-					ins2type[tmpi] = rand_.nextInt(vms);
-				problem_.setSolIns2Type(rnd, ins2type);
+			// for (int i = 0; i < 20; i++) {
+			// Solution rnd = new Solution(problem_);
+			// problem_.setSolTask2Ins(rnd, task2ins);
+			// problem_.setSolTaskInOrder(rnd, order);
+			// int[] ins2type = new int[problem_.tasksNum];
+			// for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
+			// ins2type[tmpi] = rand_.nextInt(vms);
+			// problem_.setSolIns2Type(rnd, ins2type);
+			//
+			// anchors.add(rnd);
+			// }
 
-				anchors.add(rnd);
-			}
-
-			// evaluating anchors
-			for (int i = 0; i < anchors.size(); i++)
-				problem_.evaluate(anchors.get(i));
+			// // evaluating anchors
+			// for (int i = 0; i < anchors.size(); i++)
+			// problem_.evaluate(anchors.get(i));
 
 			// creating randoms
 			for (int i = 0; i < 200; i++) {
@@ -324,14 +298,32 @@ public class RIOT {
 		return res;
 	}
 
-	/**
+}
+
+public class RIOT {
+	private VmsProblem problem_;
+
+	public SolutionSet executeSWAY(HashMap<String, Object> paras) throws ClassNotFoundException, JMException {
+		return executeSWAY((String) paras.get("dataset"), //
+				(long) paras.get("seed"));
+	}
+
+	public SolutionSet executeSWAY(String dataset, long seed) throws ClassNotFoundException, JMException {
+		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
+		this.problem_ = new VmsProblem(dataset, new Random(seed));
+		Algorithm alg = new AlgRiot(problem_);
+		alg.setInputParameter("VmsProblem", problem_);
+		alg.setInputParameter("seed", seed);
+		SolutionSet p = alg.execute();
+		return p;
+	}
+
+	/*
 	 * This is a DEMOSTRATION of EMSC algorithm. To do experiments, go to
 	 * edu.ncsu.experiments
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		// for (String model : INFRA.models) {
-		// System.out.println(model);
-		for (String model : new String[] { "sci_CyberShake_30" }) {
+		for (String model : new String[] { "sci_CyberShake_50" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("dataset", model);
 			paras.put("seed", System.currentTimeMillis());
