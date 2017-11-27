@@ -13,10 +13,11 @@ import edu.ncsu.model.INFRA;
 import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 
-/*
- * This is the Entrance of Experiments
+/**
+ * This is the Entrance of Experiments to run EMSC algorithm 
  * [repeat] [model] [alg]
  * 
+ * @author jianfeng
  */
 
 public class ExpEMSC {

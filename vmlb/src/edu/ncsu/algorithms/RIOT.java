@@ -150,7 +150,18 @@ class AlgRiot extends Algorithm {
 		problem_ = (VmsProblem) this.getInputParameter("VmsProblem");
 		rand_ = new Random((Long) this.getInputParameter("seed"));
 		SolutionSet frame = this.decomposite();
-		SolutionSet p = InsTypeCalc.better(rand_, problem_, frame);
+		SolutionSet p = null;
+		switch ((String) this.getInputParameter("variant")) {
+		case "org": // method proposed in our paper
+			p = InsTypeCalc.objGuessing(rand_, problem_, frame);
+			break;
+		case "hc": // hill climbing
+			p = InsTypeCalc.hillClimb(rand_, problem_, frame);
+			break;
+		default:
+			System.err.println("Invalid input " + this.getInputParameter("variant"));
+			System.exit(-1);
+		}
 		p.printObjectives();
 		return p;
 	}
@@ -159,17 +170,21 @@ class AlgRiot extends Algorithm {
 public class RIOT {
 	private VmsProblem problem_;
 
-	public SolutionSet executeSWAY(HashMap<String, Object> paras) throws ClassNotFoundException, JMException {
-		return executeSWAY((String) paras.get("dataset"), //
-				(long) paras.get("seed"));
+	public SolutionSet executeRIOT(HashMap<String, Object> paras) throws ClassNotFoundException, JMException {
+		return executeRIOT((String) paras.get("dataset"), //
+				(long) paras.get("seed"), //
+				(String) paras.get("variant"));
 	}
 
-	public SolutionSet executeSWAY(String dataset, long seed) throws ClassNotFoundException, JMException {
+	public SolutionSet executeRIOT(String dataset, long seed, String variant)
+			throws ClassNotFoundException, JMException {
 		PseudoRandom.setRandomGenerator(new MyRandomGenerator(seed));
 		this.problem_ = new VmsProblem(dataset, new Random(seed));
 		Algorithm alg = new AlgRiot(problem_);
 		alg.setInputParameter("VmsProblem", problem_);
+		alg.setInputParameter("dataset", dataset);
 		alg.setInputParameter("seed", seed);
+		alg.setInputParameter("variant", variant);
 		SolutionSet p = alg.execute();
 		return p;
 	}
@@ -179,15 +194,15 @@ public class RIOT {
 	 * edu.ncsu.experiments
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		for (String model : new String[] { "sci_CyberShake_30" }) {
+		for (String model : new String[] { "sci_CyberShake_100" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("dataset", model);
 			paras.put("seed", System.currentTimeMillis());
+			paras.put("variant", "org");
 			long start_time = System.currentTimeMillis();
 			RIOT runner = new RIOT();
-			runner.executeSWAY(paras);
+			runner.executeRIOT(paras);
 			System.out.println("EXEC TIME = " + (System.currentTimeMillis() - start_time) / 1000);
 		}
-
 	}
 }

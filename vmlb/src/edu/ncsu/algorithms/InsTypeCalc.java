@@ -10,12 +10,19 @@ import jmetal.core.Solution;
 import jmetal.core.SolutionSet;
 import jmetal.util.NonDominatedSolutionList;
 import jmetal.util.Ranking;
+import jmetal.util.comparators.DominanceComparator;
+
+/**
+ * 
+ * @author jianfeng
+ *
+ */
 
 public class InsTypeCalc {
-	/*
+	/**
 	 * Strategy1:: RIOT paper proposed. similar to sway.
 	 */
-	public static SolutionSet better(Random rand_, VmsProblem problem_, SolutionSet frame)
+	public static SolutionSet objGuessing(Random rand_, VmsProblem problem_, SolutionSet frame)
 			throws ClassNotFoundException {
 		SolutionSet res = new NonDominatedSolutionList();
 		SolutionSet anchors = new SolutionSet(40);
@@ -149,4 +156,40 @@ public class InsTypeCalc {
 			res += a[i] * b[i];
 		return res;
 	}
+
+	/**
+	 * Strategy 2: Hill Climbing
+	 */
+	public static SolutionSet hillClimb(Random rand_, VmsProblem problem_, SolutionSet frame)
+			throws ClassNotFoundException {
+		DominanceComparator cmpr = new DominanceComparator();
+		SolutionSet res = new NonDominatedSolutionList();
+		int aval_vms = INFRA.getAvalVmTypeNum();
+
+		for (int diaI = 0; diaI < frame.size(); diaI++) {
+			Solution best = problem_.deepCopySol(frame.get(diaI));
+			Solution candidate = problem_.deepCopySol(best);
+			problem_.evaluate(best);
+			int vms = Ints.max(VmsProblem.fetchSolDecs(best).task2ins);
+
+			int iter = 0;
+			int torr = 0;
+			while (iter < 50 && torr < 15) {
+				// Randomly create new neighbor
+				VmsProblem.fetchSolDecs(candidate).ins2type[rand_.nextInt(vms + 1)] = rand_.nextInt(aval_vms);
+				problem_.evaluate(candidate);
+
+				if (cmpr.compare(candidate, best) == -1) {
+					problem_.setSolIns2Type(best, VmsProblem.fetchSolDecs(candidate).ins2type);
+					best.setObjective(0, candidate.getObjective(0));
+					best.setObjective(1, candidate.getObjective(1));
+				} else
+					torr += 1;
+				iter += 1;
+			}
+			res.add(best);
+		}
+		return res;
+	}
+
 }
