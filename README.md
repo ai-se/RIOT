@@ -8,7 +8,7 @@
 - results: Saved results
 
 ## Building the project
-- install Apache Maven. See [here](https://maven.apache.org/install.html) 
+- install Apache Ant. See [here](http://ant.apache.org/manualdownload.cgi) 
 - build the java project  
 ```ant build```
 - run corresponding jar file
