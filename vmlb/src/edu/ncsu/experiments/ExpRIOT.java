@@ -14,18 +14,19 @@ import jmetal.core.SolutionSet;
 import jmetal.util.JMException;
 
 /**
- * Experiment. for each model, run RIOT proposed in our paper. record the hall-of-fame
- * during the iteration Repeats = 1
+ * Experiment. for each model, run RIOT proposed in our paper. record the
+ * hall-of-fame during the iteration Repeats = 1
  * 
  * @author jianfeng
  *
+ *         args = [repeats] [model] [attached Strategy]
  */
 
 public class ExpRIOT {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, JMException {
 		int repeats = 1;
 		String[] models;
-
+		String strategy;
 		if (args.length > 0)
 			repeats = Integer.parseInt(args[0]);
 		if (args.length > 1) {
@@ -36,8 +37,20 @@ public class ExpRIOT {
 		} else
 			models = INFRA.models;
 
+		if (args.length > 2) {
+			strategy = args[2];
+		} else
+			strategy = "org";
+
 		Log.disable();
-		File file = new File("riot.txt");
+		File file;
+		switch (strategy) {
+		case "hc":
+			file = new File("riotHc.txt");
+			break;
+		default:
+			file = new File("riot.txt");
+		}
 
 		HashMap<String, Object> exp_para = new HashMap<String, Object>();
 		for (int repeat = 0; repeat < repeats; repeat++) {
@@ -45,7 +58,7 @@ public class ExpRIOT {
 			for (String s : models) {
 				System.out.println("Running in " + s);
 				exp_para.put("dataset", s);
-				exp_para.put("variant", "org");
+				exp_para.put("variant", strategy);
 				long startTime = System.currentTimeMillis();
 				SolutionSet res = new RIOT().executeRIOT(exp_para);
 
