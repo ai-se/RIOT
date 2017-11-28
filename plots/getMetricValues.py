@@ -30,16 +30,17 @@ from __future__ import division, print_function
 import math
 import sys
 import xml.etree.ElementTree as ET
-import pdb
+import debug
 from lxml import etree
 
 from assPkg.hv import HyperVolume
 from utils import read_all_data
 
+debug.activate()
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
 
-algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'SANITY']  # pls put MOHEFT at the end
+algorithms = ['RIOT', 'HC', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']  # pls put MOHEFT at the end
 
 
 def format_obj_list(objs):

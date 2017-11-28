@@ -1,550 +1,513 @@
 <frontiers>
   <model name="Montage_1000">
-    <objs makespan="215.248888889" cost="194.207"/>
-    <objs makespan="128.2525" cost="326.648"/>
-    <objs makespan="154.846666667" cost="254.8"/>
-    <objs makespan="219.651111111" cost="186.28"/>
-    <objs makespan="231.323055556" cost="163.677"/>
-    <objs makespan="239.103055556" cost="151.819"/>
-    <objs makespan="327.557777778" cost="112.805"/>
-    <objs makespan="344.0025" cost="108.281"/>
-    <objs makespan="481.075555556" cost="8.0"/>
-    <objs makespan="119.66" cost="336.224"/>
-    <objs makespan="154.963333333" cost="244.8"/>
-    <objs makespan="230.324444444" cost="175.643"/>
-    <objs makespan="261.742222222" cost="149.657"/>
-    <objs makespan="265.056111111" cost="148.038"/>
-    <objs makespan="270.849166667" cost="147.478"/>
-    <objs makespan="290.44" cost="115.2"/>
-    <objs makespan="377.743333333" cost="104.478"/>
-    <objs makespan="384.198888889" cost="104.327"/>
-    <objs makespan="407.963055556" cost="104.119"/>
-    <objs makespan="445.088611111" cost="101.711"/>
-    <objs makespan="446.878055556" cost="99.756"/>
-    <objs makespan="119.7275" cost="328.244"/>
+    <objs makespan="142.81" cost="261.6"/>
+    <objs makespan="190.822222222" cost="232.259"/>
+    <objs makespan="95.2288888889" cost="504.8"/>
+    <objs makespan="95.1111111111" cost="520.8"/>
+    <objs makespan="108.6" cost="338.352"/>
+    <objs makespan="111.0525" cost="330.904"/>
+    <objs makespan="206.186944444" cost="220.718"/>
+    <objs makespan="207.160555556" cost="190.307"/>
+    <objs makespan="214.566666667" cost="161.501"/>
+    <objs makespan="218.788888889" cost="151.415"/>
+    <objs makespan="222.777777778" cost="145.563"/>
+    <objs makespan="235.1325" cost="143.303"/>
+    <objs makespan="241.666944444" cost="134.743"/>
+    <objs makespan="259.765555556" cost="103.866"/>
+    <objs makespan="273.28" cost="99.591"/>
+    <objs makespan="283.746666667" cost="96.69"/>
+    <objs makespan="321.524444444" cost="88.079"/>
+    <objs makespan="147.42" cost="248.8"/>
+    <objs makespan="204.773333333" cost="228.388"/>
+    <objs makespan="340.686666667" cost="8.0"/>
     <objs makespan="2584.14222222" cost="0.8"/>
     <objs makespan="2894.9225" cost="0.532"/>
     <objs makespan="15243.1533333" cost="0.5"/>
-    <objs makespan="100.265" cost="400.8"/>
+    <objs makespan="2502.78666667" cost="5.262"/>
+    <objs makespan="2447.18027778" cost="5.362"/>
   </model>
   <model name="Inspiral_100">
-    <objs makespan="502.653333333" cost="24.8"/>
-    <objs makespan="464.6125" cost="32.452"/>
-    <objs makespan="2466.58666667" cost="5.5"/>
-    <objs makespan="2085.94" cost="6.6"/>
-    <objs makespan="2289.08666667" cost="5.7"/>
-    <objs makespan="468.56" cost="31.92"/>
-    <objs makespan="507.618888889" cost="22.768"/>
-    <objs makespan="3649.25333333" cost="4.02"/>
-    <objs makespan="458.18" cost="32.984"/>
-    <objs makespan="517.491111111" cost="17.699"/>
-    <objs makespan="2054.55777778" cost="7.831"/>
-    <objs makespan="540.947777778" cost="15.331"/>
-    <objs makespan="1961.95333333" cost="7.98"/>
-    <objs makespan="2221.58" cost="6.4"/>
-    <objs makespan="469.740555556" cost="30.475"/>
-    <objs makespan="685.935555556" cost="8.0"/>
+    <objs makespan="415.39" cost="36.708"/>
+    <objs makespan="426.72" cost="32.452"/>
+    <objs makespan="410.504444444" cost="50.4"/>
+    <objs makespan="596.906666667" cost="27.2"/>
+    <objs makespan="606.046666667" cost="26.0"/>
+    <objs makespan="641.088888889" cost="8.0"/>
+    <objs makespan="2302.32666667" cost="6.2"/>
+    <objs makespan="3312.04666667" cost="6.063"/>
+    <objs makespan="3469.5875" cost="6.001"/>
+    <objs makespan="4261.11333333" cost="4.489"/>
+    <objs makespan="524.722222222" cost="27.727"/>
+    <objs makespan="625.602222222" cost="22.459"/>
     <objs makespan="4679.23555556" cost="1.6"/>
     <objs makespan="5262.74" cost="1.064"/>
     <objs makespan="7016.25333333" cost="0.8"/>
-    <objs makespan="4558.16666667" cost="3.6"/>
-    <objs makespan="471.28" cost="28.8"/>
-    <objs makespan="337.235" cost="33.2"/>
-    <objs makespan="332.871944444" cost="53.2"/>
-    <objs makespan="318.398333333" cost="54.8"/>
-    <objs makespan="337.1675" cost="37.2"/>
-    <objs makespan="299.002777778" cost="66.4"/>
+    <objs makespan="4302.88277778" cost="3.398"/>
+    <objs makespan="3498.4475" cost="5.163"/>
+    <objs makespan="4450.23527778" cost="2.097"/>
+    <objs makespan="3748.03" cost="4.596"/>
+    <objs makespan="3583.66" cost="5.092"/>
   </model>
   <model name="Montage_25">
-    <objs makespan="16.795" cost="10.932"/>
-    <objs makespan="42.665" cost="2.062"/>
-    <objs makespan="42.1125" cost="2.064"/>
-    <objs makespan="32.0741666667" cost="3.264"/>
-    <objs makespan="43.35" cost="1.665"/>
-    <objs makespan="40.1925" cost="2.263"/>
-    <objs makespan="47.945" cost="1.596"/>
-    <objs makespan="54.4741666667" cost="1.064"/>
-    <objs makespan="144.133333333" cost="0.334"/>
-    <objs makespan="24.0422222222" cost="4.0"/>
-    <objs makespan="17.9725" cost="6.932"/>
-    <objs makespan="17.9591666667" cost="7.184"/>
-    <objs makespan="17.0502777778" cost="7.928"/>
-    <objs makespan="43.3111111111" cost="2.0"/>
-    <objs makespan="19.5533333333" cost="4.8"/>
-    <objs makespan="37.39" cost="2.53"/>
-    <objs makespan="34.4913888889" cost="3.194"/>
-    <objs makespan="38.9158333333" cost="2.398"/>
-    <objs makespan="51.8791666667" cost="1.332"/>
+    <objs makespan="17.9805555556" cost="6.79"/>
+    <objs makespan="14.6125" cost="9.312"/>
+    <objs makespan="14.7775" cost="9.044"/>
+    <objs makespan="13.9625" cost="11.728"/>
+    <objs makespan="15.6083333333" cost="8.912"/>
+    <objs makespan="14.3411111111" cost="10.4"/>
+    <objs makespan="24.8130555556" cost="4.795"/>
+    <objs makespan="29.8275" cost="3.064"/>
+    <objs makespan="34.2108333333" cost="2.596"/>
+    <objs makespan="46.5516666667" cost="1.332"/>
     <objs makespan="54.7555555556" cost="0.8"/>
-    <objs makespan="17.6844444444" cost="7.2"/>
-    <objs makespan="30.34" cost="3.332"/>
-    <objs makespan="35.0986111111" cost="2.598"/>
-    <objs makespan="49.0891666667" cost="1.532"/>
-    <objs makespan="16.1911111111" cost="15.198"/>
-    <objs makespan="19.1866666667" cost="6.396"/>
-    <objs makespan="37.2666666667" cost="2.532"/>
-    <objs makespan="41.0858333333" cost="2.164"/>
+    <objs makespan="15.6111111111" cost="7.2"/>
+    <objs makespan="20.57" cost="6.586"/>
+    <objs makespan="20.93" cost="6.132"/>
+    <objs makespan="24.7" cost="5.198"/>
+    <objs makespan="34.7041666667" cost="2.398"/>
+    <objs makespan="39.2683333333" cost="1.832"/>
+    <objs makespan="41.1983333333" cost="1.732"/>
+    <objs makespan="54.4558333333" cost="1.232"/>
+    <objs makespan="41.2025" cost="1.532"/>
     <objs makespan="60.8875" cost="0.532"/>
     <objs makespan="81.1833333333" cost="0.4"/>
     <objs makespan="160.666666667" cost="0.2"/>
     <objs makespan="319.633333333" cost="0.1"/>
-    <objs makespan="637.766666667" cost="0.067"/>
+    <objs makespan="637.966666667" cost="0.067"/>
+    <objs makespan="35.5997222222" cost="2.264"/>
+    <objs makespan="29.4366666667" cost="3.66"/>
+    <objs makespan="26.8333333333" cost="3.728"/>
+    <objs makespan="36.4633333333" cost="1.998"/>
+    <objs makespan="22.1427777778" cost="5.326"/>
   </model>
   <model name="CyberShake_30">
-    <objs makespan="87.2833333333" cost="5.863"/>
-    <objs makespan="91.3861111111" cost="4.328"/>
-    <objs makespan="80.3333333333" cost="7.628"/>
-    <objs makespan="79.5308333333" cost="8.728"/>
-    <objs makespan="86.1611111111" cost="5.895"/>
-    <objs makespan="82.4044444444" cost="6.793"/>
-    <objs makespan="83.8577777778" cost="6.026"/>
-    <objs makespan="88.0863888889" cost="5.531"/>
-    <objs makespan="77.43" cost="11.258"/>
-    <objs makespan="108.9225" cost="3.463"/>
-    <objs makespan="186.960833333" cost="1.232"/>
-    <objs makespan="79.8733333333" cost="8.359"/>
-    <objs makespan="122.87" cost="2.865"/>
-    <objs makespan="124.293333333" cost="2.832"/>
-    <objs makespan="115.884444444" cost="3.1"/>
-    <objs makespan="171.109166667" cost="1.732"/>
-    <objs makespan="89.1775" cost="5.259"/>
-    <objs makespan="161.996666667" cost="1.798"/>
-    <objs makespan="186.7425" cost="1.398"/>
-    <objs makespan="174.511111111" cost="1.5"/>
-    <objs makespan="81.2327777778" cost="7.626"/>
-    <objs makespan="100.153333333" cost="4.097"/>
-    <objs makespan="102.197777778" cost="3.734"/>
-    <objs makespan="78.1058333333" cost="8.927"/>
-    <objs makespan="111.86" cost="3.134"/>
-    <objs makespan="132.084444444" cost="2.333"/>
-    <objs makespan="211.8125" cost="0.532"/>
-    <objs makespan="149.470833333" cost="1.865"/>
+    <objs makespan="86.0866666667" cost="6.028"/>
+    <objs makespan="94.8605555556" cost="4.595"/>
+    <objs makespan="94.0877777778" cost="5.294"/>
+    <objs makespan="94.4033333333" cost="5.262"/>
+    <objs makespan="89.9177777778" cost="5.364"/>
+    <objs makespan="80.3038888889" cost="8.356"/>
+    <objs makespan="81.6211111111" cost="6.79"/>
+    <objs makespan="85.1694444444" cost="6.264"/>
+    <objs makespan="115.010833333" cost="3.763"/>
+    <objs makespan="137.266666667" cost="2.066"/>
+    <objs makespan="174.397777778" cost="1.6"/>
+    <objs makespan="2240.16666667" cost="0.067"/>
+    <objs makespan="78.1422222222" cost="12.098"/>
+    <objs makespan="79.1438888889" cost="10.462"/>
+    <objs makespan="79.2577777778" cost="9.863"/>
+    <objs makespan="177.006666667" cost="1.5"/>
+    <objs makespan="187.355555556" cost="1.134"/>
+    <objs makespan="112.497777778" cost="3.83"/>
+    <objs makespan="118.051111111" cost="3.065"/>
+    <objs makespan="117.257777778" cost="3.698"/>
+    <objs makespan="136.385833333" cost="2.897"/>
+    <objs makespan="183.4725" cost="1.33"/>
     <objs makespan="187.988888889" cost="0.8"/>
+    <objs makespan="116.511666667" cost="3.761"/>
+    <objs makespan="106.653333333" cost="4.265"/>
+    <objs makespan="151.613333333" cost="1.867"/>
+    <objs makespan="80.2111111111" cost="9.095"/>
+    <objs makespan="211.8125" cost="0.532"/>
     <objs makespan="280.883333333" cost="0.4"/>
     <objs makespan="561.066666667" cost="0.2"/>
     <objs makespan="1120.73333333" cost="0.1"/>
-    <objs makespan="2240.36666667" cost="0.067"/>
   </model>
   <model name="Epigenomics_100">
-    <objs makespan="96325.2125" cost="13.2"/>
-    <objs makespan="84862.445" cost="13.6"/>
-    <objs makespan="70220.13" cost="15.6"/>
-    <objs makespan="55653.5975" cost="16.0"/>
-    <objs makespan="53373.9525" cost="19.18"/>
-    <objs makespan="53671.99" cost="17.2"/>
-    <objs makespan="29877.2108333" cost="22.256"/>
-    <objs makespan="29249.02" cost="22.4"/>
-    <objs makespan="36968.5775" cost="20.4"/>
-    <objs makespan="36227.9066667" cost="20.8"/>
-    <objs makespan="13494.5275" cost="23.2"/>
-    <objs makespan="11056.2875" cost="25.6"/>
-    <objs makespan="6953.80888889" cost="42.0"/>
-    <objs makespan="39851.78" cost="20.0"/>
-    <objs makespan="7472.3675" cost="31.6"/>
-    <objs makespan="6654.14888889" cost="60.0"/>
+    <objs makespan="7860.44" cost="68.0"/>
+    <objs makespan="12553.7355556" cost="34.291"/>
+    <objs makespan="21220.29" cost="20.792"/>
+    <objs makespan="23516.0691667" cost="20.212"/>
+    <objs makespan="9794.0125" cost="42.168"/>
+    <objs makespan="8640.85111111" cost="53.792"/>
+    <objs makespan="9775.5175" cost="48.412"/>
+    <objs makespan="86442.6666667" cost="18.575"/>
+    <objs makespan="8181.7" cost="61.6"/>
+    <objs makespan="10057.2841667" cost="40.68"/>
+    <objs makespan="11557.1066667" cost="38.8"/>
+    <objs makespan="11965.8525" cost="35.152"/>
+    <objs makespan="16360.2966667" cost="21.988"/>
+    <objs makespan="10810.53" cost="40.07"/>
+    <objs makespan="13329.2780556" cost="22.66"/>
+    <objs makespan="100857.7" cost="15.428"/>
+    <objs makespan="134475.6" cost="15.2"/>
+    <objs makespan="268946.0" cost="15.0"/>
+    <objs makespan="107672.7625" cost="15.263"/>
+    <objs makespan="107658.829167" cost="15.329"/>
+    <objs makespan="97815.0291667" cost="17.16"/>
+    <objs makespan="140767.683333" cost="15.167"/>
+    <objs makespan="100709.584722" cost="15.763"/>
+    <objs makespan="94892.4197222" cost="17.631"/>
+    <objs makespan="100689.084722" cost="15.962"/>
+    <objs makespan="100684.518056" cost="16.228"/>
+    <objs makespan="100696.151389" cost="15.829"/>
+    <objs makespan="100700.151389" cost="15.796"/>
+    <objs makespan="101397.079167" cost="15.396"/>
+    <objs makespan="101406.7125" cost="15.363"/>
+    <objs makespan="61599.1408333" cost="18.721"/>
   </model>
   <model name="Sipht_100">
-    <objs makespan="3410.93288889" cost="5.632"/>
-    <objs makespan="3460.43533333" cost="4.703"/>
-    <objs makespan="1006.35933333" cost="15.592"/>
-    <objs makespan="1020.04555556" cost="10.537"/>
-    <objs makespan="1512.75969444" cost="9.297"/>
-    <objs makespan="1808.16669444" cost="7.432"/>
-    <objs makespan="1006.08155556" cost="20.826"/>
-    <objs makespan="1654.80816667" cost="7.931"/>
-    <objs makespan="1918.20519444" cost="5.996"/>
-    <objs makespan="1377.778" cost="9.499"/>
+    <objs makespan="997.436555556" cost="29.093"/>
+    <objs makespan="1002.17233333" cost="23.152"/>
+    <objs makespan="1035.408" cost="22.958"/>
+    <objs makespan="997.081555556" cost="36.626"/>
+    <objs makespan="997.366" cost="30.626"/>
+    <objs makespan="1452.00133333" cost="12.052"/>
+    <objs makespan="997.092666667" cost="32.123"/>
+    <objs makespan="1112.24508333" cost="13.285"/>
+    <objs makespan="1640.88063889" cost="10.119"/>
+    <objs makespan="1908.52111111" cost="6.8"/>
     <objs makespan="3869.29822222" cost="1.6"/>
     <objs makespan="4352.173" cost="1.064"/>
     <objs makespan="5801.79733333" cost="0.8"/>
     <objs makespan="23192.2893333" cost="0.7"/>
+    <objs makespan="3869.24644444" cost="1.834"/>
+    <objs makespan="3867.67488889" cost="3.434"/>
+    <objs makespan="3471.12925" cost="4.83"/>
+    <objs makespan="3845.45222222" cost="4.165"/>
+    <objs makespan="3372.312" cost="5.498"/>
+    <objs makespan="5801.41966667" cost="1.001"/>
   </model>
   <model name="Inspiral_1000">
-    <objs makespan="662.41" cost="327.712"/>
-    <objs makespan="859.19" cost="249.2"/>
-    <objs makespan="1606.07333333" cost="122.8"/>
-    <objs makespan="579.08" cost="345.268"/>
-    <objs makespan="586.99" cost="329.308"/>
-    <objs makespan="845.75" cost="257.2"/>
-    <objs makespan="1583.33333333" cost="130.6"/>
-    <objs makespan="3272.53333333" cost="62.2"/>
-    <objs makespan="3642.62" cost="61.4"/>
-    <objs makespan="4831.5" cost="60.306"/>
-    <objs makespan="4966.64888889" cost="59.375"/>
-    <objs makespan="586.8375" cost="331.436"/>
-    <objs makespan="884.513333333" cost="245.6"/>
-    <objs makespan="2947.92666667" cost="62.8"/>
-    <objs makespan="5804.7" cost="16.0"/>
+    <objs makespan="568.626666667" cost="514.4"/>
+    <objs makespan="846.4" cost="252.0"/>
+    <objs makespan="1814.64" cost="125.8"/>
+    <objs makespan="1865.12" cost="124.0"/>
+    <objs makespan="3048.56222222" cost="117.094"/>
+    <objs makespan="3106.42666667" cost="107.341"/>
+    <objs makespan="3368.34" cost="63.3"/>
+    <objs makespan="553.515555556" cost="524.0"/>
+    <objs makespan="1588.38" cost="126.0"/>
+    <objs makespan="4347.75944444" cost="61.205"/>
+    <objs makespan="5618.19333333" cost="16.0"/>
+    <objs makespan="50648.0277778" cost="12.0"/>
     <objs makespan="56976.50625" cost="8.512"/>
     <objs makespan="303669.766667" cost="8.5"/>
-    <objs makespan="54747.9061667" cost="9.864"/>
-    <objs makespan="46564.374" cost="10.4"/>
-    <objs makespan="45749.31625" cost="15.2"/>
-    <objs makespan="2716.70666667" cost="89.9"/>
-    <objs makespan="1372.95333333" cost="179.8"/>
-    <objs makespan="510.3675" cost="359.6"/>
-    <objs makespan="1899.41333333" cost="100.2"/>
-    <objs makespan="949.806666667" cost="200.4"/>
-    <objs makespan="356.3625" cost="400.8"/>
+    <objs makespan="50348.89025" cost="12.507"/>
+    <objs makespan="43223.1367222" cost="14.728"/>
+    <objs makespan="49609.1121667" cost="13.611"/>
   </model>
   <model name="CyberShake_100">
-    <objs makespan="124.616388889" cost="19.584"/>
-    <objs makespan="119.437777778" cost="20.152"/>
-    <objs makespan="218.941388889" cost="6.128"/>
-    <objs makespan="226.981944444" cost="5.796"/>
-    <objs makespan="153.735555556" cost="13.426"/>
-    <objs makespan="171.551111111" cost="13.157"/>
-    <objs makespan="176.84" cost="11.762"/>
-    <objs makespan="195.834166667" cost="10.263"/>
-    <objs makespan="146.116111111" cost="15.754"/>
-    <objs makespan="201.566666667" cost="9.896"/>
-    <objs makespan="359.1725" cost="5.064"/>
-    <objs makespan="125.026666667" cost="19.215"/>
-    <objs makespan="151.406666667" cost="13.954"/>
-    <objs makespan="372.66" cost="4.198"/>
-    <objs makespan="441.693333333" cost="3.726"/>
-    <objs makespan="484.9725" cost="3.498"/>
-    <objs makespan="229.1025" cost="5.596"/>
-    <objs makespan="407.086666667" cost="3.732"/>
-    <objs makespan="135.107777778" cost="16.649"/>
-    <objs makespan="126.901111111" cost="18.149"/>
-    <objs makespan="232.123333333" cost="5.264"/>
+    <objs makespan="215.842777778" cost="6.392"/>
+    <objs makespan="120.694444444" cost="20.285"/>
+    <objs makespan="151.977777778" cost="14.087"/>
+    <objs makespan="251.663611111" cost="4.864"/>
+    <objs makespan="212.704444444" cost="10.52"/>
+    <objs makespan="411.184166667" cost="4.263"/>
+    <objs makespan="137.046666667" cost="18.016"/>
+    <objs makespan="177.808611111" cost="12.119"/>
+    <objs makespan="217.452777778" cost="5.928"/>
+    <objs makespan="130.802222222" cost="18.849"/>
+    <objs makespan="151.099444444" cost="16.381"/>
+    <objs makespan="232.493611111" cost="5.796"/>
+    <objs makespan="382.98" cost="4.532"/>
+    <objs makespan="125.9975" cost="19.82"/>
+    <objs makespan="217.178333333" cost="6.06"/>
+    <objs makespan="188.346666667" cost="10.785"/>
     <objs makespan="504.168888889" cost="0.8"/>
-    <objs makespan="181.637777778" cost="11.525"/>
-    <objs makespan="494.369166667" cost="3.331"/>
-    <objs makespan="174.868888889" cost="12.958"/>
-    <objs makespan="368.18" cost="5.034"/>
-    <objs makespan="475.268333333" cost="3.664"/>
-    <objs makespan="113.073333333" cost="20.885"/>
-    <objs makespan="188.019722222" cost="10.961"/>
-    <objs makespan="122.699444444" cost="19.985"/>
     <objs makespan="566.5025" cost="0.532"/>
     <objs makespan="754.703333333" cost="0.4"/>
     <objs makespan="1503.70666667" cost="0.2"/>
     <objs makespan="3002.21333333" cost="0.1"/>
+    <objs makespan="497.604444444" cost="1.767"/>
+    <objs makespan="415.662222222" cost="3.766"/>
+    <objs makespan="442.688888889" cost="2.866"/>
+    <objs makespan="455.382222222" cost="2.0"/>
+    <objs makespan="489.782222222" cost="1.933"/>
+    <objs makespan="480.044444444" cost="1.967"/>
   </model>
   <model name="Sipht_60">
-    <objs makespan="1707.79044444" cost="3.401"/>
-    <objs makespan="1046.00466667" cost="8.496"/>
-    <objs makespan="2067.65222222" cost="2.803"/>
-    <objs makespan="1067.238" cost="5.799"/>
-    <objs makespan="1042.18022222" cost="15.699"/>
-    <objs makespan="1045.00466667" cost="14.764"/>
-    <objs makespan="1052.89355556" cost="6.767"/>
-    <objs makespan="1099.354" cost="5.435"/>
-    <objs makespan="1405.81644444" cost="4.236"/>
-    <objs makespan="1045.23422222" cost="14.445"/>
-    <objs makespan="1490.14644444" cost="4.067"/>
-    <objs makespan="1165.42844444" cost="5.198"/>
-    <objs makespan="1361.45155556" cost="5.127"/>
-    <objs makespan="1073.06955556" cost="5.499"/>
+    <objs makespan="2175.93222222" cost="2.27"/>
+    <objs makespan="1033.77555556" cost="22.028"/>
+    <objs makespan="1155.19177778" cost="5.732"/>
+    <objs makespan="1227.71044444" cost="3.5"/>
+    <objs makespan="1570.29644444" cost="2.469"/>
+    <objs makespan="2160.40288889" cost="2.467"/>
+    <objs makespan="1033.84777778" cost="12.195"/>
+    <objs makespan="1034.12555556" cost="9.825"/>
+    <objs makespan="1035.49933333" cost="8.493"/>
+    <objs makespan="1037.95463889" cost="6.862"/>
+    <objs makespan="1033.82133333" cost="16.158"/>
     <objs makespan="2598.13133333" cost="0.8"/>
     <objs makespan="2922.37275" cost="0.532"/>
     <objs makespan="15575.588" cost="0.5"/>
-    <objs makespan="2170.3635" cost="2.732"/>
+    <objs makespan="2597.64619444" cost="1.965"/>
+    <objs makespan="2597.41566667" cost="2.232"/>
   </model>
   <model name="CyberShake_50">
-    <objs makespan="98.385" cost="14.258"/>
-    <objs makespan="104.775555556" cost="11.893"/>
-    <objs makespan="137.675555556" cost="7.461"/>
-    <objs makespan="114.629166667" cost="9.392"/>
-    <objs makespan="104.438888889" cost="12.656"/>
-    <objs makespan="108.822222222" cost="10.29"/>
-    <objs makespan="101.46" cost="13.554"/>
-    <objs makespan="125.865" cost="7.721"/>
-    <objs makespan="125.202222222" cost="7.797"/>
-    <objs makespan="138.712222222" cost="5.793"/>
-    <objs makespan="148.844444444" cost="5.592"/>
-    <objs makespan="156.935" cost="5.364"/>
-    <objs makespan="120.65" cost="8.93"/>
-    <objs makespan="274.499166667" cost="2.332"/>
-    <objs makespan="102.317777778" cost="12.79"/>
-    <objs makespan="138.116666667" cost="7.358"/>
-    <objs makespan="226.8225" cost="2.628"/>
-    <objs makespan="166.382222222" cost="5.261"/>
-    <objs makespan="222.960833333" cost="2.731"/>
-    <objs makespan="112.186666667" cost="9.497"/>
-    <objs makespan="120.494444444" cost="8.991"/>
-    <objs makespan="282.906666667" cost="2.232"/>
-    <objs makespan="123.726666667" cost="8.425"/>
-    <objs makespan="133.349166667" cost="7.621"/>
-    <objs makespan="98.1244444444" cost="15.085"/>
-    <objs makespan="117.826666667" cost="9.161"/>
-    <objs makespan="178.195555556" cost="3.866"/>
-    <objs makespan="175.69" cost="4.73"/>
-    <objs makespan="216.924444444" cost="2.933"/>
-    <objs makespan="195.431111111" cost="3.499"/>
-    <objs makespan="244.937777778" cost="2.465"/>
+    <objs makespan="98.4266666667" cost="12.29"/>
+    <objs makespan="112.943333333" cost="8.788"/>
+    <objs makespan="107.723333333" cost="10.761"/>
+    <objs makespan="115.383333333" cost="8.494"/>
+    <objs makespan="136.904722222" cost="6.995"/>
+    <objs makespan="145.0" cost="6.497"/>
+    <objs makespan="178.035555556" cost="4.596"/>
+    <objs makespan="250.373333333" cost="2.568"/>
+    <objs makespan="128.862222222" cost="7.395"/>
+    <objs makespan="154.928888889" cost="6.364"/>
+    <objs makespan="159.762222222" cost="5.365"/>
+    <objs makespan="124.635555556" cost="8.027"/>
+    <objs makespan="127.553333333" cost="7.594"/>
+    <objs makespan="160.893333333" cost="4.861"/>
     <objs makespan="298.94" cost="0.8"/>
-    <objs makespan="168.8125" cost="4.827"/>
+    <objs makespan="155.005833333" cost="5.826"/>
+    <objs makespan="287.028888889" cost="2.467"/>
+    <objs makespan="109.455555556" cost="10.725"/>
+    <objs makespan="3559.08" cost="0.067"/>
+    <objs makespan="183.42" cost="3.401"/>
+    <objs makespan="232.681666667" cost="3.133"/>
     <objs makespan="335.395" cost="0.532"/>
     <objs makespan="447.36" cost="0.4"/>
     <objs makespan="891.92" cost="0.2"/>
     <objs makespan="1781.24" cost="0.1"/>
-    <objs makespan="3559.88" cost="0.067"/>
+    <objs makespan="295.268888889" cost="2.1"/>
+    <objs makespan="287.597777778" cost="2.133"/>
   </model>
   <model name="Montage_50">
-    <objs makespan="25.8525" cost="17.024"/>
-    <objs makespan="25.8075" cost="17.556"/>
-    <objs makespan="68.9658333333" cost="4.528"/>
-    <objs makespan="75.7733333333" cost="3.832"/>
-    <objs makespan="62.4791666667" cost="5.462"/>
-    <objs makespan="61.5233333333" cost="6.059"/>
-    <objs makespan="68.5708333333" cost="5.094"/>
-    <objs makespan="80.8644444444" cost="3.765"/>
-    <objs makespan="53.9755555556" cost="6.961"/>
-    <objs makespan="73.02" cost="4.164"/>
-    <objs makespan="70.9288888889" cost="4.495"/>
-    <objs makespan="109.8575" cost="1.729"/>
-    <objs makespan="25.9225" cost="16.492"/>
-    <objs makespan="57.46" cost="6.43"/>
-    <objs makespan="67.1316666667" cost="5.131"/>
-    <objs makespan="26.1577777778" cost="8.0"/>
-    <objs makespan="86.78" cost="2.233"/>
-    <objs makespan="29.5844444444" cost="7.2"/>
-    <objs makespan="26.2511111111" cost="7.732"/>
-    <objs makespan="73.2541666667" cost="4.031"/>
-    <objs makespan="25.7825" cost="18.62"/>
-    <objs makespan="97.0333333333" cost="2.0"/>
+    <objs makespan="49.3077777778" cost="7.065"/>
+    <objs makespan="95.2088888889" cost="2.2"/>
+    <objs makespan="116.09" cost="1.799"/>
+    <objs makespan="46.5377777778" cost="7.926"/>
+    <objs makespan="100.944444444" cost="2.067"/>
+    <objs makespan="102.3475" cost="1.932"/>
+    <objs makespan="19.625" cost="16.492"/>
+    <objs makespan="89.74" cost="2.299"/>
     <objs makespan="117.775555556" cost="0.8"/>
+    <objs makespan="20.0311111111" cost="8.0"/>
+    <objs makespan="49.0822222222" cost="7.56"/>
+    <objs makespan="17.9844444444" cost="29.6"/>
+    <objs makespan="19.6" cost="19.684"/>
+    <objs makespan="95.5355555556" cost="2.1"/>
     <objs makespan="131.81" cost="0.532"/>
     <objs makespan="175.313333333" cost="0.4"/>
     <objs makespan="348.726666667" cost="0.2"/>
     <objs makespan="695.153333333" cost="0.1"/>
     <objs makespan="1387.90666667" cost="0.067"/>
-    <objs makespan="81.5825" cost="3.2"/>
-    <objs makespan="20.09" cost="19.6"/>
+    <objs makespan="89.6158333333" cost="2.53"/>
+    <objs makespan="71.3666666667" cost="3.064"/>
+    <objs makespan="57.4369444444" cost="4.198"/>
+    <objs makespan="36.1044444444" cost="7.957"/>
+    <objs makespan="52.1811111111" cost="6.029"/>
+    <objs makespan="76.0233333333" cost="2.831"/>
+    <objs makespan="71.785" cost="2.93"/>
   </model>
   <model name="Montage_100">
-    <objs makespan="43.4533333333" cost="26.0"/>
-    <objs makespan="49.1377777778" cost="8.0"/>
-    <objs makespan="43.4933333333" cost="25.6"/>
-    <objs makespan="166.528888889" cost="5.863"/>
-    <objs makespan="176.242222222" cost="4.8"/>
-    <objs makespan="169.064444444" cost="5.064"/>
-    <objs makespan="191.817777778" cost="4.3"/>
-    <objs makespan="156.382222222" cost="6.064"/>
-    <objs makespan="193.951111111" cost="4.167"/>
-    <objs makespan="48.2555555556" cost="14.488"/>
-    <objs makespan="43.5933333333" cost="24.0"/>
-    <objs makespan="216.1275" cost="3.57"/>
-    <objs makespan="186.355555556" cost="4.692"/>
-    <objs makespan="196.764444444" cost="3.633"/>
+    <objs makespan="34.9633333333" cost="23.6"/>
+    <objs makespan="34.9233333333" cost="24.8"/>
+    <objs makespan="31.2533333333" cost="25.6"/>
+    <objs makespan="23.3955555556" cost="50.4"/>
+    <objs makespan="138.473333333" cost="6.2"/>
+    <objs makespan="165.981944444" cost="5.264"/>
+    <objs makespan="26.32" cost="37.24"/>
+    <objs makespan="26.3525" cost="35.644"/>
+    <objs makespan="28.8" cost="34.048"/>
+    <objs makespan="161.837777778" cost="5.365"/>
+    <objs makespan="169.075555556" cost="5.034"/>
+    <objs makespan="23.3733333333" cost="53.6"/>
+    <objs makespan="29.0125" cost="31.92"/>
     <objs makespan="246.597777778" cost="0.8"/>
-    <objs makespan="137.411111111" cost="6.598"/>
-    <objs makespan="127.648888889" cost="7.663"/>
-    <objs makespan="132.664444444" cost="6.931"/>
-    <objs makespan="217.651111111" cost="3.139"/>
+    <objs makespan="131.481111111" cost="7.566"/>
+    <objs makespan="23.2755555556" cost="54.4"/>
+    <objs makespan="131.353333333" cost="7.897"/>
+    <objs makespan="25.7711111111" cost="47.2"/>
+    <objs makespan="35.5911111111" cost="8.0"/>
+    <objs makespan="126.637777778" cost="7.901"/>
     <objs makespan="276.985" cost="0.532"/>
     <objs makespan="367.946666667" cost="0.4"/>
     <objs makespan="731.393333333" cost="0.2"/>
     <objs makespan="1458.38666667" cost="0.1"/>
     <objs makespan="2912.17333333" cost="0.067"/>
-    <objs makespan="35.08" cost="30.8"/>
-    <objs makespan="29.7275" cost="33.2"/>
-    <objs makespan="24.03" cost="38.0"/>
+    <objs makespan="235.528055556" cost="2.132"/>
+    <objs makespan="219.427222222" cost="2.698"/>
+    <objs makespan="172.788888889" cost="4.232"/>
+    <objs makespan="176.064166667" cost="3.826"/>
+    <objs makespan="196.734166667" cost="2.931"/>
+    <objs makespan="225.485277778" cost="2.265"/>
   </model>
   <model name="Inspiral_50">
-    <objs makespan="316.277777778" cost="24.0"/>
-    <objs makespan="1109.48666667" cost="5.865"/>
-    <objs makespan="1152.51333333" cost="5.864"/>
-    <objs makespan="948.266666667" cost="6.799"/>
-    <objs makespan="1251.53583333" cost="4.497"/>
-    <objs makespan="1398.4125" cost="4.361"/>
-    <objs makespan="1543.095" cost="3.662"/>
-    <objs makespan="2063.10833333" cost="2.664"/>
-    <objs makespan="343.165555556" cost="19.097"/>
-    <objs makespan="793.024444444" cost="7.197"/>
-    <objs makespan="952.113333333" cost="6.596"/>
-    <objs makespan="1226.25333333" cost="5.764"/>
-    <objs makespan="2333.00083333" cost="2.264"/>
-    <objs makespan="2184.37333333" cost="2.266"/>
-    <objs makespan="2520.0475" cost="2.066"/>
-    <objs makespan="1733.7775" cost="3.198"/>
-    <objs makespan="1619.8" cost="3.298"/>
-    <objs makespan="348.582777778" cost="14.116"/>
-    <objs makespan="2153.62083333" cost="2.432"/>
-    <objs makespan="1744.17333333" cost="3.067"/>
-    <objs makespan="1495.5275" cost="4.096"/>
-    <objs makespan="358.480277778" cost="13.584"/>
-    <objs makespan="945.628888889" cost="7.161"/>
-    <objs makespan="360.793333333" cost="8.0"/>
-    <objs makespan="956.273333333" cost="6.362"/>
-    <objs makespan="1774.98583333" cost="2.898"/>
+    <objs makespan="329.873611111" cost="23.531"/>
+    <objs makespan="1716.98194444" cost="3.462"/>
+    <objs makespan="893.173333333" cost="6.395"/>
+    <objs makespan="1284.82666667" cost="4.797"/>
+    <objs makespan="1684.615" cost="3.73"/>
+    <objs makespan="2059.75111111" cost="2.963"/>
+    <objs makespan="2187.60444444" cost="2.567"/>
+    <objs makespan="333.022222222" cost="8.0"/>
+    <objs makespan="862.106666667" cost="7.896"/>
+    <objs makespan="1035.23722222" cost="5.997"/>
+    <objs makespan="1145.17555556" cost="5.831"/>
+    <objs makespan="1272.8475" cost="5.662"/>
     <objs makespan="2618.71111111" cost="0.8"/>
+    <objs makespan="1347.61833333" cost="4.395"/>
+    <objs makespan="1523.62083333" cost="4.229"/>
+    <objs makespan="1899.035" cost="3.363"/>
+    <objs makespan="2318.05166667" cost="2.165"/>
     <objs makespan="2945.2375" cost="0.532"/>
     <objs makespan="15698.9666667" cost="0.5"/>
-    <objs makespan="988.98" cost="6.0"/>
-    <objs makespan="338.506944444" cost="20.4"/>
-    <objs makespan="316.184444444" cost="29.6"/>
+    <objs makespan="2618.48555556" cost="2.132"/>
   </model>
   <model name="CyberShake_1000">
-    <objs makespan="1182.36222222" cost="499.2"/>
-    <objs makespan="1360.48444444" cost="380.183"/>
-    <objs makespan="1363.07111111" cost="375.674"/>
-    <objs makespan="1419.36555556" cost="111.855"/>
-    <objs makespan="1590.18805556" cost="61.87"/>
-    <objs makespan="1176.19333333" cost="502.4"/>
-    <objs makespan="1354.86222222" cost="386.139"/>
-    <objs makespan="1589.89011111" cost="87.331"/>
-    <objs makespan="1897.61083333" cost="6.396"/>
-    <objs makespan="1368.67777778" cost="296.335"/>
-    <objs makespan="1405.60805556" cost="183.574"/>
+    <objs makespan="1178.89777778" cost="499.2"/>
+    <objs makespan="1294.415" cost="195.956"/>
+    <objs makespan="1431.06666667" cost="179.926"/>
+    <objs makespan="1606.74033333" cost="122.589"/>
+    <objs makespan="1648.98344444" cost="120.565"/>
+    <objs makespan="1759.36777778" cost="118.996"/>
+    <objs makespan="1175.12" cost="509.6"/>
+    <objs makespan="1447.51888889" cost="137.74"/>
+    <objs makespan="1771.65683333" cost="86.722"/>
+    <objs makespan="1890.61816667" cost="6.528"/>
     <objs makespan="5235.98533333" cost="1.6"/>
     <objs makespan="5881.246" cost="1.064"/>
     <objs makespan="15599.756" cost="1.0"/>
     <objs makespan="31152.612" cost="0.9"/>
-    <objs makespan="3220.06925" cost="3.6"/>
+    <objs makespan="4831.85725" cost="3.326"/>
+    <objs makespan="4835.05133333" cost="3.26"/>
+    <objs makespan="3411.41366667" cost="4.264"/>
+    <objs makespan="3425.72977778" cost="3.398"/>
   </model>
   <model name="Epigenomics_997">
-    <objs makespan="158523.9925" cost="118.4"/>
-    <objs makespan="137359.29475" cost="122.8"/>
-    <objs makespan="123949.0275" cost="130.0"/>
-    <objs makespan="108264.565" cost="135.6"/>
-    <objs makespan="105368.1875" cost="154.0"/>
-    <objs makespan="95026.8475" cost="158.8"/>
-    <objs makespan="75794.51" cost="160.8"/>
-    <objs makespan="69888.4525" cost="169.2"/>
-    <objs makespan="45391.085" cost="183.2"/>
-    <objs makespan="32951.2825" cost="216.8"/>
-    <objs makespan="22594.21" cost="227.2"/>
-    <objs makespan="18775.2525" cost="270.8"/>
-    <objs makespan="10592.3075" cost="290.4"/>
-    <objs makespan="7727.00222222" cost="548.0"/>
-    <objs makespan="8530.5175" cost="326.4"/>
-    <objs makespan="8530.49" cost="452.8"/>
+    <objs makespan="13776.1288889" cost="624.8"/>
+    <objs makespan="13876.2325" cost="455.924"/>
+    <objs makespan="14583.6125" cost="438.9"/>
+    <objs makespan="19292.5366667" cost="387.2"/>
+    <objs makespan="21109.26" cost="377.6"/>
+    <objs makespan="39338.42" cost="278.0"/>
+    <objs makespan="12812.9844444" cost="648.0"/>
+    <objs makespan="13313.5177778" cost="637.6"/>
+    <objs makespan="18248.6266667" cost="388.4"/>
+    <objs makespan="37534.1133333" cost="284.8"/>
+    <objs makespan="75025.3466667" cost="222.2"/>
+    <objs makespan="14110.5975" cost="453.264"/>
+    <objs makespan="72221.3533333" cost="226.2"/>
+    <objs makespan="157072.478611" cost="203.711"/>
+    <objs makespan="963752.642" cost="142.576"/>
+    <objs makespan="667178.823" cost="173.157"/>
+    <objs makespan="211131.966111" cost="193.91"/>
+    <objs makespan="251561.873333" cost="191.896"/>
+    <objs makespan="196568.265556" cost="199.239"/>
+    <objs makespan="109866.330833" cost="210.532"/>
+    <objs makespan="82833.0566667" cost="215.024"/>
+    <objs makespan="71142.7188889" cost="255.465"/>
+    <objs makespan="63865.4675" cost="263.104"/>
+    <objs makespan="63583.0255556" cost="265.107"/>
+    <objs makespan="59172.3741667" cost="275.4"/>
+    <objs makespan="720601.553083" cost="158.756"/>
+    <objs makespan="285291.778056" cost="177.454"/>
+    <objs makespan="65142.14" cost="256.527"/>
+    <objs makespan="61410.4641667" cost="273.125"/>
   </model>
   <model name="Epigenomics_46">
-    <objs makespan="1722.39666667" cost="20.63"/>
-    <objs makespan="1723.45555556" cost="20.166"/>
-    <objs makespan="6544.36583333" cost="3.029"/>
-    <objs makespan="3685.27916667" cost="5.194"/>
-    <objs makespan="1909.72277778" cost="6.796"/>
-    <objs makespan="4552.16416667" cost="5.028"/>
-    <objs makespan="1724.51055556" cost="13.779"/>
-    <objs makespan="4524.85472222" cost="5.032"/>
-    <objs makespan="1757.65972222" cost="11.352"/>
-    <objs makespan="2474.86222222" cost="5.464"/>
-    <objs makespan="1725.33" cost="12.681"/>
-    <objs makespan="1880.91083333" cost="8.724"/>
-    <objs makespan="2394.27583333" cost="5.728"/>
-    <objs makespan="1741.80166667" cost="11.963"/>
-    <objs makespan="1957.68611111" cost="5.996"/>
+    <objs makespan="2393.59583333" cost="5.46"/>
+    <objs makespan="1722.27333333" cost="24.8"/>
+    <objs makespan="1724.05944444" cost="19.531"/>
+    <objs makespan="2337.18305556" cost="6.06"/>
+    <objs makespan="1722.39555556" cost="22.999"/>
+    <objs makespan="1725.77888889" cost="6.596"/>
+    <objs makespan="2506.535" cost="5.128"/>
     <objs makespan="9205.04" cost="2.4"/>
     <objs makespan="10355.695" cost="1.596"/>
-    <objs makespan="5578.785" cost="3.332"/>
-    <objs makespan="4740.1475" cost="4.0"/>
-    <objs makespan="1784.68277778" cost="9.6"/>
+    <objs makespan="6414.645" cost="3.164"/>
+    <objs makespan="6566.98583333" cost="2.431"/>
+    <objs makespan="4019.63361111" cost="4.598"/>
+    <objs makespan="5845.91666667" cost="3.196"/>
+    <objs makespan="3413.58166667" cost="4.693"/>
+    <objs makespan="4774.32444444" cost="3.365"/>
   </model>
   <model name="Sipht_1000">
-    <objs makespan="1358.676" cost="319.2"/>
-    <objs makespan="1806.11966667" cost="249.6"/>
-    <objs makespan="3510.88316667" cost="214.982"/>
-    <objs makespan="1358.74125" cost="312.816"/>
-    <objs makespan="2011.787" cost="244.8"/>
-    <objs makespan="2045.13666667" cost="243.6"/>
-    <objs makespan="3582.79333333" cost="163.59"/>
-    <objs makespan="3694.258" cost="120.4"/>
-    <objs makespan="1204.72244444" cost="486.4"/>
-    <objs makespan="1205.51888889" cost="485.6"/>
-    <objs makespan="1855.66166667" cost="246.4"/>
-    <objs makespan="2049.46533333" cost="242.4"/>
-    <objs makespan="3304.26088889" cost="225.464"/>
-    <objs makespan="3478.83" cost="219.517"/>
-    <objs makespan="3606.834" cost="162.26"/>
-    <objs makespan="7160.09333333" cost="89.908"/>
-    <objs makespan="7231.13733333" cost="69.6"/>
-    <objs makespan="7529.71066667" cost="68.5"/>
-    <objs makespan="1207.93533333" cost="477.6"/>
-    <objs makespan="4958.298" cost="120.0"/>
-    <objs makespan="6561.54133333" cost="119.79"/>
-    <objs makespan="6597.28088889" cost="119.292"/>
-    <objs makespan="6658.20133333" cost="118.934"/>
-    <objs makespan="6659.66033333" cost="117.271"/>
-    <objs makespan="6968.146" cost="115.305"/>
-    <objs makespan="7134.81483333" cost="113.979"/>
-    <objs makespan="7320.84933333" cost="68.8"/>
-    <objs makespan="16402.7031111" cost="33.18"/>
-    <objs makespan="1202.63333333" cost="495.2"/>
-    <objs makespan="3612.03933333" cost="122.4"/>
-    <objs makespan="8080.016" cost="68.1"/>
-    <objs makespan="14256.8573333" cost="56.615"/>
+    <objs makespan="1258.92422222" cost="480.0"/>
+    <objs makespan="1637.33125" cost="332.5"/>
+    <objs makespan="1681.9665" cost="325.052"/>
+    <objs makespan="3575.73733333" cost="122.0"/>
+    <objs makespan="3601.19133333" cost="121.4"/>
+    <objs makespan="1210.35777778" cost="485.6"/>
+    <objs makespan="1799.70533333" cost="238.8"/>
+    <objs makespan="3685.91933333" cost="120.6"/>
+    <objs makespan="6517.658" cost="114.938"/>
+    <objs makespan="6630.48666667" cost="111.647"/>
+    <objs makespan="7225.96866667" cost="111.359"/>
+    <objs makespan="7307.54133333" cost="92.435"/>
+    <objs makespan="14395.6426667" cost="58.424"/>
+    <objs makespan="14543.856" cost="57.218"/>
+    <objs makespan="1202.96" cost="508.0"/>
+    <objs makespan="7826.15733333" cost="67.5"/>
+    <objs makespan="16790.0758889" cost="27.728"/>
     <objs makespan="38645.7068889" cost="8.8"/>
     <objs makespan="43467.19525" cost="6.916"/>
     <objs makespan="57945.2603333" cost="6.8"/>
     <objs makespan="115841.020667" cost="6.6"/>
     <objs makespan="231633.941333" cost="6.5"/>
+    <objs makespan="38644.4785" cost="12.565"/>
+    <objs makespan="38644.2611667" cost="15.197"/>
+    <objs makespan="38644.1114444" cost="15.496"/>
   </model>
   <model name="Inspiral_30">
-    <objs makespan="299.684722222" cost="11.328"/>
-    <objs makespan="510.053333333" cost="4.867"/>
-    <objs makespan="957.084166667" cost="2.499"/>
-    <objs makespan="299.251111111" cost="12.866"/>
-    <objs makespan="1104.55" cost="2.132"/>
-    <objs makespan="1163.26833333" cost="1.898"/>
-    <objs makespan="1303.19166667" cost="1.663"/>
-    <objs makespan="677.123333333" cost="3.397"/>
-    <objs makespan="767.33" cost="3.297"/>
-    <objs makespan="823.74" cost="3.031"/>
-    <objs makespan="880.470833333" cost="2.798"/>
-    <objs makespan="309.06" cost="6.867"/>
-    <objs makespan="826.473333333" cost="2.929"/>
-    <objs makespan="1003.15583333" cost="2.264"/>
-    <objs makespan="1372.43" cost="1.333"/>
-    <objs makespan="435.285555556" cost="5.264"/>
-    <objs makespan="1415.34083333" cost="1.232"/>
-    <objs makespan="674.405" cost="3.796"/>
-    <objs makespan="549.875" cost="4.526"/>
-    <objs makespan="301.088888889" cost="7.131"/>
-    <objs makespan="660.2375" cost="4.365"/>
-    <objs makespan="1089.8275" cost="2.232"/>
-    <objs makespan="309.308888889" cost="5.6"/>
-    <objs makespan="299.8525" cost="9.395"/>
-    <objs makespan="1658.4175" cost="0.532"/>
+    <objs makespan="299.528888889" cost="13.395"/>
+    <objs makespan="299.774166667" cost="12.529"/>
+    <objs makespan="299.485833333" cost="14.132"/>
+    <objs makespan="299.251111111" cost="16.532"/>
+    <objs makespan="1003.28833333" cost="2.299"/>
+    <objs makespan="1172.00416667" cost="1.932"/>
+    <objs makespan="1298.61083333" cost="1.832"/>
+    <objs makespan="571.300833333" cost="4.529"/>
+    <objs makespan="915.605" cost="2.964"/>
+    <objs makespan="959.140833333" cost="2.564"/>
+    <objs makespan="716.868888889" cost="4.099"/>
+    <objs makespan="772.242222222" cost="3.566"/>
+    <objs makespan="1324.53583333" cost="1.665"/>
     <objs makespan="1474.40444444" cost="0.8"/>
+    <objs makespan="301.088888889" cost="5.6"/>
+    <objs makespan="481.12" cost="5.063"/>
+    <objs makespan="796.533333333" cost="3.265"/>
+    <objs makespan="1390.22916667" cost="1.199"/>
+    <objs makespan="907.399166667" cost="3.095"/>
+    <objs makespan="1072.09" cost="1.998"/>
+    <objs makespan="1658.4175" cost="0.532"/>
     <objs makespan="2210.35666667" cost="0.4"/>
     <objs makespan="8838.62666667" cost="0.3"/>
+    <objs makespan="769.155833333" cost="4.097"/>
   </model>
   <model name="Epigenomics_24">
-    <objs makespan="1315.71083333" cost="4.062"/>
-    <objs makespan="2576.71833333" cost="2.03"/>
-    <objs makespan="1900.05916667" cost="2.263"/>
-    <objs makespan="2983.29083333" cost="1.399"/>
-    <objs makespan="1264.43416667" cost="4.363"/>
-    <objs makespan="1337.91888889" cost="3.895"/>
-    <objs makespan="2582.89" cost="1.931"/>
-    <objs makespan="1391.24861111" cost="2.93"/>
-    <objs makespan="1243.03333333" cost="7.4"/>
-    <objs makespan="2054.0275" cost="2.062"/>
-    <objs makespan="1243.07777778" cost="4.532"/>
-    <objs makespan="1723.03083333" cost="2.595"/>
-    <objs makespan="2663.64333333" cost="1.664"/>
-    <objs makespan="3433.12416667" cost="1.331"/>
-    <objs makespan="1859.21083333" cost="2.499"/>
-    <objs makespan="1243.64888889" cost="4.4"/>
+    <objs makespan="1250.51333333" cost="5.297"/>
+    <objs makespan="1245.18666667" cost="9.866"/>
+    <objs makespan="1246.29777778" cost="7.599"/>
+    <objs makespan="1243.07777778" cost="11.2"/>
+    <objs makespan="1341.24638889" cost="5.262"/>
+    <objs makespan="1243.45638889" cost="9.997"/>
+    <objs makespan="1249.69333333" cost="7.332"/>
+    <objs makespan="1421.97083333" cost="2.86"/>
+    <objs makespan="2214.91166667" cost="2.096"/>
+    <objs makespan="2856.1675" cost="1.664"/>
+    <objs makespan="3416.8925" cost="1.596"/>
+    <objs makespan="1418.90833333" cost="3.761"/>
+    <objs makespan="2118.87333333" cost="2.461"/>
+    <objs makespan="1393.20555556" cost="4.031"/>
+    <objs makespan="1726.64777778" cost="2.667"/>
+    <objs makespan="2687.38333333" cost="1.997"/>
+    <objs makespan="3572.0725" cost="1.332"/>
     <objs makespan="4433.9875" cost="1.064"/>
     <objs makespan="5911.98333333" cost="0.8"/>
     <objs makespan="23643.0333333" cost="0.7"/>
   </model>
   <model name="Sipht_30">
-    <objs makespan="982.404666667" cost="3.067"/>
-    <objs makespan="1218.332" cost="1.403"/>
-    <objs makespan="983.735777778" cost="2.799"/>
-    <objs makespan="1219.99911111" cost="1.202"/>
-    <objs makespan="985.050222222" cost="2.136"/>
-    <objs makespan="1048.15152778" cost="1.968"/>
-    <objs makespan="1235.98422222" cost="1.066"/>
-    <objs makespan="1159.96508333" cost="1.667"/>
-    <objs makespan="1166.7245" cost="1.467"/>
-    <objs makespan="1060.86775" cost="1.7"/>
-    <objs makespan="1096.72755556" cost="1.669"/>
-    <objs makespan="982.332444444" cost="3.566"/>
-    <objs makespan="1049.07069444" cost="1.834"/>
-    <objs makespan="1039.22225" cost="2.132"/>
-    <objs makespan="1390.66125" cost="0.532"/>
+    <objs makespan="995.000222222" cost="2.567"/>
+    <objs makespan="1016.99888889" cost="1.97"/>
+    <objs makespan="986.932611111" cost="2.598"/>
+    <objs makespan="983.050444444" cost="2.601"/>
+    <objs makespan="982.404666667" cost="2.967"/>
+    <objs makespan="1104.70622222" cost="1.601"/>
+    <objs makespan="1212.01088889" cost="1.469"/>
+    <objs makespan="1215.83333333" cost="1.201"/>
+    <objs makespan="982.332444444" cost="3.434"/>
+    <objs makespan="996.517333333" cost="2.299"/>
+    <objs makespan="1093.59466667" cost="1.967"/>
     <objs makespan="1236.18777778" cost="0.8"/>
+    <objs makespan="1390.66125" cost="0.532"/>
     <objs makespan="1853.68166667" cost="0.4"/>
     <objs makespan="7411.12666667" cost="0.3"/>
+    <objs makespan="1390.436" cost="0.599"/>
     <objs makespan="7411.092" cost="0.367"/>
+    <objs makespan="1853.648" cost="0.467"/>
+    <objs makespan="1390.23666667" cost="0.799"/>
   </model>
 </frontiers>

@@ -28,6 +28,8 @@ from bdb import BdbQuit
 
 sys.dont_write_btyecode = True
 
+def activate():
+    pass
 
 def info(type, value, tb):
     if type is BdbQuit:

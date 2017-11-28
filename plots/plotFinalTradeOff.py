@@ -41,7 +41,7 @@ def jitter(x, y, drawed):
 
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
-algs = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']  # pls put MOHEFT at the end
+algs = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'HC']  # pls put MOHEFT at the end
 colors = ['darkgreen', 'red', 'blue', 'darkmagenta',
           'orange']  # https://matplotlib.org/examples/color/named_colors.html
 markers = ['d', 's', 'x', 'p', '^']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
@@ -75,7 +75,7 @@ for model in models:
 
         if alg != 'MOHEFT' or not x or np.mean(x) <= math.log10(
                 currentM):  # dont show if extremely bad or no results in MOHEFT
-            ax.plot(x, y, c=color, label=alg if alg != 'SWAY' else 'Our method', marker=mk, ls='--', linewidth=0.8)
+            ax.plot(x, y, c=color, label=alg if alg != 'RIOT' else 'Our method', marker=mk, ls='--', linewidth=0.8)
             if not x and alg == 'MOHEFT':
                 plt.text((currentM) * 0.8, currentN * 0.8, 'Model too large for MOHEFT', fontsize=9,
                          color='gray')
@@ -93,4 +93,4 @@ for model in models:
         plt.legend(loc=0)
         plt.title(model)
         # plt.show()
-        plt.savefig('../results/tradeOffPF/' + model + '.eps')
+        plt.savefig('../results/tradeOffPF/' + model + '.png')
