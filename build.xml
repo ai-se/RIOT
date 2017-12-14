@@ -20,6 +20,7 @@
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="guava-22.0.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="jmetal4.2.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="w3c-dom.jar"/>
+            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="xchart-3.5.0.jar"/>
         </jar>
 
         <jar destfile="${dir.jarfile}/riot.jar">
@@ -35,6 +36,7 @@
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="jmetal4.2.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="guava-22.0.jar"/>
             <zipfileset dir="${dir.workspace}/vmlb/lib" includes="w3c-dom.jar"/>
+            <zipfileset dir="${dir.workspace}/vmlb/lib" includes="xchart-3.5.0.jar"/>
         </jar>
     </target>
 </project>

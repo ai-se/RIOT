@@ -191,5 +191,4 @@ public class InsTypeCalc {
 		}
 		return res;
 	}
-
 }

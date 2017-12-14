@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
+import edu.ncsu.experiments.BubbleChartTool;
 import edu.ncsu.model.DAG;
 import edu.ncsu.model.Task;
 import jmetal.core.Algorithm;
@@ -201,8 +202,9 @@ public class RIOT {
 			paras.put("variant", "org");
 			long start_time = System.currentTimeMillis();
 			RIOT runner = new RIOT();
-			runner.executeRIOT(paras);
+			SolutionSet res = runner.executeRIOT(paras);
 			System.out.println("EXEC TIME = " + (System.currentTimeMillis() - start_time) / 1000);
+			BubbleChartTool.showFrontier("org", res);
 		}
 	}
 }
