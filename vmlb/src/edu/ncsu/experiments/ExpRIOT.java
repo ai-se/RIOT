@@ -48,6 +48,9 @@ public class ExpRIOT {
 		case "hc":
 			file = new File("riotHc.txt");
 			break;
+		case "sa":
+			file = new File("riotSa.txt");
+			break;
 		default:
 			file = new File("riot.txt");
 		}

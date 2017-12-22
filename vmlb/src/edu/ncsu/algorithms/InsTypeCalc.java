@@ -3,6 +3,7 @@ package edu.ncsu.algorithms;
 import java.util.Arrays;
 import java.util.Random;
 
+import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
 
 import edu.ncsu.model.INFRA;
@@ -38,7 +39,19 @@ public class InsTypeCalc {
 			int[] task2ins = VmsProblem.fetchSolDecs(org).task2ins;
 
 			// case 1 random assignment
-			for (int i = 0; i < 30; i++) {
+			for (int inst = 0; inst < INFRA.getAvalVmTypeNum(); inst++) {
+				Solution iso = new Solution(problem_);
+				problem_.setSolTask2Ins(iso, task2ins);
+				problem_.setSolTaskInOrder(iso, order);
+				int[] ins2type = new int[problem_.tasksNum];
+				for (int tmpi = 0; tmpi <= Ints.max(task2ins); tmpi++)
+					ins2type[tmpi] = inst;
+				problem_.setSolIns2Type(iso, ins2type);
+
+				anchors.add(iso);
+			}
+
+			for (int i = 0; i < 20; i++) {
 				Solution rnd = new Solution(problem_);
 				problem_.setSolTask2Ins(rnd, task2ins);
 				problem_.setSolTaskInOrder(rnd, order);
@@ -177,6 +190,7 @@ public class InsTypeCalc {
 			while (iter < 50 && torr < 15) {
 				// Randomly create new neighbor
 				VmsProblem.fetchSolDecs(candidate).ins2type[rand_.nextInt(vms + 1)] = rand_.nextInt(aval_vms);
+				VmsProblem.fetchSolDecs(candidate).ins2type[rand_.nextInt(vms + 1)] = rand_.nextInt(aval_vms);
 				problem_.evaluate(candidate);
 
 				if (cmpr.compare(candidate, best) == -1) {
@@ -190,5 +204,90 @@ public class InsTypeCalc {
 			res.add(best);
 		}
 		return res;
+	}
+
+	/**
+	 * Strategy 3: Simulated Annealing
+	 * 
+	 * @throws ClassNotFoundException
+	 */
+	public static SolutionSet simulatedAnnealing(Random rand_, VmsProblem problem_, SolutionSet frame)
+			throws ClassNotFoundException {
+		SolutionSet res = new NonDominatedSolutionList();
+		double[] tuneVec = selfTune(problem_);
+
+		// applied simulated annealing to weighted sum objectives
+		for (int diaI = 0; diaI < frame.size(); diaI++)
+			for (double weightingRatio = 0.0; weightingRatio <= 1.0; weightingRatio++) {
+				Solution s = problem_.deepCopySol(frame.get(diaI));
+				saCore(rand_, problem_, s, weightingRatio, tuneVec);
+				res.add(s);
+			}
+
+		return res;
+	}
+
+	/**
+	 * 
+	 * @param problem_
+	 * @return [obj1_lowerBound, obj1_higherBound, obj2_lowerBoundm
+	 *         obj2_higherBound]
+	 * @throws ClassNotFoundException
+	 */
+	private static double[] selfTune(VmsProblem problem_) throws ClassNotFoundException {
+		double[] res = new double[] { Double.MAX_VALUE, 0, Double.MAX_VALUE, 0 };
+		for (int i = 0; i < 50; i++) {
+			Solution r = new Solution(problem_);
+			problem_.evaluate(r);
+			res[0] = Doubles.min(res[0], r.getObjective(0));
+			res[1] = Doubles.max(res[1], r.getObjective(0));
+			res[2] = Doubles.min(res[2], r.getObjective(1));
+			res[3] = Doubles.max(res[3], r.getObjective(1));
+		}
+		return res;
+	}
+
+	/**
+	 * Core of the annealing simulated algorithms
+	 * 
+	 * @param rand_
+	 * @param problem_
+	 * @param s
+	 * @param tuneVector
+	 * @return Null. set s inside the function
+	 */
+	private static void saCore(Random rand_, VmsProblem problem_, Solution s, double weightingRatio,
+			double[] tuneVector) {
+		int iterNum = 1000;
+		double temp = 10.0;
+		double tempRR = 0.9;
+		int aval_vms = INFRA.getAvalVmTypeNum();
+
+		int[] current = VmsProblem.fetchSolDecs(s).ins2type;
+		int[] neighbor = VmsProblem.fetchSolDecs(s).ins2type;
+		int[] best = VmsProblem.fetchSolDecs(s).ins2type;
+		double en = Double.MAX_VALUE, eb = Double.MAX_VALUE, ec = Double.MAX_VALUE;
+
+		for (int i = 0; i < iterNum; i++) {
+			// creating an neighbor first
+			neighbor[rand_.nextInt(current.length)] = rand_.nextInt(aval_vms);
+			problem_.setSolIns2Type(s, current);
+			en = weightingRatio * (s.getObjective(0) - tuneVector[0]) / (tuneVector[1] - tuneVector[0])
+					+ (1 - weightingRatio) * (s.getObjective(1) - tuneVector[2]) / (tuneVector[3] - tuneVector[2]);
+
+			if (en < eb) {
+				best = neighbor;
+				eb = en;
+			}
+			if (en < ec || Math.exp((ec - en) / temp) > rand_.nextDouble()) {
+				current = neighbor;
+				ec = en;
+			}
+
+			temp *= tempRR;
+		}
+
+		problem_.setSolIns2Type(s, best);
+		problem_.evaluate(s);
 	}
 }

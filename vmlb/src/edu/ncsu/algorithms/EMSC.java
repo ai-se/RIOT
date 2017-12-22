@@ -218,7 +218,7 @@ public class EMSC {
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
 		// for (String model : Infrastructure.models) {
-		for (String model : new String[] { "sci_Montage_1000" }) {
+		for (String model : new String[] { "sci_Montage_100" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("algorithm", "NSGAII"); // TODO change here
 			paras.put("dataset", model);

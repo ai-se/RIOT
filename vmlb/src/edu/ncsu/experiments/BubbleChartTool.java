@@ -47,16 +47,20 @@ public class BubbleChartTool {
 		for (int i = 0; i < ss.size(); i++) {
 			o1[i] = ss.get(i).getObjective(0);
 			o2[i] = ss.get(i).getObjective(1);
-			bubble[i] = 2.0;
+			bubble[i] = 3.0;
 		}
+		try {
+			if (existSeries.contains(series)) { // updating
+				bubbleChart.updateBubbleSeries(series, o1, o2, bubble);
+			} else { // adding
+				bubbleChart.addSeries(series, o1, o2, bubble);
+				existSeries.add(series);
+			}
 
-		if (existSeries.contains(series)) { // updating
-			bubbleChart.updateBubbleSeries(series, o1, o2, bubble);
-		} else { // adding
-			bubbleChart.addSeries(series, o1, o2, bubble);
-			existSeries.add(series);
+			chartPanel.revalidate();
+			chartPanel.repaint();
+		} catch (Exception e) {
+			// Do nothing
 		}
-		chartPanel.revalidate();
-		chartPanel.repaint();
 	}
 }

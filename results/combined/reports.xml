@@ -1,140 +1,140 @@
 <reports>
   <runtimes>
     <model name="Montage_1000">
-      <sec alg="RIOT" algRunTime="102 101"/>
+      <sec alg="RIOT" algRunTime="264 109 144 261 268 273"/>
       <sec alg="HC" algRunTime="23"/>
       <sec alg="EMSC-NSGAII" algRunTime="9377"/>
       <sec alg="EMSC-SPEA2" algRunTime="10379"/>
       <sec alg="EMSC-MOEA/D" algRunTime="10644"/>
     </model>
     <model name="Inspiral_100">
-      <sec alg="RIOT" algRunTime="5 5 6"/>
+      <sec alg="RIOT" algRunTime="9 4 9 5 9 9"/>
       <sec alg="HC" algRunTime="2"/>
       <sec alg="EMSC-NSGAII" algRunTime="175"/>
       <sec alg="EMSC-SPEA2" algRunTime="182"/>
       <sec alg="EMSC-MOEA/D" algRunTime="186"/>
     </model>
     <model name="Montage_25">
-      <sec alg="RIOT" algRunTime="2 2 2 2 2"/>
+      <sec alg="RIOT" algRunTime="2 2 2 2 2 1"/>
       <sec alg="HC" algRunTime="1"/>
       <sec alg="EMSC-NSGAII" algRunTime="32 33 23"/>
       <sec alg="EMSC-SPEA2" algRunTime="33 34 32"/>
       <sec alg="EMSC-MOEA/D" algRunTime="33 33 34"/>
     </model>
     <model name="CyberShake_30">
-      <sec alg="RIOT" algRunTime="1 1 1 1 1"/>
+      <sec alg="RIOT" algRunTime="2 1 2 1 2 2"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="34 34 22"/>
       <sec alg="EMSC-SPEA2" algRunTime="35 35 34"/>
       <sec alg="EMSC-MOEA/D" algRunTime="35 35 35"/>
     </model>
     <model name="Epigenomics_100">
-      <sec alg="RIOT" algRunTime="3 2 3 2 3"/>
+      <sec alg="RIOT" algRunTime="6 2 6 6 6 6"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="153 153 98"/>
       <sec alg="EMSC-SPEA2" algRunTime="154 157 150"/>
       <sec alg="EMSC-MOEA/D" algRunTime="159 161 162"/>
     </model>
     <model name="Sipht_100">
-      <sec alg="RIOT" algRunTime="6 4 4"/>
+      <sec alg="RIOT" algRunTime="10 10 7 10 10 8"/>
       <sec alg="HC" algRunTime="2"/>
       <sec alg="EMSC-NSGAII" algRunTime="168"/>
       <sec alg="EMSC-SPEA2" algRunTime="169"/>
       <sec alg="EMSC-MOEA/D" algRunTime="178"/>
     </model>
     <model name="Inspiral_1000">
-      <sec alg="RIOT" algRunTime="94 92"/>
+      <sec alg="RIOT" algRunTime="240 85 96 132 229 234"/>
       <sec alg="HC" algRunTime="26"/>
       <sec alg="EMSC-NSGAII" algRunTime="9537"/>
       <sec alg="EMSC-SPEA2" algRunTime="9603"/>
       <sec alg="EMSC-MOEA/D" algRunTime=""/>
     </model>
     <model name="CyberShake_100">
-      <sec alg="RIOT" algRunTime="3 3 3 3 3"/>
+      <sec alg="RIOT" algRunTime="8 3 8 7 8 8"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="152 154 98"/>
       <sec alg="EMSC-SPEA2" algRunTime="152 154 148"/>
       <sec alg="EMSC-MOEA/D" algRunTime="162 161 162"/>
     </model>
     <model name="Sipht_60">
-      <sec alg="RIOT" algRunTime="2 2 2 2 2"/>
+      <sec alg="RIOT" algRunTime="4 1 4 4 3 4"/>
       <sec alg="HC" algRunTime="1"/>
       <sec alg="EMSC-NSGAII" algRunTime="75 76 53"/>
       <sec alg="EMSC-SPEA2" algRunTime="76 77 75"/>
       <sec alg="EMSC-MOEA/D" algRunTime="79 78 79"/>
     </model>
     <model name="CyberShake_50">
-      <sec alg="RIOT" algRunTime="1 1 1 1 1"/>
+      <sec alg="RIOT" algRunTime="3 1 3 3 3 3"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="62 63 41"/>
       <sec alg="EMSC-SPEA2" algRunTime="62 63 61"/>
       <sec alg="EMSC-MOEA/D" algRunTime="64 64 64"/>
     </model>
     <model name="Montage_50">
-      <sec alg="RIOT" algRunTime="2 2 2 2 2"/>
+      <sec alg="RIOT" algRunTime="4 4 3 3 1 4"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="61 62 39"/>
       <sec alg="EMSC-SPEA2" algRunTime="62 65 60"/>
       <sec alg="EMSC-MOEA/D" algRunTime="63 65 64"/>
     </model>
     <model name="Montage_100">
-      <sec alg="RIOT" algRunTime="3 3 4 3 4"/>
+      <sec alg="RIOT" algRunTime="8 3 7 7 7 8"/>
       <sec alg="HC" algRunTime="1"/>
       <sec alg="EMSC-NSGAII" algRunTime="151 154 94"/>
       <sec alg="EMSC-SPEA2" algRunTime="152 157 147"/>
       <sec alg="EMSC-MOEA/D" algRunTime="159 161 160"/>
     </model>
     <model name="Inspiral_50">
-      <sec alg="RIOT" algRunTime="1 1 1 1 1"/>
+      <sec alg="RIOT" algRunTime="2 1 3 2 2 2"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="62 62 43"/>
       <sec alg="EMSC-SPEA2" algRunTime="62 64 62"/>
       <sec alg="EMSC-MOEA/D" algRunTime="64 64 65"/>
     </model>
     <model name="CyberShake_1000">
-      <sec alg="RIOT" algRunTime="100 83"/>
+      <sec alg="RIOT" algRunTime="260 107 129 256 263 269"/>
       <sec alg="HC" algRunTime="25"/>
       <sec alg="EMSC-NSGAII" algRunTime="10681"/>
       <sec alg="EMSC-SPEA2" algRunTime="9381"/>
       <sec alg="EMSC-MOEA/D" algRunTime="10398"/>
     </model>
     <model name="Epigenomics_997">
-      <sec alg="RIOT" algRunTime="72 74"/>
+      <sec alg="RIOT" algRunTime="237 91 121 220 233 231"/>
       <sec alg="HC" algRunTime="23"/>
       <sec alg="EMSC-NSGAII" algRunTime="9320"/>
       <sec alg="EMSC-SPEA2" algRunTime="9747"/>
       <sec alg="EMSC-MOEA/D" algRunTime="16974"/>
     </model>
     <model name="Epigenomics_46">
-      <sec alg="RIOT" algRunTime="1 1 1 1 1"/>
+      <sec alg="RIOT" algRunTime="2 1 2 2 3 3"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="57 58 38"/>
       <sec alg="EMSC-SPEA2" algRunTime="59 58 57"/>
       <sec alg="EMSC-MOEA/D" algRunTime="60 60 60"/>
     </model>
     <model name="Sipht_1000">
-      <sec alg="RIOT" algRunTime="92 47 51"/>
+      <sec alg="RIOT" algRunTime="252 86 111 235 239 251"/>
       <sec alg="HC" algRunTime="31"/>
       <sec alg="EMSC-NSGAII" algRunTime="7250"/>
       <sec alg="EMSC-SPEA2" algRunTime="7143"/>
       <sec alg="EMSC-MOEA/D" algRunTime="8105"/>
     </model>
     <model name="Inspiral_30">
-      <sec alg="RIOT" algRunTime="1 1 1 1 1"/>
+      <sec alg="RIOT" algRunTime="1 0 1 1 1 1"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="34 34 23"/>
       <sec alg="EMSC-SPEA2" algRunTime="34 35 34"/>
       <sec alg="EMSC-MOEA/D" algRunTime="36 35 36"/>
     </model>
     <model name="Epigenomics_24">
-      <sec alg="RIOT" algRunTime="1 0 0 0 0"/>
+      <sec alg="RIOT" algRunTime="1 0 1 1 1 1"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="27 27 17"/>
       <sec alg="EMSC-SPEA2" algRunTime="27 28 27"/>
       <sec alg="EMSC-MOEA/D" algRunTime="28 28 28"/>
     </model>
     <model name="Sipht_30">
-      <sec alg="RIOT" algRunTime="1 1 1 1 1"/>
+      <sec alg="RIOT" algRunTime="1 0 1 1 1 1"/>
       <sec alg="HC" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="34 34 23"/>
       <sec alg="EMSC-SPEA2" algRunTime="34 35 33"/>
@@ -143,140 +143,140 @@
   </runtimes>
   <spreads>
     <model name="Montage_1000">
-      <rec alg="RIOT" spread="0.771 0.763"/>
+      <rec alg="RIOT" spread="0.900 0.971 1.014 0.964 1.032 0.963"/>
       <rec alg="HC" spread="0.836"/>
       <rec alg="EMSC-NSGAII" spread="1.047"/>
       <rec alg="EMSC-SPEA2" spread="0.559"/>
       <rec alg="EMSC-MOEA/D" spread="1.000"/>
     </model>
     <model name="Inspiral_100">
-      <rec alg="RIOT" spread="0.709 0.801 0.840"/>
+      <rec alg="RIOT" spread="0.719 0.739 0.639 0.816 0.907 0.677"/>
       <rec alg="HC" spread="0.853"/>
       <rec alg="EMSC-NSGAII" spread="1.094"/>
       <rec alg="EMSC-SPEA2" spread="0.794"/>
       <rec alg="EMSC-MOEA/D" spread="0.788"/>
     </model>
     <model name="Montage_25">
-      <rec alg="RIOT" spread="0.847 0.819 0.834 0.864 0.777"/>
+      <rec alg="RIOT" spread="0.796 0.800 0.846 0.896 0.744 0.761"/>
       <rec alg="HC" spread="0.857"/>
       <rec alg="EMSC-NSGAII" spread="0.926 1.035 0.882"/>
       <rec alg="EMSC-SPEA2" spread="0.530 0.554 0.638"/>
       <rec alg="EMSC-MOEA/D" spread="0.850 0.890 0.764"/>
     </model>
     <model name="CyberShake_30">
-      <rec alg="RIOT" spread="0.883 1.063 0.942 0.921 0.899"/>
+      <rec alg="RIOT" spread="0.956 1.086 0.999 1.114 0.974 1.050"/>
       <rec alg="HC" spread="0.957"/>
       <rec alg="EMSC-NSGAII" spread="0.918 0.911 0.893"/>
       <rec alg="EMSC-SPEA2" spread="0.425 0.537 0.428"/>
       <rec alg="EMSC-MOEA/D" spread="0.823 0.842 0.800"/>
     </model>
     <model name="Epigenomics_100">
-      <rec alg="RIOT" spread="0.995 0.958 0.967 0.996 0.904"/>
+      <rec alg="RIOT" spread="0.718 0.940 0.688 0.614 0.774 0.861"/>
       <rec alg="HC" spread="0.870"/>
       <rec alg="EMSC-NSGAII" spread="0.982 0.827 0.656"/>
       <rec alg="EMSC-SPEA2" spread="0.562 0.522 0.613"/>
       <rec alg="EMSC-MOEA/D" spread="0.785 0.951 0.980"/>
     </model>
     <model name="Sipht_100">
-      <rec alg="RIOT" spread="0.911 0.759 0.787"/>
+      <rec alg="RIOT" spread="0.921 0.888 0.968 0.804 1.076 0.879"/>
       <rec alg="HC" spread="-1.000"/>
       <rec alg="EMSC-NSGAII" spread="1.038"/>
       <rec alg="EMSC-SPEA2" spread="0.851"/>
       <rec alg="EMSC-MOEA/D" spread="0.892"/>
     </model>
     <model name="Inspiral_1000">
-      <rec alg="RIOT" spread="0.723 0.780"/>
+      <rec alg="RIOT" spread="0.914 0.909 0.819 0.896 0.827 0.890"/>
       <rec alg="HC" spread="0.845"/>
       <rec alg="EMSC-NSGAII" spread="1.365"/>
       <rec alg="EMSC-SPEA2" spread="0.922"/>
       <rec alg="EMSC-MOEA/D" spread=""/>
     </model>
     <model name="CyberShake_100">
-      <rec alg="RIOT" spread="0.813 0.826 0.904 0.803 0.938"/>
+      <rec alg="RIOT" spread="1.103 1.171 1.225 1.148 1.086 1.218"/>
       <rec alg="HC" spread="0.873"/>
       <rec alg="EMSC-NSGAII" spread="0.915 1.126 0.832"/>
       <rec alg="EMSC-SPEA2" spread="0.513 0.512 0.627"/>
       <rec alg="EMSC-MOEA/D" spread="0.856 0.879 0.957"/>
     </model>
     <model name="Sipht_60">
-      <rec alg="RIOT" spread="0.944 0.916 0.921 0.957 0.895"/>
+      <rec alg="RIOT" spread="0.891 0.963 0.948 1.013 1.099 0.912"/>
       <rec alg="HC" spread="0.968"/>
       <rec alg="EMSC-NSGAII" spread="0.999 1.104 1.065"/>
       <rec alg="EMSC-SPEA2" spread="0.862 0.777 0.855"/>
       <rec alg="EMSC-MOEA/D" spread="0.893 0.977 0.805"/>
     </model>
     <model name="CyberShake_50">
-      <rec alg="RIOT" spread="0.962 0.893 0.828 0.824 0.958"/>
+      <rec alg="RIOT" spread="1.032 1.116 1.059 0.811 0.950 1.134"/>
       <rec alg="HC" spread="0.862"/>
       <rec alg="EMSC-NSGAII" spread="1.011 0.987 0.950"/>
       <rec alg="EMSC-SPEA2" spread="0.426 0.347 0.592"/>
       <rec alg="EMSC-MOEA/D" spread="0.870 0.646 0.741"/>
     </model>
     <model name="Montage_50">
-      <rec alg="RIOT" spread="0.840 0.918 0.873 0.810 0.706"/>
+      <rec alg="RIOT" spread="0.756 0.788 0.713 0.823 0.655 0.754"/>
       <rec alg="HC" spread="0.906"/>
       <rec alg="EMSC-NSGAII" spread="1.057 1.066 1.058"/>
       <rec alg="EMSC-SPEA2" spread="0.629 0.629 0.443"/>
       <rec alg="EMSC-MOEA/D" spread="0.784 0.736 0.812"/>
     </model>
     <model name="Montage_100">
-      <rec alg="RIOT" spread="0.860 0.786 0.845 0.901 0.750"/>
+      <rec alg="RIOT" spread="0.979 0.920 0.848 0.761 0.841 0.879"/>
       <rec alg="HC" spread="0.829"/>
       <rec alg="EMSC-NSGAII" spread="1.233 1.293 1.036"/>
       <rec alg="EMSC-SPEA2" spread="0.810 0.813 0.768"/>
       <rec alg="EMSC-MOEA/D" spread="0.628 0.757 0.725"/>
     </model>
     <model name="Inspiral_50">
-      <rec alg="RIOT" spread="1.028 0.805 0.970 0.847 0.954"/>
+      <rec alg="RIOT" spread="0.857 0.980 0.959 0.946 0.971 0.862"/>
       <rec alg="HC" spread="-1.000"/>
       <rec alg="EMSC-NSGAII" spread="1.331 1.146 0.926"/>
       <rec alg="EMSC-SPEA2" spread="0.851 0.665 0.615"/>
       <rec alg="EMSC-MOEA/D" spread="0.857 0.816 0.650"/>
     </model>
     <model name="CyberShake_1000">
-      <rec alg="RIOT" spread="0.888 0.869"/>
+      <rec alg="RIOT" spread="0.777 0.915 0.750 0.804 0.882 0.887"/>
       <rec alg="HC" spread="0.852"/>
       <rec alg="EMSC-NSGAII" spread="1.191"/>
       <rec alg="EMSC-SPEA2" spread="0.555"/>
       <rec alg="EMSC-MOEA/D" spread="1.051"/>
     </model>
     <model name="Epigenomics_997">
-      <rec alg="RIOT" spread="0.807 0.766"/>
+      <rec alg="RIOT" spread="0.532 0.665 0.692 0.605 0.635 0.621"/>
       <rec alg="HC" spread="0.818"/>
       <rec alg="EMSC-NSGAII" spread="0.950"/>
       <rec alg="EMSC-SPEA2" spread="0.544"/>
       <rec alg="EMSC-MOEA/D" spread="0.730"/>
     </model>
     <model name="Epigenomics_46">
-      <rec alg="RIOT" spread="0.884 0.843 0.941 1.016 0.819"/>
+      <rec alg="RIOT" spread="0.783 0.819 0.837 0.845 0.746 0.769"/>
       <rec alg="HC" spread="0.911"/>
       <rec alg="EMSC-NSGAII" spread="0.907 0.894 0.845"/>
       <rec alg="EMSC-SPEA2" spread="0.548 0.819 0.832"/>
       <rec alg="EMSC-MOEA/D" spread="0.754 1.017 0.890"/>
     </model>
     <model name="Sipht_1000">
-      <rec alg="RIOT" spread="0.968 0.966 0.995"/>
+      <rec alg="RIOT" spread="0.975 0.798 0.990 1.049 0.947 1.095"/>
       <rec alg="HC" spread="-1.000"/>
       <rec alg="EMSC-NSGAII" spread="1.277"/>
       <rec alg="EMSC-SPEA2" spread="0.794"/>
       <rec alg="EMSC-MOEA/D" spread="0.839"/>
     </model>
     <model name="Inspiral_30">
-      <rec alg="RIOT" spread="0.940 0.861 1.064 1.075 0.845"/>
+      <rec alg="RIOT" spread="0.887 1.036 0.879 0.852 0.853 0.968"/>
       <rec alg="HC" spread="0.896"/>
       <rec alg="EMSC-NSGAII" spread="1.047 0.872 1.072"/>
       <rec alg="EMSC-SPEA2" spread="0.707 0.691 0.926"/>
       <rec alg="EMSC-MOEA/D" spread="0.872 0.986 0.790"/>
     </model>
     <model name="Epigenomics_24">
-      <rec alg="RIOT" spread="1.082 0.923 1.010 0.891 0.963"/>
+      <rec alg="RIOT" spread="1.122 0.940 0.863 0.983 0.853 0.801"/>
       <rec alg="HC" spread="-1.000"/>
       <rec alg="EMSC-NSGAII" spread="0.794 0.958 0.792"/>
       <rec alg="EMSC-SPEA2" spread="0.775 0.921 0.789"/>
       <rec alg="EMSC-MOEA/D" spread="0.861 0.673 1.066"/>
     </model>
     <model name="Sipht_30">
-      <rec alg="RIOT" spread="0.960 0.968 0.948 1.119 0.917"/>
+      <rec alg="RIOT" spread="1.161 1.112 1.191 1.266 1.281 1.239"/>
       <rec alg="HC" spread="-1.000"/>
       <rec alg="EMSC-NSGAII" spread="0.895 0.819 1.035"/>
       <rec alg="EMSC-SPEA2" spread="0.706 0.640 0.673"/>
@@ -285,140 +285,140 @@
   </spreads>
   <igds>
     <model name="Montage_1000">
-      <rec alg="RIOT" igd="0.142 0.146"/>
+      <rec alg="RIOT" igd="0.088 0.092 0.078 0.084 0.092 0.101"/>
       <rec alg="HC" igd="0.360"/>
       <rec alg="EMSC-NSGAII" igd="0.003"/>
       <rec alg="EMSC-SPEA2" igd="0.022"/>
       <rec alg="EMSC-MOEA/D" igd="0.150"/>
     </model>
     <model name="Inspiral_100">
-      <rec alg="RIOT" igd="0.131 0.157 0.140"/>
+      <rec alg="RIOT" igd="0.030 0.034 0.046 0.038 0.041 0.042"/>
       <rec alg="HC" igd="0.278"/>
       <rec alg="EMSC-NSGAII" igd="0.015"/>
       <rec alg="EMSC-SPEA2" igd="0.035"/>
       <rec alg="EMSC-MOEA/D" igd="0.092"/>
     </model>
     <model name="Montage_25">
-      <rec alg="RIOT" igd="0.103 0.185 0.152 0.098 0.122"/>
+      <rec alg="RIOT" igd="0.047 0.046 0.043 0.049 0.045 0.048"/>
       <rec alg="HC" igd="0.415"/>
       <rec alg="EMSC-NSGAII" igd="0.019 0.024 0.043"/>
       <rec alg="EMSC-SPEA2" igd="0.064 0.069 0.073"/>
       <rec alg="EMSC-MOEA/D" igd="0.091 0.095 0.127"/>
     </model>
     <model name="CyberShake_30">
-      <rec alg="RIOT" igd="0.176 0.169 0.171 0.190 0.191"/>
+      <rec alg="RIOT" igd="0.140 0.155 0.152 0.150 0.139 0.147"/>
       <rec alg="HC" igd="0.539"/>
       <rec alg="EMSC-NSGAII" igd="0.022 0.016 0.030"/>
       <rec alg="EMSC-SPEA2" igd="0.038 0.054 0.052"/>
       <rec alg="EMSC-MOEA/D" igd="0.104 0.094 0.112"/>
     </model>
     <model name="Epigenomics_100">
-      <rec alg="RIOT" igd="0.114 0.124 0.113 0.114 0.092"/>
+      <rec alg="RIOT" igd="0.035 0.040 0.047 0.043 0.057 0.027"/>
       <rec alg="HC" igd="0.235"/>
       <rec alg="EMSC-NSGAII" igd="0.054 0.050 0.022"/>
       <rec alg="EMSC-SPEA2" igd="0.031 0.034 0.040"/>
       <rec alg="EMSC-MOEA/D" igd="0.185 0.182 0.191"/>
     </model>
     <model name="Sipht_100">
-      <rec alg="RIOT" igd="0.083 0.118 0.102"/>
+      <rec alg="RIOT" igd="0.074 0.061 0.063 0.075 0.059 0.061"/>
       <rec alg="HC" igd="0.366"/>
       <rec alg="EMSC-NSGAII" igd="0.025"/>
       <rec alg="EMSC-SPEA2" igd="0.051"/>
       <rec alg="EMSC-MOEA/D" igd="0.147"/>
     </model>
     <model name="Inspiral_1000">
-      <rec alg="RIOT" igd="0.151 0.148"/>
+      <rec alg="RIOT" igd="0.044 0.046 0.046 0.048 0.045 0.050"/>
       <rec alg="HC" igd="0.206"/>
       <rec alg="EMSC-NSGAII" igd="0.005"/>
       <rec alg="EMSC-SPEA2" igd="0.021"/>
       <rec alg="EMSC-MOEA/D" igd=""/>
     </model>
     <model name="CyberShake_100">
-      <rec alg="RIOT" igd="0.090 0.095 0.111 0.089 0.093"/>
+      <rec alg="RIOT" igd="0.098 0.113 0.119 0.097 0.093 0.150"/>
       <rec alg="HC" igd="0.398"/>
       <rec alg="EMSC-NSGAII" igd="0.030 0.036 0.027"/>
       <rec alg="EMSC-SPEA2" igd="0.051 0.044 0.064"/>
       <rec alg="EMSC-MOEA/D" igd="0.180 0.171 0.143"/>
     </model>
     <model name="Sipht_60">
-      <rec alg="RIOT" igd="0.080 0.102 0.123 0.094 0.109"/>
+      <rec alg="RIOT" igd="0.069 0.083 0.084 0.077 0.081 0.062"/>
       <rec alg="HC" igd="0.525"/>
       <rec alg="EMSC-NSGAII" igd="0.035 0.043 0.025"/>
       <rec alg="EMSC-SPEA2" igd="0.092 0.045 0.066"/>
       <rec alg="EMSC-MOEA/D" igd="0.171 0.135 0.197"/>
     </model>
     <model name="CyberShake_50">
-      <rec alg="RIOT" igd="0.113 0.209 0.140 0.115 0.136"/>
+      <rec alg="RIOT" igd="0.111 0.110 0.094 0.113 0.110 0.100"/>
       <rec alg="HC" igd="0.432"/>
       <rec alg="EMSC-NSGAII" igd="0.018 0.024 0.023"/>
       <rec alg="EMSC-SPEA2" igd="0.052 0.046 0.089"/>
       <rec alg="EMSC-MOEA/D" igd="0.177 0.168 0.175"/>
     </model>
     <model name="Montage_50">
-      <rec alg="RIOT" igd="0.101 0.100 0.091 0.081 0.081"/>
+      <rec alg="RIOT" igd="0.040 0.038 0.038 0.038 0.045 0.039"/>
       <rec alg="HC" igd="0.231"/>
       <rec alg="EMSC-NSGAII" igd="0.061 0.060 0.033"/>
       <rec alg="EMSC-SPEA2" igd="0.065 0.045 0.041"/>
       <rec alg="EMSC-MOEA/D" igd="0.111 0.094 0.125"/>
     </model>
     <model name="Montage_100">
-      <rec alg="RIOT" igd="0.187 0.127 0.129 0.147 0.124"/>
+      <rec alg="RIOT" igd="0.037 0.035 0.040 0.039 0.045 0.034"/>
       <rec alg="HC" igd="0.275"/>
       <rec alg="EMSC-NSGAII" igd="0.028 0.055 0.012"/>
       <rec alg="EMSC-SPEA2" igd="0.080 0.089 0.074"/>
       <rec alg="EMSC-MOEA/D" igd="0.219 0.083 0.110"/>
     </model>
     <model name="Inspiral_50">
-      <rec alg="RIOT" igd="0.099 0.097 0.082 0.093 0.088"/>
+      <rec alg="RIOT" igd="0.047 0.044 0.047 0.049 0.036 0.050"/>
       <rec alg="HC" igd="0.238"/>
       <rec alg="EMSC-NSGAII" igd="0.019 0.015 0.057"/>
       <rec alg="EMSC-SPEA2" igd="0.054 0.044 0.061"/>
       <rec alg="EMSC-MOEA/D" igd="0.149 0.192 0.165"/>
     </model>
     <model name="CyberShake_1000">
-      <rec alg="RIOT" igd="0.108 0.102"/>
+      <rec alg="RIOT" igd="0.028 0.033 0.039 0.039 0.060 0.038"/>
       <rec alg="HC" igd="0.209"/>
       <rec alg="EMSC-NSGAII" igd="0.017"/>
       <rec alg="EMSC-SPEA2" igd="0.025"/>
       <rec alg="EMSC-MOEA/D" igd="0.200"/>
     </model>
     <model name="Epigenomics_997">
-      <rec alg="RIOT" igd="0.106 0.127"/>
+      <rec alg="RIOT" igd="0.075 0.088 0.070 0.096 0.070 0.071"/>
       <rec alg="HC" igd="0.205"/>
       <rec alg="EMSC-NSGAII" igd="0.030"/>
       <rec alg="EMSC-SPEA2" igd="0.070"/>
       <rec alg="EMSC-MOEA/D" igd="0.068"/>
     </model>
     <model name="Epigenomics_46">
-      <rec alg="RIOT" igd="0.145 0.177 0.171 0.188 0.143"/>
+      <rec alg="RIOT" igd="0.119 0.123 0.062 0.111 0.053 0.052"/>
       <rec alg="HC" igd="0.492"/>
       <rec alg="EMSC-NSGAII" igd="0.050 0.046 0.123"/>
       <rec alg="EMSC-SPEA2" igd="0.066 0.180 0.121"/>
       <rec alg="EMSC-MOEA/D" igd="0.173 0.173 0.190"/>
     </model>
     <model name="Sipht_1000">
-      <rec alg="RIOT" igd="0.172 0.165 0.172"/>
+      <rec alg="RIOT" igd="0.086 0.052 0.045 0.061 0.048 0.083"/>
       <rec alg="HC" igd="0.274"/>
       <rec alg="EMSC-NSGAII" igd="0.017"/>
       <rec alg="EMSC-SPEA2" igd="0.059"/>
       <rec alg="EMSC-MOEA/D" igd="0.091"/>
     </model>
     <model name="Inspiral_30">
-      <rec alg="RIOT" igd="0.123 0.115 0.133 0.080 0.104"/>
+      <rec alg="RIOT" igd="0.062 0.061 0.060 0.056 0.064 0.068"/>
       <rec alg="HC" igd="0.377"/>
       <rec alg="EMSC-NSGAII" igd="0.017 0.016 0.018"/>
       <rec alg="EMSC-SPEA2" igd="0.097 0.042 0.073"/>
       <rec alg="EMSC-MOEA/D" igd="0.166 0.205 0.178"/>
     </model>
     <model name="Epigenomics_24">
-      <rec alg="RIOT" igd="0.170 0.136 0.165 0.108 0.100"/>
+      <rec alg="RIOT" igd="0.057 0.057 0.087 0.115 0.069 0.087"/>
       <rec alg="HC" igd="0.445"/>
       <rec alg="EMSC-NSGAII" igd="0.022 0.022 0.023"/>
       <rec alg="EMSC-SPEA2" igd="0.039 0.076 0.055"/>
       <rec alg="EMSC-MOEA/D" igd="0.162 0.184 0.148"/>
     </model>
     <model name="Sipht_30">
-      <rec alg="RIOT" igd="0.044 0.044 0.043 0.025 0.045"/>
+      <rec alg="RIOT" igd="0.038 0.045 0.053 0.043 0.051 0.048"/>
       <rec alg="HC" igd="0.590"/>
       <rec alg="EMSC-NSGAII" igd="0.017 0.019 0.017"/>
       <rec alg="EMSC-SPEA2" igd="0.034 0.028 0.067"/>
@@ -427,140 +427,140 @@
   </igds>
   <hypervolumes>
     <model name="Montage_1000">
-      <rec alg="RIOT" hypervolume="0.684 0.689"/>
+      <rec alg="RIOT" hypervolume="0.723 0.713 0.743 0.723 0.716 0.707"/>
       <rec alg="HC" hypervolume="0.477"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.840"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.833"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.808"/>
     </model>
     <model name="Inspiral_100">
-      <rec alg="RIOT" hypervolume="0.514 0.495 0.484"/>
+      <rec alg="RIOT" hypervolume="0.701 0.691 0.701 0.685 0.703 0.688"/>
       <rec alg="HC" hypervolume="0.337"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.731"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.712"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.602"/>
     </model>
     <model name="Montage_25">
-      <rec alg="RIOT" hypervolume="0.733 0.711 0.745 0.769 0.717"/>
+      <rec alg="RIOT" hypervolume="0.786 0.796 0.777 0.789 0.795 0.789"/>
       <rec alg="HC" hypervolume="0.421"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.822 0.827 0.823"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.808 0.802 0.773"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.767 0.702 0.672"/>
     </model>
     <model name="CyberShake_30">
-      <rec alg="RIOT" hypervolume="0.645 0.647 0.640 0.634 0.635"/>
+      <rec alg="RIOT" hypervolume="0.654 0.652 0.643 0.648 0.658 0.652"/>
       <rec alg="HC" hypervolume="0.310"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.821 0.827 0.830"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.814 0.815 0.809"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.653 0.665 0.680"/>
     </model>
     <model name="Epigenomics_100">
-      <rec alg="RIOT" hypervolume="0.595 0.583 0.569 0.554 0.589"/>
+      <rec alg="RIOT" hypervolume="0.744 0.757 0.741 0.753 0.750 0.756"/>
       <rec alg="HC" hypervolume="0.445"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.700 0.707 0.726"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.713 0.696 0.690"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.630 0.659 0.661"/>
     </model>
     <model name="Sipht_100">
-      <rec alg="RIOT" hypervolume="0.651 0.648 0.712"/>
+      <rec alg="RIOT" hypervolume="0.680 0.674 0.688 0.659 0.688 0.685"/>
       <rec alg="HC" hypervolume="0.489"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.775"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.781"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.675"/>
     </model>
     <model name="Inspiral_1000">
-      <rec alg="RIOT" hypervolume="0.635 0.630"/>
+      <rec alg="RIOT" hypervolume="0.819 0.807 0.767 0.826 0.829 0.817"/>
       <rec alg="HC" hypervolume="0.590"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.813"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.775"/>
       <rec alg="EMSC-MOEA/D" hypervolume=""/>
     </model>
     <model name="CyberShake_100">
-      <rec alg="RIOT" hypervolume="0.632 0.630 0.630 0.633 0.627"/>
+      <rec alg="RIOT" hypervolume="0.625 0.632 0.634 0.633 0.635 0.619"/>
       <rec alg="HC" hypervolume="0.339"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.741 0.743 0.744"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.735 0.726 0.724"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.573 0.577 0.622"/>
     </model>
     <model name="Sipht_60">
-      <rec alg="RIOT" hypervolume="0.729 0.721 0.734 0.735 0.745"/>
+      <rec alg="RIOT" hypervolume="0.734 0.701 0.710 0.748 0.725 0.732"/>
       <rec alg="HC" hypervolume="0.237"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.795 0.788 0.809"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.796 0.800 0.786"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.623 0.707 0.585"/>
     </model>
     <model name="CyberShake_50">
-      <rec alg="RIOT" hypervolume="0.668 0.667 0.667 0.683 0.657"/>
+      <rec alg="RIOT" hypervolume="0.659 0.681 0.676 0.673 0.671 0.680"/>
       <rec alg="HC" hypervolume="0.369"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.787 0.781 0.784"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.770 0.762 0.754"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.514 0.523 0.508"/>
     </model>
     <model name="Montage_50">
-      <rec alg="RIOT" hypervolume="0.679 0.685 0.762 0.706 0.702"/>
+      <rec alg="RIOT" hypervolume="0.828 0.817 0.825 0.826 0.831 0.824"/>
       <rec alg="HC" hypervolume="0.502"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.860 0.859 0.862"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.856 0.851 0.801"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.789 0.721 0.706"/>
     </model>
     <model name="Montage_100">
-      <rec alg="RIOT" hypervolume="0.689 0.680 0.681 0.690 0.701"/>
+      <rec alg="RIOT" hypervolume="0.820 0.808 0.791 0.792 0.790 0.808"/>
       <rec alg="HC" hypervolume="0.545"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.856 0.851 0.855"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.833 0.829 0.844"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.775 0.737 0.745"/>
     </model>
     <model name="Inspiral_50">
-      <rec alg="RIOT" hypervolume="0.606 0.596 0.607 0.594 0.616"/>
+      <rec alg="RIOT" hypervolume="0.719 0.710 0.719 0.701 0.735 0.707"/>
       <rec alg="HC" hypervolume="0.449"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.782 0.779 0.800"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.771 0.687 0.707"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.616 0.570 0.592"/>
     </model>
     <model name="CyberShake_1000">
-      <rec alg="RIOT" hypervolume="0.720 0.732"/>
+      <rec alg="RIOT" hypervolume="0.801 0.801 0.791 0.783 0.808 0.794"/>
       <rec alg="HC" hypervolume="0.631"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.819"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.810"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.799"/>
     </model>
     <model name="Epigenomics_997">
-      <rec alg="RIOT" hypervolume="0.571 0.573"/>
+      <rec alg="RIOT" hypervolume="0.804 0.813 0.790 0.803 0.803 0.797"/>
       <rec alg="HC" hypervolume="0.487"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.686"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.670"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.658"/>
     </model>
     <model name="Epigenomics_46">
-      <rec alg="RIOT" hypervolume="0.513 0.556 0.544 0.516 0.559"/>
+      <rec alg="RIOT" hypervolume="0.690 0.698 0.686 0.687 0.684 0.686"/>
       <rec alg="HC" hypervolume="0.145"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.683 0.677 0.686"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.649 0.691 0.682"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.615 0.598 0.569"/>
     </model>
     <model name="Sipht_1000">
-      <rec alg="RIOT" hypervolume="0.572 0.577 0.572"/>
+      <rec alg="RIOT" hypervolume="0.638 0.705 0.716 0.685 0.702 0.641"/>
       <rec alg="HC" hypervolume="0.470"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.773"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.708"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.735"/>
     </model>
     <model name="Inspiral_30">
-      <rec alg="RIOT" hypervolume="0.639 0.651 0.656 0.657 0.623"/>
+      <rec alg="RIOT" hypervolume="0.723 0.727 0.741 0.739 0.713 0.727"/>
       <rec alg="HC" hypervolume="0.357"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.793 0.797 0.802"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.803 0.726 0.756"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.625 0.625 0.609"/>
     </model>
     <model name="Epigenomics_24">
-      <rec alg="RIOT" hypervolume="0.681 0.729 0.668 0.689 0.696"/>
+      <rec alg="RIOT" hypervolume="0.763 0.748 0.727 0.739 0.764 0.739"/>
       <rec alg="HC" hypervolume="0.402"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.786 0.784 0.781"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.789 0.769 0.785"/>
       <rec alg="EMSC-MOEA/D" hypervolume="0.576 0.587 0.600"/>
     </model>
     <model name="Sipht_30">
-      <rec alg="RIOT" hypervolume="0.713 0.714 0.692 0.719 0.719"/>
+      <rec alg="RIOT" hypervolume="0.713 0.712 0.701 0.722 0.722 0.711"/>
       <rec alg="HC" hypervolume="0.240"/>
       <rec alg="EMSC-NSGAII" hypervolume="0.749 0.745 0.750"/>
       <rec alg="EMSC-SPEA2" hypervolume="0.746 0.748 0.726"/>

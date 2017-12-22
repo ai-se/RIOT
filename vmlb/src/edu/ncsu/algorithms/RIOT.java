@@ -159,6 +159,9 @@ class AlgRiot extends Algorithm {
 		case "hc": // hill climbing
 			p = InsTypeCalc.hillClimb(rand_, problem_, frame);
 			break;
+		case "sa": // simulated annealing
+			p = InsTypeCalc.simulatedAnnealing(rand_, problem_, frame);
+			break;
 		default:
 			System.err.println("Invalid input " + this.getInputParameter("variant"));
 			System.exit(-1);
@@ -195,7 +198,7 @@ public class RIOT {
 	 * edu.ncsu.experiments
 	 */
 	public static void main(String[] args) throws JMException, ClassNotFoundException {
-		for (String model : new String[] { "sci_CyberShake_100" }) {
+		for (String model : new String[] { "sci_CyberShake_1000" }) {
 			HashMap<String, Object> paras = new HashMap<String, Object>();
 			paras.put("dataset", model);
 			paras.put("seed", System.currentTimeMillis());
@@ -204,7 +207,11 @@ public class RIOT {
 			RIOT runner = new RIOT();
 			SolutionSet res = runner.executeRIOT(paras);
 			System.out.println("EXEC TIME = " + (System.currentTimeMillis() - start_time) / 1000);
-			BubbleChartTool.showFrontier("org", res);
+			BubbleChartTool.showFrontier("riot", res);
+
+			paras.put("variant", "sa");
+			res = runner.executeRIOT(paras);
+			BubbleChartTool.showFrontier("sa", res);
 		}
 	}
 }
