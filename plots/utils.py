@@ -45,107 +45,24 @@ def read_all_data():
     currentExpDatas = list()
     newe = None
 
-    # Read all NSGAII results
-    with open("../results/emsc-nsgaii.txt", 'r') as f:
-        content = f.read()
-        for line in content.split('\n'):
-            if line.startswith('#'):
-                if newe:
-                    currentExpDatas.append(newe)
-                continue
-            if line.startswith('*'):
-                d = line.split(' ')
-                newe = Exp('EMSC-NSGAII', d[1], int(d[2]))
-                continue
-            if len(line) == 0:
-                continue
-            os = line.split(' ')
-            newe.add_obj(float(os[0]), float(os[1]))
-
-    # Read all SPEA2 results
-    with open("../results/emsc-spea2.txt", 'r') as f:
-        content = f.read()
-        for line in content.split('\n'):
-            if line.startswith('#'):
-                if newe:
-                    currentExpDatas.append(newe)
-                continue
-            if line.startswith('*'):
-                d = line.split(' ')
-                newe = Exp('EMSC-SPEA2', d[1], int(d[2]))
-                continue
-            if len(line) == 0:
-                continue
-            os = line.split(' ')
-            newe.add_obj(float(os[0]), float(os[1]))
-
-    # Read all MOEAD results
-    with open("../results/emsc-moead.txt", 'r') as f:
-        content = f.read()
-        for line in content.split('\n'):
-            if line.startswith('#'):
-                if newe:
-                    currentExpDatas.append(newe)
-                continue
-            if line.startswith('*'):
-                d = line.split(' ')
-                newe = Exp('EMSC-MOEA/D', d[1], int(d[2]))
-                continue
-            if len(line) == 0:
-                continue
-            os = line.split(' ')
-            newe.add_obj(float(os[0]), float(os[1]))
-
-    # # Read all MOHEFT results
-    # with open("../results/moheft.txt", 'r') as f:
-    #     content = f.read()
-    #     for line in content.split('\n'):
-    #         if line.startswith('#'):
-    #             if newe:
-    #                 currentExpDatas.append(newe)
-    #             continue
-    #         if line.startswith('*'):
-    #             d = line.split(' ')
-    #             newe = Exp('MOHEFT', d[1], int(d[2]))
-    #             continue
-    #         if len(line) == 0:
-    #             continue
-    #         os = line.split(' ')
-    #         newe.add_obj(float(os[0]), float(os[1]))
-
-    # Read all RIOT results
-    with open("../results/riot.txt", 'r') as f:
-        content = f.read()
-        for line in content.split('\n'):
-            if line.startswith('#'):
-                if newe:
-                    currentExpDatas.append(newe)
-                continue
-            if line.startswith('*'):
-                d = line.split(' ')
-                newe = Exp('RIOT', d[1], int(d[2]))
-                continue
-            if len(line) == 0:
-                continue
-            os = line.split(' ')
-            newe.add_obj(float(os[0]), float(os[1]))
-
-    # Read all RIOT-HC results
-    with open("../results/riotHc.txt", 'r') as f:
-        content = f.read()
-        for line in content.split('\n'):
-            if line.startswith('#'):
-                if newe:
-                    currentExpDatas.append(newe)
-                continue
-            if line.startswith('*'):
-                d = line.split(' ')
-                newe = Exp('HC', d[1], int(d[2]))
-                continue
-            if len(line) == 0:
-                continue
-            os = line.split(' ')
-            newe.add_obj(float(os[0]), float(os[1]))
+    for fileName, algName in zip(
+            ['emsc-nsgaii.txt', 'emsc-spea2.txt', 'emsc-moead.txt', 'riot.txt', 'riotHc.txt', 'riotSa.txt'],
+            ['EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'RIOT', 'HC', 'SA']):
+        with open("../results/" + fileName, 'r') as f:
+            content = f.read()
+            for line in content.split('\n'):
+                if line.startswith('#'):
+                    if newe:
+                        currentExpDatas.append(newe)
+                    continue
+                if line.startswith('*'):
+                    d = line.split(' ')
+                    newe = Exp(algName, d[1], int(d[2]))
+                    continue
+                if len(line) == 0:
+                    continue
+                os = line.split(' ')
+                newe.add_obj(float(os[0]), float(os[1]))
 
     # # Read all Sanity Check results
     # with open("../results/sanity.txt", 'r') as f:

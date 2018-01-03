@@ -223,7 +223,7 @@ public class InsTypeCalc {
 				saCore(rand_, problem_, s, weightingRatio, tuneVec);
 				res.add(s);
 			}
-
+		
 		return res;
 	}
 

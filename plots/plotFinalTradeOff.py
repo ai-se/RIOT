@@ -41,10 +41,10 @@ def jitter(x, y, drawed):
 
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
-algs = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'HC']  # pls put MOHEFT at the end
+algs = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'HC', 'SA']  # pls put MOHEFT at the end
 colors = ['darkgreen', 'red', 'blue', 'darkmagenta',
-          'orange']  # https://matplotlib.org/examples/color/named_colors.html
-markers = ['d', 's', 'x', 'p', '^']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
+          'orange', 'black']  # https://matplotlib.org/examples/color/named_colors.html
+markers = ['d', 's', 'x', 'p', '^', '1']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
 
 for model in models:
     plt.clf()
