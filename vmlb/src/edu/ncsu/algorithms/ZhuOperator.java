@@ -139,6 +139,7 @@ class ZhuCrossover extends Crossover {
 	}
 }
 
+
 class ZhuMutation extends Mutation {
 	private static final long serialVersionUID = 3956833626877416282L;
 	private double mutationProbability_;

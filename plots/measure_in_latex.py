@@ -28,11 +28,10 @@ import xml.etree.ElementTree as ET
 import numpy
 import sys
 import pdb
-import debug
 from scipy.stats import ttest_ind
 import scipy
 
-algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'SANITY']
+algorithms = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'SA', 'HC']
 modelref = ['Montage', 'Epigenomics', 'Inspiral', 'CyberShake', 'Sipht']
 
 
@@ -47,7 +46,7 @@ def get_data_by_tag(tag):
 
 
 def get_runtime_csv():
-    algorithms = ['SWAY', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']
+    algorithms = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']
 
     # f1 = open('../results/combined/runtime.csv', 'w+')
     f1 = sys.stdout
@@ -176,7 +175,7 @@ def rq2_in_latex():
             hvx = [i for i in d.getchildren() if i.get('alg') == alg][0].get('hypervolume').split(' ')
             hvx = [float(i) for i in hvx]
             hvr.append(median(hvx))
-            if alg == 'SWAY':
+            if alg == 'RIOT':
                 q75, q25 = numpy.percentile(hvx, [75, 25])
                 iqrh = q75 - q25
                 iqrh = max(iqrh, .01)
@@ -199,7 +198,7 @@ def rq2_in_latex():
             spx = [float(i) for i in spx]
             spr.append(median(spx))
 
-            if alg == 'SWAY':
+            if alg == 'RIOT':
                 q75, q25 = numpy.percentile(spr, [75, 25])
                 iqrs = q75 - q25
                 iqrs = max(iqrs, .01)
@@ -219,7 +218,7 @@ def rq2_in_latex():
             ix = [i for i in d.getchildren() if i.get('alg') == alg][0].get('igd').split(' ')
             ix = [float(i) for i in ix]
             ir.append(median(ix))
-            if alg == 'SWAY':
+            if alg == 'RIOT':
                 q75, q25 = numpy.percentile(ix, [75, 25])
                 iqri = q75 - q25
                 iqri = max(iqri, .01)
@@ -231,19 +230,22 @@ def rq2_in_latex():
         # tmp_i = [str(round(i / ir[-1], 2)) for i in ir[:-1]]
         # ir = tmp_i
         ir = [str(round(i, 2)) for i in ir]
-
+        # pdb.set_trace()
         printseq = [model.replace('_', ' '),
                     '\\s' + ('s' if unforn1 else '') + 'val{%s}{%s}' % (hvr[0], iqrh), '/'.join(hvr[1:4]), hvr[4],
+                    hvr[5],
                     '\\s' + ('s' if unforn2 else '') + 'val{%s}{%s}' % (spr[0], iqrs),
-                    '/'.join(spr[1:4]), spr[4],
+                    '/'.join(spr[1:4]), spr[4], spr[5],
                     '\\s' + ('s' if unforn3 else '') + 'val{%s}{%s}' % (ir[0], iqri),
-                    '/'.join(ir[1:4]), ir[4]]
+                    '/'.join(ir[1:4]), ir[4], ir[5]]
 
         print(' & '.join(printseq) + '\\\\')
         if models.index(model) % 4 == 3:
-            print('\\midrule')
+            print('\\hline')
 
 
 if __name__ == '__main__':
     # get_runtime_csv()
+    import debug
+
     rq2_in_latex()

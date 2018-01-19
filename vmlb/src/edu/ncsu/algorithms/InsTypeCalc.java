@@ -150,14 +150,25 @@ public class InsTypeCalc {
 		return res;
 	}
 
+	// /*
+	// * Using Euclidean distance
+	// */
+	// private static int dist(int[] a) {
+	// int res = 0;
+	// for (int i : a)
+	// res += i * i;
+	// return (int) Math.sqrt(res);
+	// }
+
 	/*
-	 * Using Euclidean distance
+	 * Using Mahantan distance
 	 */
+
 	private static int dist(int[] a) {
 		int res = 0;
 		for (int i : a)
-			res += i * i;
-		return (int) Math.sqrt(res);
+			res += Math.abs(i);
+		return res;
 	}
 
 	/*
@@ -223,7 +234,7 @@ public class InsTypeCalc {
 				saCore(rand_, problem_, s, weightingRatio, tuneVec);
 				res.add(s);
 			}
-		
+
 		return res;
 	}
 
