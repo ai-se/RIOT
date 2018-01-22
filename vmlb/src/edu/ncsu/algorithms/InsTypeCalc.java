@@ -1,5 +1,8 @@
 package edu.ncsu.algorithms;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -121,11 +124,29 @@ public class InsTypeCalc {
 
 			} // for i in random
 
-			Ranking rnk = new Ranking(randoms.union(anchors));
+			SolutionSet all = randoms.union(anchors);
+			Ranking rnk = new Ranking(all);
 			SolutionSet ests = rnk.getSubfront(0);
 			for (int i = 0; i < ests.size(); i++) {
 				problem_.evaluate(ests.get(i));
 				res.add(ests.get(i));
+			}
+			// check order preserving
+			System.err.println("i am running");
+			try {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(
+						"../results/objCmpr/" + problem_.getName() + ".txt", true));
+				for (int i = 0; i < all.size(); i++) {
+					Solution s = all.get(i);
+					writer.write("guess " + s.getObjective(0) + " " + s.getObjective(1));
+					problem_.evaluate(s);
+					writer.write("\t actual " + s.getObjective(0) + " " + s.getObjective(1) + "\n");
+				}
+				writer.write("===\n");
+				writer.flush();
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
 		}

@@ -113,7 +113,7 @@ public class VmsProblem extends Problem {
 	public Map<Integer, Double> lstTaskExp;
 
 	private DAG dag;
-	private String name;
+//	private String name;
 
 	public static boolean isSameSolution(Solution a, Solution b) {
 		VmEncoding left = (VmEncoding) a.getDecisionVariables()[0];
@@ -158,9 +158,9 @@ public class VmsProblem extends Problem {
 	@SuppressWarnings("unchecked")
 	public VmsProblem(String dataset, Random rand) {
 		this.rand = rand;
-		this.name = dataset;
+		this.problemName_ = dataset;
 
-		Object[] tmpInfo = INFRA.getCaseCloudlets(this.name, 0);
+		Object[] tmpInfo = INFRA.getCaseCloudlets(this.problemName_, 0);
 		tasks = (List<Task>) tmpInfo[0];
 		tasksNum = tasks.size();
 		dag = (DAG) (tmpInfo[1]);
@@ -184,10 +184,10 @@ public class VmsProblem extends Problem {
 	@Override
 	public void evaluate(Solution solution) {
 		evalCount += 1;
-		if (evalCount % 100 == 0 || evalCount == 1) {
-			System.out.println(
-					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + "  Eval # so far : " + evalCount);
-		}
+//		if (evalCount % 100 == 0 || evalCount == 1) {
+//			System.out.println(
+//					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + "  Eval # so far : " + evalCount);
+//		}
 
 		Log.disable();
 

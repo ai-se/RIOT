@@ -28,7 +28,10 @@ import glob
 import pdb
 from PIL import Image
 
-folder = '../results/tradeOffPF/'
+# TODO SETTING HERE...
+folder = '../results/objCmprImg/'
+saveat = '../results/combined/objCmpr.png'
+
 ifs = glob.glob(folder + '*.png')
 ifs = [i for i in ifs if 'combine' not in i]
 images = map(Image.open, ifs)
@@ -64,4 +67,4 @@ for m in models:
     y_offset += im.size[1] + 10
     x_offset = 0
 
-new_im.save('../results/combined/combine.png')
+new_im.save(saveat)
