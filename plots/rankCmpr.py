@@ -25,13 +25,14 @@
 from __future__ import division
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 import glob
 import math
 import pdb
 
 ifs = glob.glob('../results/objCmpr/' + '*.txt')
 
-for f in ifs:
+for f_i, f in enumerate(ifs):
     model_name = f.split('/')[-1][4:-4]
     records = list()
     with open(f, 'r') as f:
@@ -59,7 +60,15 @@ for f in ifs:
     # plot scatters
     plt.xlim(-1, 1)
     plt.ylim(-1, 1)
-    ax.scatter(x=df['delta0'], y=df['delta1'], s=1)
+    # ax.scatter(x=df['delta0'], y=df['delta1'], s=0.1)
+
+    # draw the heat map
+    x = df['delta0']
+    y = df['delta1']
+    heatmap, xedges, yedges = np.histogram2d(x, y, bins=5)
+    pdb.set_trace()
+    extent = [-1, 1, -1, 1]
+    plt.imshow(heatmap, extent=extent)
 
     # print model name
     ax.text(-0.3, 1.1, model_name, fontsize=10)
@@ -69,4 +78,8 @@ for f in ifs:
     center_count = df[(abs(df.delta0) < 0.25) & (abs(df.delta1) < 0.25)].shape[0]
     ax.text(0.3, 0.8, "Points within [+-0.25]^2 = \n%d/%d = %.2f%%" % (
         center_count, case_in_total, center_count / case_in_total * 100), fontsize=9, color='r')
-    plt.savefig('../results/objCmprImg/' + model_name + '.png')
+
+    if f_i == 0:
+        plt.show()
+        break
+        # plt.savefig('../results/objCmprImg/' + model_name + '.png')
