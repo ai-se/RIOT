@@ -104,6 +104,7 @@ class HEFTScheduler {
 		for (int i = 0; i < vmTypes.length; i++) {
 			code.ins2type[i] = vmTypes[i];
 		}
+
 		return sol;
 	}
 
@@ -233,7 +234,7 @@ class MOHEFTcore extends Algorithm {
 	 * @param p
 	 * @return the rank. use pointers of cloudlets
 	 */
-	public static Map<Task, Double> bRank(VmsProblem p) {
+	static Map<Task, Double> bRank(VmsProblem p) {
 		List<Task> cloudlets = p.tasks;
 		DAG cp = p.getDAG();
 
@@ -287,11 +288,14 @@ class MOHEFTcore extends Algorithm {
 				res.put(i, (deap + (match.indexOf(i) + 0.0) / (match.size() + 1.0)));
 
 		}
+
 		return res;
 	}
 
 	private double unitPrice(Vm v) {
-		return INFRA.getUnitPrice(v);
+		List<Vm> tmp = new ArrayList<Vm>();
+		tmp.add(v);
+		return INFRA.getUnitPrice(tmp);
 	}
 
 	/**
@@ -355,13 +359,12 @@ class MOHEFTcore extends Algorithm {
 		List<Vm> avalVmTypes = INFRA.createVms();
 
 		// 1. B-Rank
-		Map<Task, Double> rank = bRank(problem);
+		Map<Task, Double> rank = this.bRank(problem);
 
 		// 2. Sort cloudlets with b-rank
 		List<Task> sortedCloudlets = new ArrayList<Task>();
 		for (Task t : problem.tasks)
 			sortedCloudlets.add(t);
-
 		Collections.sort(sortedCloudlets, (Task one, Task other) -> rank.get(one).compareTo(rank.get(other)));
 
 		HEFTScheduler sched = new HEFTScheduler(problem.getDAG(), n, sortedCloudlets);
@@ -421,7 +424,7 @@ class MOHEFTcore extends Algorithm {
 		VmsProblem problem = (VmsProblem) problem_;
 
 		// 1. B-Rank
-		Map<Task, Double> rank = bRank(problem);
+		Map<Task, Double> rank = this.bRank(problem);
 
 		// 2. Sort cloudlets with b-rank
 		List<Task> sortedCloudlets = new ArrayList<Task>();

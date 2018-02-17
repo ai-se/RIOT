@@ -103,6 +103,12 @@ public class DAG {
 		defultTotalCloudletNum = totalCloudletNum;
 	}
 
+	public void clearFileTransferTimes(List<Task> cList) {
+		this.fileTransferTime.clear();
+		for (Task c : cList)
+			this.fileTransferTime.put(c, 0.0);
+	}
+
 	/**
 	 * Calculating/ pre-calc the required file-transfer times for each cloudlet
 	 * Only when all files finished transfer, is the cloudlet be done.
@@ -112,9 +118,7 @@ public class DAG {
 	 * @param vmlist
 	 */
 	public void calcFileTransferTimes(int[] task2ins, List<Vm> vmlist, List<Task> cList) {
-		this.fileTransferTime.clear();
-		for (Task c : cList)
-			fileTransferTime.put(c, 0.0);
+		this.clearFileTransferTimes(cList);
 
 		for (Task target : requiring.keySet()) {
 			for (Task src : requiring.get(target)) {

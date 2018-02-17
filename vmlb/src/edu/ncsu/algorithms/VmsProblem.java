@@ -13,6 +13,8 @@ import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Vm;
 
+import com.google.common.primitives.Ints;
+
 import edu.ncsu.model.DAG;
 import edu.ncsu.model.DAGCentralSimulator;
 import edu.ncsu.model.INFRA;
@@ -113,7 +115,7 @@ public class VmsProblem extends Problem {
 	public Map<Integer, Double> lstTaskExp;
 
 	private DAG dag;
-//	private String name;
+	// private String name;
 
 	public static boolean isSameSolution(Solution a, Solution b) {
 		VmEncoding left = (VmEncoding) a.getDecisionVariables()[0];
@@ -184,10 +186,11 @@ public class VmsProblem extends Problem {
 	@Override
 	public void evaluate(Solution solution) {
 		evalCount += 1;
-//		if (evalCount % 100 == 0 || evalCount == 1) {
-//			System.out.println(
-//					"[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + "  Eval # so far : " + evalCount);
-//		}
+		// if (evalCount % 100 == 0 || evalCount == 1) {
+		// System.out.println(
+		// "[VmsP] Time -- " + System.currentTimeMillis() / 1000 % 100000 + "
+		// Eval # so far : " + evalCount);
+		// }
 
 		Log.disable();
 
@@ -195,6 +198,10 @@ public class VmsProblem extends Problem {
 		int[] order = ((VmEncoding) decs[0]).taskInOrder;
 		int[] task2ins = ((VmEncoding) decs[0]).task2ins;
 		int[] ins2type = ((VmEncoding) decs[0]).ins2type;
+
+		// System.out.println(Arrays.toString(order));
+		// System.out.println(Arrays.toString(task2ins));
+		// System.out.println(Arrays.toString(ins2type));
 
 		// reset cloudlet to factory configurations
 		for (Task c : tasks)
@@ -215,7 +222,10 @@ public class VmsProblem extends Problem {
 			tasks.get(var).setVmId(vmlist.get(task2ins[var]).getId());
 		}
 
-		dag.calcFileTransferTimes(task2ins, vmlist, tasks);
+		if (!Ints.contains(task2ins, -1))
+			dag.calcFileTransferTimes(task2ins, vmlist, tasks);
+		else
+			dag.clearFileTransferTimes(tasks);
 
 		// binding global workflow to vm
 		vmlist.removeAll(Collections.singleton(null)); // remove null
@@ -307,7 +317,7 @@ public class VmsProblem extends Problem {
 
 	public static void main(String[] args) throws ClassNotFoundException, JMException {
 		VmsProblem p = new VmsProblem("sci_CyberShake_30", new Random());
-		for (int i = 0; i < 40; i++){
+		for (int i = 0; i < 40; i++) {
 			Solution sol = new Solution(p);
 			p.evaluate(sol);
 			System.out.print(sol.getObjective(0) + " ");
