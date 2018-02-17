@@ -6,7 +6,8 @@
       <sec alg="SA" algRunTime="9"/>
       <sec alg="EMSC-NSGAII" algRunTime="9377"/>
       <sec alg="EMSC-SPEA2" algRunTime="10379"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="10644"/>
+      <sec alg="EMSC-MOEA/D" algRunTime=""/>
+      <sec alg="MOHEFT" algRunTime="5675 5675 5669"/>
     </model>
     <model name="Inspiral_100">
       <sec alg="RIOT" algRunTime="4 7 7 7 7"/>
@@ -14,7 +15,8 @@
       <sec alg="SA" algRunTime="1"/>
       <sec alg="EMSC-NSGAII" algRunTime="175"/>
       <sec alg="EMSC-SPEA2" algRunTime="182"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="186"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="89 181 179 181 199"/>
+      <sec alg="MOHEFT" algRunTime="63 63 57"/>
     </model>
     <model name="Montage_25">
       <sec alg="RIOT" algRunTime="1 1 2 2 19"/>
@@ -22,7 +24,8 @@
       <sec alg="SA" algRunTime="1"/>
       <sec alg="EMSC-NSGAII" algRunTime="32 33 23"/>
       <sec alg="EMSC-SPEA2" algRunTime="33 34 32"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="33 33 34"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="16 33 33 33 35"/>
+      <sec alg="MOHEFT" algRunTime="6 6 6"/>
     </model>
     <model name="CyberShake_30">
       <sec alg="RIOT" algRunTime="0 1 1 1"/>
@@ -30,7 +33,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="34 34 22"/>
       <sec alg="EMSC-SPEA2" algRunTime="35 35 34"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="35 35 35"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="16 34 36 35 36"/>
+      <sec alg="MOHEFT" algRunTime="7 7 6"/>
     </model>
     <model name="Epigenomics_100">
       <sec alg="RIOT" algRunTime="2 3 5 5"/>
@@ -38,7 +42,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="153 153 98"/>
       <sec alg="EMSC-SPEA2" algRunTime="154 157 150"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="159 161 162"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="73 159 162 160 164"/>
+      <sec alg="MOHEFT" algRunTime="56 56 55"/>
     </model>
     <model name="Sipht_100">
       <sec alg="RIOT" algRunTime="5 6 8 8 9"/>
@@ -46,7 +51,8 @@
       <sec alg="SA" algRunTime="2"/>
       <sec alg="EMSC-NSGAII" algRunTime="168"/>
       <sec alg="EMSC-SPEA2" algRunTime="169"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="178"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="88 175 177 180"/>
+      <sec alg="MOHEFT" algRunTime="62 62 62"/>
     </model>
     <model name="Inspiral_1000">
       <sec alg="RIOT" algRunTime="75 105 183 189 189"/>
@@ -54,7 +60,8 @@
       <sec alg="SA" algRunTime="10"/>
       <sec alg="EMSC-NSGAII" algRunTime="9537"/>
       <sec alg="EMSC-SPEA2" algRunTime="9603"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="10529"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="17348"/>
+      <sec alg="MOHEFT" algRunTime="5408 5408 5579"/>
     </model>
     <model name="CyberShake_100">
       <sec alg="RIOT" algRunTime="3 4 7 7"/>
@@ -62,7 +69,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="152 154 98"/>
       <sec alg="EMSC-SPEA2" algRunTime="152 154 148"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="162 161 162"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="72 158 159 161 162"/>
+      <sec alg="MOHEFT" algRunTime="61 61 59"/>
     </model>
     <model name="Sipht_60">
       <sec alg="RIOT" algRunTime="1 1 3 3"/>
@@ -70,7 +78,8 @@
       <sec alg="SA" algRunTime="1"/>
       <sec alg="EMSC-NSGAII" algRunTime="75 76 53"/>
       <sec alg="EMSC-SPEA2" algRunTime="76 77 75"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="79 78 79"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="34 77 78 79 79"/>
+      <sec alg="MOHEFT" algRunTime="23 23 22"/>
     </model>
     <model name="CyberShake_50">
       <sec alg="RIOT" algRunTime="1 1 3 3"/>
@@ -78,7 +87,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="62 63 41"/>
       <sec alg="EMSC-SPEA2" algRunTime="62 63 61"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="64 64 64"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="30 63 64 64 65"/>
+      <sec alg="MOHEFT" algRunTime="16 16 16"/>
     </model>
     <model name="Montage_50">
       <sec alg="RIOT" algRunTime="1 2 3 3 9"/>
@@ -86,7 +96,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="61 62 39"/>
       <sec alg="EMSC-SPEA2" algRunTime="62 65 60"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="63 65 64"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="29 62 64 64 65"/>
+      <sec alg="MOHEFT" algRunTime="17 17 16"/>
     </model>
     <model name="Montage_100">
       <sec alg="RIOT" algRunTime="3 3 6 6"/>
@@ -94,7 +105,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="151 154 94"/>
       <sec alg="EMSC-SPEA2" algRunTime="152 157 147"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="159 161 160"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="73 156 160 160 162"/>
+      <sec alg="MOHEFT" algRunTime="55 55 55"/>
     </model>
     <model name="Inspiral_50">
       <sec alg="RIOT" algRunTime="0 1 2 2"/>
@@ -102,7 +114,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="62 62 43"/>
       <sec alg="EMSC-SPEA2" algRunTime="62 64 62"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="64 64 65"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="30 63 64 65 65"/>
+      <sec alg="MOHEFT" algRunTime="15 15 15"/>
     </model>
     <model name="CyberShake_1000">
       <sec alg="RIOT" algRunTime="104 130 264 264 273"/>
@@ -110,7 +123,8 @@
       <sec alg="SA" algRunTime="11"/>
       <sec alg="EMSC-NSGAII" algRunTime="10681"/>
       <sec alg="EMSC-SPEA2" algRunTime="9381"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="10398"/>
+      <sec alg="EMSC-MOEA/D" algRunTime=""/>
+      <sec alg="MOHEFT" algRunTime="6281 6281 6089"/>
     </model>
     <model name="Epigenomics_997">
       <sec alg="RIOT" algRunTime="87 105 208 208 211"/>
@@ -118,7 +132,8 @@
       <sec alg="SA" algRunTime="10"/>
       <sec alg="EMSC-NSGAII" algRunTime="9320"/>
       <sec alg="EMSC-SPEA2" algRunTime="9747"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="16974"/>
+      <sec alg="EMSC-MOEA/D" algRunTime=""/>
+      <sec alg="MOHEFT" algRunTime="5874 5874 5484"/>
     </model>
     <model name="Epigenomics_46">
       <sec alg="RIOT" algRunTime="1 1 2 2"/>
@@ -126,7 +141,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="57 58 38"/>
       <sec alg="EMSC-SPEA2" algRunTime="59 58 57"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="60 60 60"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="28 58 60 61 61"/>
+      <sec alg="MOHEFT" algRunTime="14 14 13"/>
     </model>
     <model name="Sipht_1000">
       <sec alg="RIOT" algRunTime="74 192 196 202 302"/>
@@ -134,7 +150,8 @@
       <sec alg="SA" algRunTime="20"/>
       <sec alg="EMSC-NSGAII" algRunTime="7250"/>
       <sec alg="EMSC-SPEA2" algRunTime="7143"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="8105"/>
+      <sec alg="EMSC-MOEA/D" algRunTime=""/>
+      <sec alg="MOHEFT" algRunTime="5092 5092"/>
     </model>
     <model name="Inspiral_30">
       <sec alg="RIOT" algRunTime="0 0 1 1"/>
@@ -142,7 +159,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="34 34 23"/>
       <sec alg="EMSC-SPEA2" algRunTime="34 35 34"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="36 35 36"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="16 35 35 35 36"/>
+      <sec alg="MOHEFT" algRunTime="6 6 6"/>
     </model>
     <model name="Epigenomics_24">
       <sec alg="RIOT" algRunTime="0 0 1 1"/>
@@ -150,7 +168,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="27 27 17"/>
       <sec alg="EMSC-SPEA2" algRunTime="27 28 27"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="28 28 28"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="13 27 28 29 28"/>
+      <sec alg="MOHEFT" algRunTime="4 4 4"/>
     </model>
     <model name="Sipht_30">
       <sec alg="RIOT" algRunTime="0 0 1 1"/>
@@ -158,7 +177,8 @@
       <sec alg="SA" algRunTime="0"/>
       <sec alg="EMSC-NSGAII" algRunTime="34 34 23"/>
       <sec alg="EMSC-SPEA2" algRunTime="34 35 33"/>
-      <sec alg="EMSC-MOEA/D" algRunTime="35 35 35"/>
+      <sec alg="EMSC-MOEA/D" algRunTime="16 34 34 35 35"/>
+      <sec alg="MOHEFT" algRunTime="6 6 6"/>
     </model>
   </runtimes>
   <spreads>
@@ -168,7 +188,8 @@
       <rec alg="SA" spread="0.617"/>
       <rec alg="EMSC-NSGAII" spread="1.047"/>
       <rec alg="EMSC-SPEA2" spread="0.559"/>
-      <rec alg="EMSC-MOEA/D" spread="1.000"/>
+      <rec alg="EMSC-MOEA/D" spread=""/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Inspiral_100">
       <rec alg="RIOT" spread="0.917 0.800 0.807 0.767 0.778"/>
@@ -176,7 +197,8 @@
       <rec alg="SA" spread="0.610"/>
       <rec alg="EMSC-NSGAII" spread="1.094"/>
       <rec alg="EMSC-SPEA2" spread="0.794"/>
-      <rec alg="EMSC-MOEA/D" spread="0.788"/>
+      <rec alg="EMSC-MOEA/D" spread="0.759 0.622 0.640 0.710 0.782"/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Montage_25">
       <rec alg="RIOT" spread="0.902 0.834 0.786 0.762 0.862"/>
@@ -184,7 +206,8 @@
       <rec alg="SA" spread="0.772"/>
       <rec alg="EMSC-NSGAII" spread="0.926 1.035 0.882"/>
       <rec alg="EMSC-SPEA2" spread="0.530 0.554 0.638"/>
-      <rec alg="EMSC-MOEA/D" spread="0.850 0.890 0.764"/>
+      <rec alg="EMSC-MOEA/D" spread="0.716 0.816 0.770 0.639 0.680"/>
+      <rec alg="MOHEFT" spread="0.913 0.913 0.913"/>
     </model>
     <model name="CyberShake_30">
       <rec alg="RIOT" spread="1.080 1.090 1.009 1.065"/>
@@ -192,7 +215,8 @@
       <rec alg="SA" spread="0.849"/>
       <rec alg="EMSC-NSGAII" spread="0.918 0.911 0.893"/>
       <rec alg="EMSC-SPEA2" spread="0.425 0.537 0.428"/>
-      <rec alg="EMSC-MOEA/D" spread="0.823 0.842 0.800"/>
+      <rec alg="EMSC-MOEA/D" spread="0.832 0.832 0.857 0.969 0.812"/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Epigenomics_100">
       <rec alg="RIOT" spread="0.841 1.034 0.769 1.037"/>
@@ -200,7 +224,8 @@
       <rec alg="SA" spread="0.805"/>
       <rec alg="EMSC-NSGAII" spread="0.982 0.827 0.656"/>
       <rec alg="EMSC-SPEA2" spread="0.562 0.522 0.613"/>
-      <rec alg="EMSC-MOEA/D" spread="0.785 0.951 0.980"/>
+      <rec alg="EMSC-MOEA/D" spread="0.857 0.866 0.895 0.902 0.922"/>
+      <rec alg="MOHEFT" spread="0.878 0.878 0.878"/>
     </model>
     <model name="Sipht_100">
       <rec alg="RIOT" spread="0.893 0.772 0.769 0.965 0.895"/>
@@ -208,7 +233,8 @@
       <rec alg="SA" spread="0.992"/>
       <rec alg="EMSC-NSGAII" spread="1.038"/>
       <rec alg="EMSC-SPEA2" spread="0.851"/>
-      <rec alg="EMSC-MOEA/D" spread="0.892"/>
+      <rec alg="EMSC-MOEA/D" spread="0.878 0.973 0.806 0.883"/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Inspiral_1000">
       <rec alg="RIOT" spread="0.814 0.891 0.840 0.798 0.890"/>
@@ -216,7 +242,8 @@
       <rec alg="SA" spread="0.715"/>
       <rec alg="EMSC-NSGAII" spread="1.365"/>
       <rec alg="EMSC-SPEA2" spread="0.922"/>
-      <rec alg="EMSC-MOEA/D" spread="0.922 0.923 0.920"/>
+      <rec alg="EMSC-MOEA/D" spread="0.816"/>
+      <rec alg="MOHEFT" spread="1.024 1.024 -1.000"/>
     </model>
     <model name="CyberShake_100">
       <rec alg="RIOT" spread="1.108 1.104 1.244 1.026"/>
@@ -224,7 +251,8 @@
       <rec alg="SA" spread="0.436"/>
       <rec alg="EMSC-NSGAII" spread="0.915 1.126 0.832"/>
       <rec alg="EMSC-SPEA2" spread="0.513 0.512 0.627"/>
-      <rec alg="EMSC-MOEA/D" spread="0.856 0.879 0.957"/>
+      <rec alg="EMSC-MOEA/D" spread="0.954 0.914 0.977 0.954 0.873"/>
+      <rec alg="MOHEFT" spread="0.959 0.959 0.959"/>
     </model>
     <model name="Sipht_60">
       <rec alg="RIOT" spread="0.891 0.926 1.109 0.994"/>
@@ -232,7 +260,8 @@
       <rec alg="SA" spread="-1.000"/>
       <rec alg="EMSC-NSGAII" spread="0.999 1.104 1.065"/>
       <rec alg="EMSC-SPEA2" spread="0.862 0.777 0.855"/>
-      <rec alg="EMSC-MOEA/D" spread="0.893 0.977 0.805"/>
+      <rec alg="EMSC-MOEA/D" spread="0.942 0.998 0.801 0.861 0.973"/>
+      <rec alg="MOHEFT" spread="0.857 0.857 0.857"/>
     </model>
     <model name="CyberShake_50">
       <rec alg="RIOT" spread="1.072 1.169 1.042 1.099"/>
@@ -240,7 +269,8 @@
       <rec alg="SA" spread="0.812"/>
       <rec alg="EMSC-NSGAII" spread="1.011 0.987 0.950"/>
       <rec alg="EMSC-SPEA2" spread="0.426 0.347 0.592"/>
-      <rec alg="EMSC-MOEA/D" spread="0.870 0.646 0.741"/>
+      <rec alg="EMSC-MOEA/D" spread="0.812 0.807 0.908 0.860 0.692"/>
+      <rec alg="MOHEFT" spread="0.864 0.864 0.864"/>
     </model>
     <model name="Montage_50">
       <rec alg="RIOT" spread="0.724 0.771 0.774 0.764 0.746"/>
@@ -248,7 +278,8 @@
       <rec alg="SA" spread="0.933"/>
       <rec alg="EMSC-NSGAII" spread="1.057 1.066 1.058"/>
       <rec alg="EMSC-SPEA2" spread="0.629 0.629 0.443"/>
-      <rec alg="EMSC-MOEA/D" spread="0.784 0.736 0.812"/>
+      <rec alg="EMSC-MOEA/D" spread="0.850 0.754 0.771 0.721 0.802"/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Montage_100">
       <rec alg="RIOT" spread="0.908 0.952 0.850 0.868"/>
@@ -256,7 +287,8 @@
       <rec alg="SA" spread="0.789"/>
       <rec alg="EMSC-NSGAII" spread="1.233 1.293 1.036"/>
       <rec alg="EMSC-SPEA2" spread="0.810 0.813 0.768"/>
-      <rec alg="EMSC-MOEA/D" spread="0.628 0.757 0.725"/>
+      <rec alg="EMSC-MOEA/D" spread="0.865 0.830 0.811 0.631 0.689"/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Inspiral_50">
       <rec alg="RIOT" spread="0.915 0.938 0.986 0.935"/>
@@ -264,7 +296,8 @@
       <rec alg="SA" spread="0.715"/>
       <rec alg="EMSC-NSGAII" spread="1.331 1.146 0.926"/>
       <rec alg="EMSC-SPEA2" spread="0.851 0.665 0.615"/>
-      <rec alg="EMSC-MOEA/D" spread="0.857 0.816 0.650"/>
+      <rec alg="EMSC-MOEA/D" spread="0.909 0.615 1.029 0.778 1.013"/>
+      <rec alg="MOHEFT" spread="0.919 0.919 0.919"/>
     </model>
     <model name="CyberShake_1000">
       <rec alg="RIOT" spread="0.825 0.929 0.756 0.924 0.869"/>
@@ -272,7 +305,8 @@
       <rec alg="SA" spread="0.811"/>
       <rec alg="EMSC-NSGAII" spread="1.191"/>
       <rec alg="EMSC-SPEA2" spread="0.555"/>
-      <rec alg="EMSC-MOEA/D" spread="1.051"/>
+      <rec alg="EMSC-MOEA/D" spread=""/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Epigenomics_997">
       <rec alg="RIOT" spread="0.482 0.560 0.667 0.644 0.755"/>
@@ -280,7 +314,8 @@
       <rec alg="SA" spread="0.902"/>
       <rec alg="EMSC-NSGAII" spread="0.950"/>
       <rec alg="EMSC-SPEA2" spread="0.544"/>
-      <rec alg="EMSC-MOEA/D" spread="0.730"/>
+      <rec alg="EMSC-MOEA/D" spread=""/>
+      <rec alg="MOHEFT" spread="0.902 0.902 0.927"/>
     </model>
     <model name="Epigenomics_46">
       <rec alg="RIOT" spread="0.721 0.767 0.838 0.825"/>
@@ -288,7 +323,8 @@
       <rec alg="SA" spread="0.828"/>
       <rec alg="EMSC-NSGAII" spread="0.907 0.894 0.845"/>
       <rec alg="EMSC-SPEA2" spread="0.548 0.819 0.832"/>
-      <rec alg="EMSC-MOEA/D" spread="0.754 1.017 0.890"/>
+      <rec alg="EMSC-MOEA/D" spread="0.825 1.040 0.736 0.866 0.855"/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000 -1.000"/>
     </model>
     <model name="Sipht_1000">
       <rec alg="RIOT" spread="0.873 0.893 0.946 0.956 1.076"/>
@@ -296,7 +332,8 @@
       <rec alg="SA" spread="0.828"/>
       <rec alg="EMSC-NSGAII" spread="1.277"/>
       <rec alg="EMSC-SPEA2" spread="0.794"/>
-      <rec alg="EMSC-MOEA/D" spread="0.839"/>
+      <rec alg="EMSC-MOEA/D" spread=""/>
+      <rec alg="MOHEFT" spread="-1.000 -1.000"/>
     </model>
     <model name="Inspiral_30">
       <rec alg="RIOT" spread="0.990 0.869 1.061 0.923"/>
@@ -304,7 +341,8 @@
       <rec alg="SA" spread="0.717"/>
       <rec alg="EMSC-NSGAII" spread="1.047 0.872 1.072"/>
       <rec alg="EMSC-SPEA2" spread="0.707 0.691 0.926"/>
-      <rec alg="EMSC-MOEA/D" spread="0.872 0.986 0.790"/>
+      <rec alg="EMSC-MOEA/D" spread="0.841 1.008 0.937 0.901 0.735"/>
+      <rec alg="MOHEFT" spread="0.929 0.929 0.929"/>
     </model>
     <model name="Epigenomics_24">
       <rec alg="RIOT" spread="0.988 0.999 0.918 0.869"/>
@@ -312,7 +350,8 @@
       <rec alg="SA" spread="0.761"/>
       <rec alg="EMSC-NSGAII" spread="0.794 0.958 0.792"/>
       <rec alg="EMSC-SPEA2" spread="0.775 0.921 0.789"/>
-      <rec alg="EMSC-MOEA/D" spread="0.861 0.673 1.066"/>
+      <rec alg="EMSC-MOEA/D" spread="1.128 0.951 0.961 1.055 0.879"/>
+      <rec alg="MOHEFT" spread="0.878 0.878 0.878"/>
     </model>
     <model name="Sipht_30">
       <rec alg="RIOT" spread="1.159 1.174 1.074 1.042"/>
@@ -320,7 +359,8 @@
       <rec alg="SA" spread="0.592"/>
       <rec alg="EMSC-NSGAII" spread="0.895 0.819 1.035"/>
       <rec alg="EMSC-SPEA2" spread="0.706 0.640 0.673"/>
-      <rec alg="EMSC-MOEA/D" spread="0.897 0.923 0.848"/>
+      <rec alg="EMSC-MOEA/D" spread="0.799 1.015 0.775 1.019 0.904"/>
+      <rec alg="MOHEFT" spread="0.781 0.781 0.781"/>
     </model>
   </spreads>
   <igds>
@@ -330,7 +370,8 @@
       <rec alg="SA" igd="0.208"/>
       <rec alg="EMSC-NSGAII" igd="0.003"/>
       <rec alg="EMSC-SPEA2" igd="0.022"/>
-      <rec alg="EMSC-MOEA/D" igd="0.150"/>
+      <rec alg="EMSC-MOEA/D" igd=""/>
+      <rec alg="MOHEFT" igd="0.508 0.508 0.461"/>
     </model>
     <model name="Inspiral_100">
       <rec alg="RIOT" igd="0.046 0.040 0.035 0.041 0.043"/>
@@ -338,7 +379,8 @@
       <rec alg="SA" igd="0.169"/>
       <rec alg="EMSC-NSGAII" igd="0.015"/>
       <rec alg="EMSC-SPEA2" igd="0.035"/>
-      <rec alg="EMSC-MOEA/D" igd="0.092"/>
+      <rec alg="EMSC-MOEA/D" igd="0.288 0.243 0.289 0.289 0.286"/>
+      <rec alg="MOHEFT" igd="0.640 0.640 0.624"/>
     </model>
     <model name="Montage_25">
       <rec alg="RIOT" igd="0.047 0.038 0.051 0.038 0.050"/>
@@ -346,7 +388,8 @@
       <rec alg="SA" igd="0.227"/>
       <rec alg="EMSC-NSGAII" igd="0.019 0.024 0.043"/>
       <rec alg="EMSC-SPEA2" igd="0.064 0.069 0.073"/>
-      <rec alg="EMSC-MOEA/D" igd="0.091 0.095 0.127"/>
+      <rec alg="EMSC-MOEA/D" igd="0.109 0.105 0.105 0.089 0.113"/>
+      <rec alg="MOHEFT" igd="0.364 0.364 0.364"/>
     </model>
     <model name="CyberShake_30">
       <rec alg="RIOT" igd="0.151 0.162 0.147 0.146"/>
@@ -354,7 +397,8 @@
       <rec alg="SA" igd="0.224"/>
       <rec alg="EMSC-NSGAII" igd="0.022 0.016 0.030"/>
       <rec alg="EMSC-SPEA2" igd="0.038 0.054 0.052"/>
-      <rec alg="EMSC-MOEA/D" igd="0.104 0.094 0.112"/>
+      <rec alg="EMSC-MOEA/D" igd="0.102 0.098 0.094 0.112 0.117"/>
+      <rec alg="MOHEFT" igd="0.485 0.485 0.485"/>
     </model>
     <model name="Epigenomics_100">
       <rec alg="RIOT" igd="0.049 0.050 0.037 0.046"/>
@@ -362,7 +406,8 @@
       <rec alg="SA" igd="0.165"/>
       <rec alg="EMSC-NSGAII" igd="0.054 0.050 0.022"/>
       <rec alg="EMSC-SPEA2" igd="0.031 0.034 0.040"/>
-      <rec alg="EMSC-MOEA/D" igd="0.185 0.182 0.191"/>
+      <rec alg="EMSC-MOEA/D" igd="0.225 0.164 0.247 0.244 0.214"/>
+      <rec alg="MOHEFT" igd="0.622 0.622 0.622"/>
     </model>
     <model name="Sipht_100">
       <rec alg="RIOT" igd="0.072 0.059 0.062 0.057 0.057"/>
@@ -370,7 +415,8 @@
       <rec alg="SA" igd="0.213"/>
       <rec alg="EMSC-NSGAII" igd="0.025"/>
       <rec alg="EMSC-SPEA2" igd="0.051"/>
-      <rec alg="EMSC-MOEA/D" igd="0.147"/>
+      <rec alg="EMSC-MOEA/D" igd="0.137 0.147 0.139 0.173"/>
+      <rec alg="MOHEFT" igd="0.410 0.410 0.410"/>
     </model>
     <model name="Inspiral_1000">
       <rec alg="RIOT" igd="0.044 0.049 0.048 0.046 0.046"/>
@@ -378,7 +424,8 @@
       <rec alg="SA" igd="0.188"/>
       <rec alg="EMSC-NSGAII" igd="0.005"/>
       <rec alg="EMSC-SPEA2" igd="0.021"/>
-      <rec alg="EMSC-MOEA/D" igd="0.09 0.09 0.09"/>
+      <rec alg="EMSC-MOEA/D" igd="0.124"/>
+      <rec alg="MOHEFT" igd="0.490 0.490 0.468"/>
     </model>
     <model name="CyberShake_100">
       <rec alg="RIOT" igd="0.089 0.093 0.101 0.094"/>
@@ -386,7 +433,8 @@
       <rec alg="SA" igd="0.153"/>
       <rec alg="EMSC-NSGAII" igd="0.030 0.036 0.027"/>
       <rec alg="EMSC-SPEA2" igd="0.051 0.044 0.064"/>
-      <rec alg="EMSC-MOEA/D" igd="0.180 0.171 0.143"/>
+      <rec alg="EMSC-MOEA/D" igd="0.165 0.172 0.147 0.176 0.147"/>
+      <rec alg="MOHEFT" igd="0.550 0.550 0.550"/>
     </model>
     <model name="Sipht_60">
       <rec alg="RIOT" igd="0.097 0.057 0.079 0.079"/>
@@ -394,7 +442,8 @@
       <rec alg="SA" igd="0.236"/>
       <rec alg="EMSC-NSGAII" igd="0.035 0.043 0.025"/>
       <rec alg="EMSC-SPEA2" igd="0.092 0.045 0.066"/>
-      <rec alg="EMSC-MOEA/D" igd="0.171 0.135 0.197"/>
+      <rec alg="EMSC-MOEA/D" igd="0.132 0.110 0.108 0.156 0.218"/>
+      <rec alg="MOHEFT" igd="0.499 0.499 0.499"/>
     </model>
     <model name="CyberShake_50">
       <rec alg="RIOT" igd="0.113 0.109 0.115 0.108"/>
@@ -402,7 +451,8 @@
       <rec alg="SA" igd="0.258"/>
       <rec alg="EMSC-NSGAII" igd="0.018 0.024 0.023"/>
       <rec alg="EMSC-SPEA2" igd="0.052 0.046 0.089"/>
-      <rec alg="EMSC-MOEA/D" igd="0.177 0.168 0.175"/>
+      <rec alg="EMSC-MOEA/D" igd="0.144 0.171 0.185 0.152 0.167"/>
+      <rec alg="MOHEFT" igd="0.432 0.432 0.432"/>
     </model>
     <model name="Montage_50">
       <rec alg="RIOT" igd="0.041 0.043 0.040 0.040 0.043"/>
@@ -410,7 +460,8 @@
       <rec alg="SA" igd="0.147"/>
       <rec alg="EMSC-NSGAII" igd="0.061 0.060 0.033"/>
       <rec alg="EMSC-SPEA2" igd="0.065 0.045 0.041"/>
-      <rec alg="EMSC-MOEA/D" igd="0.111 0.094 0.125"/>
+      <rec alg="EMSC-MOEA/D" igd="0.117 0.085 0.122 0.109 0.098"/>
+      <rec alg="MOHEFT" igd="0.421 0.421 0.421"/>
     </model>
     <model name="Montage_100">
       <rec alg="RIOT" igd="0.039 0.037 0.041 0.033"/>
@@ -418,7 +469,8 @@
       <rec alg="SA" igd="0.165"/>
       <rec alg="EMSC-NSGAII" igd="0.028 0.055 0.012"/>
       <rec alg="EMSC-SPEA2" igd="0.080 0.089 0.074"/>
-      <rec alg="EMSC-MOEA/D" igd="0.219 0.083 0.110"/>
+      <rec alg="EMSC-MOEA/D" igd="0.255 0.093 0.222 0.237 0.089"/>
+      <rec alg="MOHEFT" igd="0.483 0.483 0.483"/>
     </model>
     <model name="Inspiral_50">
       <rec alg="RIOT" igd="0.050 0.038 0.042 0.045"/>
@@ -426,7 +478,8 @@
       <rec alg="SA" igd="0.156"/>
       <rec alg="EMSC-NSGAII" igd="0.019 0.015 0.057"/>
       <rec alg="EMSC-SPEA2" igd="0.054 0.044 0.061"/>
-      <rec alg="EMSC-MOEA/D" igd="0.149 0.192 0.165"/>
+      <rec alg="EMSC-MOEA/D" igd="0.172 0.123 0.156 0.163 0.171"/>
+      <rec alg="MOHEFT" igd="0.392 0.392 0.392"/>
     </model>
     <model name="CyberShake_1000">
       <rec alg="RIOT" igd="0.048 0.059 0.038 0.069 0.053"/>
@@ -434,7 +487,8 @@
       <rec alg="SA" igd="0.201"/>
       <rec alg="EMSC-NSGAII" igd="0.017"/>
       <rec alg="EMSC-SPEA2" igd="0.025"/>
-      <rec alg="EMSC-MOEA/D" igd="0.200"/>
+      <rec alg="EMSC-MOEA/D" igd=""/>
+      <rec alg="MOHEFT" igd="0.380 0.380 0.380"/>
     </model>
     <model name="Epigenomics_997">
       <rec alg="RIOT" igd="0.082 0.075 0.085 0.065 0.094"/>
@@ -442,7 +496,8 @@
       <rec alg="SA" igd="0.177"/>
       <rec alg="EMSC-NSGAII" igd="0.030"/>
       <rec alg="EMSC-SPEA2" igd="0.070"/>
-      <rec alg="EMSC-MOEA/D" igd="0.068"/>
+      <rec alg="EMSC-MOEA/D" igd=""/>
+      <rec alg="MOHEFT" igd="1.567 1.567 1.107"/>
     </model>
     <model name="Epigenomics_46">
       <rec alg="RIOT" igd="0.095 0.062 0.054 0.070"/>
@@ -450,7 +505,8 @@
       <rec alg="SA" igd="0.275"/>
       <rec alg="EMSC-NSGAII" igd="0.050 0.046 0.123"/>
       <rec alg="EMSC-SPEA2" igd="0.066 0.180 0.121"/>
-      <rec alg="EMSC-MOEA/D" igd="0.173 0.173 0.190"/>
+      <rec alg="EMSC-MOEA/D" igd="0.176 0.269 0.151 0.173 0.154"/>
+      <rec alg="MOHEFT" igd="0.673 0.673 0.673"/>
     </model>
     <model name="Sipht_1000">
       <rec alg="RIOT" igd="0.069 0.086 0.039 0.056 0.048"/>
@@ -458,7 +514,8 @@
       <rec alg="SA" igd="0.218"/>
       <rec alg="EMSC-NSGAII" igd="0.017"/>
       <rec alg="EMSC-SPEA2" igd="0.059"/>
-      <rec alg="EMSC-MOEA/D" igd="0.091"/>
+      <rec alg="EMSC-MOEA/D" igd=""/>
+      <rec alg="MOHEFT" igd="0.482 0.482"/>
     </model>
     <model name="Inspiral_30">
       <rec alg="RIOT" igd="0.068 0.063 0.072 0.056"/>
@@ -466,7 +523,8 @@
       <rec alg="SA" igd="0.176"/>
       <rec alg="EMSC-NSGAII" igd="0.017 0.016 0.018"/>
       <rec alg="EMSC-SPEA2" igd="0.097 0.042 0.073"/>
-      <rec alg="EMSC-MOEA/D" igd="0.166 0.205 0.178"/>
+      <rec alg="EMSC-MOEA/D" igd="0.163 0.182 0.182 0.153 0.123"/>
+      <rec alg="MOHEFT" igd="0.407 0.407 0.407"/>
     </model>
     <model name="Epigenomics_24">
       <rec alg="RIOT" igd="0.117 0.079 0.075 0.085"/>
@@ -474,7 +532,8 @@
       <rec alg="SA" igd="0.222"/>
       <rec alg="EMSC-NSGAII" igd="0.022 0.022 0.023"/>
       <rec alg="EMSC-SPEA2" igd="0.039 0.076 0.055"/>
-      <rec alg="EMSC-MOEA/D" igd="0.162 0.184 0.148"/>
+      <rec alg="EMSC-MOEA/D" igd="0.211 0.143 0.169 0.148 0.126"/>
+      <rec alg="MOHEFT" igd="0.455 0.455 0.455"/>
     </model>
     <model name="Sipht_30">
       <rec alg="RIOT" igd="0.025 0.042 0.030 0.033"/>
@@ -482,169 +541,190 @@
       <rec alg="SA" igd="0.119"/>
       <rec alg="EMSC-NSGAII" igd="0.017 0.019 0.017"/>
       <rec alg="EMSC-SPEA2" igd="0.034 0.028 0.067"/>
-      <rec alg="EMSC-MOEA/D" igd="0.531 0.507 0.220"/>
+      <rec alg="EMSC-MOEA/D" igd="0.325 0.383 0.433 0.358 0.452"/>
+      <rec alg="MOHEFT" igd="0.387 0.387 0.387"/>
     </model>
   </igds>
-  <hypervolumes>
+  <makespans>
     <model name="Montage_1000">
-      <rec alg="RIOT" hypervolume="0.710 0.728 0.711 0.730 0.719"/>
-      <rec alg="HC" hypervolume="0.477"/>
-      <rec alg="SA" hypervolume="0.581"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.840"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.833"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.808"/>
+      <rec alg="RIOT" makespan="2783.366 3706.402 2981.996 13375.907 2277.449 2545.889 2560.157 2694.272 2117.858 2058.164 2257.684 2072.678 1705.894 1724.814 1390.821 1386.822 738.139 685.578 518.183 549.065 530.013 377.088 347.061 734.420 364.672 308.221 302.717 1257.987 632.140 221.142 873.660 868.660 442.373 165.580 220.910 146.173 251.609 3157.896 3063.224 2548.444 5015.457 3349.505 2605.062 3749.554 3865.242 13312.147 6679.520 2532.357 2255.773 2713.764 9253.180 2194.971 1936.114 2029.309 1906.880 1799.053 1993.568 329.009 284.017 1302.087 659.187 253.893 247.162 280.807 1357.573 685.813 680.813 338.187 127.820 169.293 113.029 2468.917 2735.383 5276.655 3261.217 2249.204 2574.660 2467.855 2178.618 2020.860 2098.267 2029.809 2065.617 1745.979 1796.059 1877.971 1686.868 1659.501 1724.790 1374.395 1459.959 1517.577 686.414 586.728 422.403 386.881 415.134 849.487 238.136 381.717 977.960 487.760 182.762 162.927 223.899 876.827 871.827 443.840 166.140 220.257 147.167 2716.869 2459.584 3470.878 2510.508 3267.932 13221.273 2240.071 3148.824 1915.723 1928.000 1834.726 1878.570 1825.455 1680.536 1714.130 1327.893 1254.760 669.371 579.287 547.095 314.051 299.572 1339.433 261.101 273.197 207.127 235.644 273.915 1344.873 679.287 674.287 344.740 128.337 172.550 113.551 275.978 5131.337 7671.940 2539.875 2262.284 2961.243 2435.585 2134.447 2086.780 1970.731 1921.238 1534.706 1589.979 1646.523 1475.111 1433.171 1198.120 324.112 330.022 391.097 1427.467 712.813 367.065 309.774 1018.947 505.753 192.845 258.669 254.425 211.818 778.967 773.967 393.107 149.492 197.153 131.684 210.624"/>
+      <rec alg="HC" makespan="26479.107 24517.427 21256.227 11051.733 9265.073 9908.033 6869.760 4427.380 3989.087 2832.573 2013.280 1499.347"/>
+      <rec alg="SA" makespan="8613.637 5363.669 3009.779 2818.156 1814.669 1012.803 565.354"/>
+      <rec alg="EMSC-NSGAII" makespan="95.229 95.111 108.600 111.052 148.560 204.733 204.596 206.187 207.161 214.567 218.789 222.778 235.133 241.667 259.766 273.280 283.747 321.524 340.687 2584.142 2584.142 2894.922 2894.922 15243.153 15243.153"/>
+      <rec alg="EMSC-SPEA2" makespan="97.509 110.150 147.420 204.773 233.828 285.073 340.687 2584.142 2894.922 15243.153"/>
+      <rec alg="EMSC-MOEA/D" makespan=""/>
+      <rec alg="MOHEFT" makespan="4158.666 4158.750 4158.666 4158.750 2764.696"/>
     </model>
     <model name="Inspiral_100">
-      <rec alg="RIOT" hypervolume="0.673 0.691 0.694 0.703 0.682"/>
-      <rec alg="HC" hypervolume="0.337"/>
-      <rec alg="SA" hypervolume="0.454"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.731"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.712"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.602"/>
+      <rec alg="RIOT" makespan="9964.488 4770.455 13487.510 5740.358 12929.827 12922.880 5181.693 4298.619 4623.831 4344.431 4365.671 25381.973 12940.273 3817.359 3687.675 3542.970 3236.753 3128.547 1641.020 782.323 2497.340 1252.080 624.257 1792.080 1074.100 337.168 448.357 333.233 896.140 13477.657 9082.453 5195.033 4314.032 4617.932 4845.640 25381.973 4757.160 25390.487 4309.140 2292.020 1171.170 3089.573 1606.620 579.365 805.887 2677.793 1338.947 669.523 1792.080 896.140 337.168 448.357 333.233 5317.222 12943.747 4310.776 4763.259 5313.748 25381.973 12940.273 4757.160 4500.760 4367.945 9930.793 9693.240 19861.760 3832.627 660.805 2731.093 1353.340 486.423 682.503 2368.967 1268.100 403.663 2117.013 1058.887 386.430 1792.080 896.140 337.168 333.233 4311.207 4717.412 4753.033 9075.507 18486.093 7688.141 6591.584 11283.697 5170.817 12963.613 4052.043 2946.943 1665.933 786.547 3084.127 1274.113 456.570 637.143 3583.660 1792.080 1015.693 337.168 507.997 896.140 448.357 333.233 15468.730 11277.957 18478.813 6843.787 4759.952 4345.378 4762.023 22043.047 9977.111 12940.273 4757.160 4339.689 10856.633 5182.003 3347.182 3221.823 1588.540 1783.741 718.168 811.353 3583.660 2194.413 1097.307 367.898 548.790 1792.080 896.140 448.357 338.691 340.825 333.233"/>
+      <rec alg="HC" makespan="41512.953 34948.160 31414.260 34811.207 26199.853 13675.420 8428.620 10444.793 5493.080 3583.660 4388.527"/>
+      <rec alg="SA" makespan="5263.529 2615.521 2074.557 1759.913"/>
+      <rec alg="EMSC-NSGAII" makespan="410.504 448.013 494.950 596.907 606.047 641.089 2302.327 3312.047 3469.587 3664.248 4216.800 4261.113 4679.236 4679.236 4679.236 4679.236 4679.236 5262.740 5262.740 7016.253 7016.253 7016.253"/>
+      <rec alg="EMSC-SPEA2" makespan="429.258 524.722 625.602 793.247 2705.627 2741.900 3445.027 4679.236 5262.740 7016.253"/>
+      <rec alg="EMSC-MOEA/D" makespan="358.120 476.025 476.195 607.838 641.089 386.520 423.340 582.267 640.693 675.361 793.247 328.718 419.271 543.358 641.089 409.333 549.443 639.417 641.089 487.044 587.760 625.717 641.089"/>
+      <rec alg="MOHEFT" makespan="23376.971 23376.971 22841.770 21722.440"/>
     </model>
     <model name="Montage_25">
-      <rec alg="RIOT" hypervolume="0.786 0.793 0.764 0.802 0.799"/>
-      <rec alg="HC" hypervolume="0.421"/>
-      <rec alg="SA" hypervolume="0.614"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.822 0.827 0.823"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.808 0.802 0.773"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.767 0.702 0.672"/>
+      <rec alg="RIOT" makespan="170.200 40.820 58.878 385.387 345.953 123.493 97.803 64.110 430.740 215.820 108.160 40.890 85.547 140.993 194.713 54.704 72.153 50.356 57.140 74.807 74.711 46.205 199.967 38.313 365.740 34.820 31.293 71.673 68.190 114.837 29.380 22.675 28.868 17.240 26.633 14.777 14.777 14.777 48.886 50.772 175.267 74.835 128.033 45.622 70.754 107.133 150.553 61.833 38.740 41.973 38.275 34.347 32.163 64.470 150.120 37.690 447.713 75.323 77.631 315.607 303.767 81.043 90.907 46.555 74.957 447.713 133.407 459.553 230.227 43.735 65.709 28.008 34.376 19.978 26.720 17.605 17.240 14.777 14.777 107.153 130.360 43.971 50.654 95.700 34.554 402.933 202.067 101.433 38.410 34.411 155.513 58.203 69.530 148.280 67.231 48.394 31.953 395.727 198.313 37.468 26.038 30.935 25.195 17.585 14.777 23.117 14.777 23.117 14.777 23.117 71.077 40.014 152.947 43.191 60.322 109.913 54.238 71.077 114.700 42.678 430.653 215.827 108.213 40.973 328.400 196.107 76.327 82.047 53.751 145.773 312.907 71.040 140.547 33.951 32.033 29.903 33.523 34.793 23.448 20.088 20.750 17.233 14.777 232.987 134.980 67.770 45.890 129.160 37.770 40.876 130.893 430.467 215.733 40.893 57.013 119.053 44.539 73.397 66.153 58.757 99.527 48.084 102.067 37.843 29.508 31.712 20.080 30.453 20.058 14.777 17.060 14.777"/>
+      <rec alg="HC" makespan="487.387 274.467 395.420 246.640 190.193 179.693 153.860"/>
+      <rec alg="SA" makespan="89.207 438.887 230.387 74.521 72.233 50.224"/>
+      <rec alg="EMSC-NSGAII" makespan="14.613 15.664 14.777 13.962 15.608 21.825 21.459 22.246 24.682 25.763 29.741 31.869 31.962 32.642 33.989 34.369 33.383 36.319 36.858 37.302 38.581 38.659 40.444 41.909 41.273 42.243 46.923 52.298 53.590 53.543 54.756 54.756 54.756 60.888 60.888 60.888 60.888 81.183 160.667 319.633 319.633 637.967 15.664 14.777 14.341 19.891 22.197 23.251 24.813 23.890 28.342 29.288 28.990 29.828 34.211 36.928 38.409 41.429 41.865 43.518 46.552 46.392 54.756 54.756 54.756 54.756 54.756 54.756 54.756 54.756 54.756 60.888 60.888 60.888 60.888 81.183 81.183 160.667 160.667 160.667 160.667 319.633 319.633 637.967 15.611 20.570 20.930 23.097 24.700 24.295 23.632 27.189 26.848 27.163 29.552 29.836 30.907 30.493 32.078 33.189 34.704 37.678 39.268 41.198 46.421 54.456 60.888 60.888 60.888 60.888 60.232 81.183 81.183 81.183 81.183 81.183 160.667 319.633 319.633 319.633 319.633 637.967"/>
+      <rec alg="EMSC-SPEA2" makespan="15.664 23.020 31.618 41.203 54.532 60.888 81.183 160.667 319.633 637.967 15.664 27.080 36.654 47.199 55.523 60.888 81.183 160.667 319.633 637.967 15.472 22.516 30.576 38.357 48.516 60.888 81.183 160.667 319.633 637.967"/>
+      <rec alg="EMSC-MOEA/D" makespan="18.465 20.285 21.569 20.932 21.930 22.569 25.325 29.067 34.584 33.787 37.110 45.787 48.204 56.400 76.691 102.429 122.239 16.527 15.611 18.381 20.178 25.406 30.326 31.423 31.757 33.063 37.759 42.108 41.348 46.333 47.602 58.207 70.247 82.020 142.460 14.777 17.217 19.058 19.915 22.320 23.863 25.089 29.297 32.038 32.253 38.058 43.433 46.120 58.448 65.767 115.400 117.333 14.273 19.148 18.175 20.452 27.251 29.859 32.178 33.985 38.093 45.774 47.581 59.948 63.520 138.793 19.833 19.568 21.591 23.117 23.657 27.918 27.128 30.813 30.923 33.956 36.860 38.784 48.576 57.927 70.835 89.660"/>
+      <rec alg="MOHEFT" makespan="247.273 143.182 159.196 240.839 247.273 143.182 159.196 240.839 247.273 143.182 159.196 240.839"/>
     </model>
     <model name="CyberShake_30">
-      <rec alg="RIOT" hypervolume="0.658 0.649 0.654 0.654"/>
-      <rec alg="HC" hypervolume="0.310"/>
-      <rec alg="SA" hypervolume="0.578"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.821 0.827 0.830"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.814 0.815 0.809"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.653 0.665 0.680"/>
+      <rec alg="RIOT" makespan="422.613 811.020 307.214 1838.827 381.089 355.290 269.992 304.941 291.267 593.273 1975.833 321.741 291.653 1095.447 305.861 1165.740 591.840 1974.600 577.960 270.333 1975.833 270.598 208.451 204.471 231.277 249.049 236.749 181.360 171.664 192.867 1837.867 381.873 1051.753 1050.540 1112.800 308.695 1046.013 561.240 338.701 1136.787 387.040 380.659 672.667 1839.080 292.560 338.548 285.270 356.900 302.464 242.780 285.612 207.078 235.965 171.664 411.630 312.224 1328.387 262.053 343.050 1328.387 747.027 970.367 1089.047 747.027 673.207 536.387 330.544 294.460 636.953 1791.133 536.387 1789.900 287.616 1658.053 283.829 219.387 243.849 289.918 276.624 214.471 194.164 198.036 195.291 171.664 314.194 315.101 307.828 639.987 436.007 265.456 1207.833 1988.100 359.990 596.200 263.011 306.688 262.891 1054.167 843.627 1988.100 313.961 246.296 254.573 236.431 283.848 242.942 236.448 195.429 202.518 171.664"/>
+      <rec alg="HC" makespan="1890.287 1536.273 1734.820 1132.133"/>
+      <rec alg="SA" makespan="596.277 665.427 632.613 248.347 609.940 449.000 233.440 536.273"/>
+      <rec alg="EMSC-NSGAII" makespan="90.034 89.978 91.007 94.253 96.862 99.366 110.371 112.651 115.011 119.393 120.307 120.751 134.044 137.267 170.578 173.362 174.398 188.416 192.705 211.812 211.812 211.812 211.812 211.812 280.883 561.067 561.067 1120.733 1120.733 1120.733 1120.733 1120.733 2240.167 78.142 79.144 79.258 84.842 85.868 89.236 90.400 89.820 93.611 92.824 94.786 100.532 101.299 107.081 113.670 121.116 126.684 129.898 135.287 134.309 141.860 143.500 148.064 153.037 154.916 163.964 177.007 187.989 187.989 187.989 187.989 187.989 187.356 211.812 211.812 211.812 211.812 280.883 561.067 561.067 561.067 1120.733 2240.167 84.163 84.083 88.204 91.147 92.807 93.116 97.087 101.362 106.671 112.498 118.051 117.258 136.386 147.482 150.266 167.678 179.257 183.472 187.989 211.812 211.812 211.812 280.883 280.883 280.883 280.883 561.067 561.067 561.067 1120.733 1120.733 2240.367 2240.367 2240.367"/>
+      <rec alg="EMSC-SPEA2" makespan="80.792 95.815 116.512 141.836 185.203 211.812 280.883 561.067 1120.733 2240.367 84.343 106.653 129.413 151.613 183.078 211.812 280.883 561.067 1120.733 2240.367 80.211 94.927 117.361 138.833 176.853 211.812 280.883 561.067 1120.733 2240.367"/>
+      <rec alg="EMSC-MOEA/D" makespan="82.312 81.586 85.521 87.187 86.927 91.346 104.048 106.758 108.251 129.649 147.957 161.632 211.193 1188.160 78.066 77.386 79.096 91.624 91.471 102.473 103.528 108.873 125.465 146.401 229.561 1477.927 77.990 79.360 84.642 88.156 90.451 101.171 123.696 127.684 177.524 1381.213 78.820 81.280 82.427 84.004 85.004 87.034 86.202 88.830 94.184 99.482 107.364 138.218 139.548 1016.440 81.109 84.650 86.193 87.198 91.402 94.388 95.880 98.411 107.060 107.404 111.503 123.602 127.502 145.967 204.050"/>
+      <rec alg="MOHEFT" makespan="783.587 783.587 783.587"/>
     </model>
     <model name="Epigenomics_100">
-      <rec alg="RIOT" hypervolume="0.761 0.755 0.726 0.754"/>
-      <rec alg="HC" hypervolume="0.445"/>
-      <rec alg="SA" hypervolume="0.494"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.700 0.707 0.726"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.713 0.696 0.690"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.630 0.659 0.661"/>
+      <rec alg="RIOT" makespan="103113.633 107662.874 523412.262 100683.728 100857.610 107651.308 267556.272 89161.390 78735.428 34969.131 39851.780 19926.040 8275.102 9962.620 6642.160 7472.368 100862.967 134487.200 100858.700 136580.283 101392.579 100865.067 100684.440 100685.751 103485.663 136589.517 136580.283 134487.200 537892.600 100858.700 29792.687 14895.993 42762.500 21381.400 7472.368 10690.350 7126.793 39851.780 19926.040 107674.196 103496.896 453683.133 226842.667 85069.953 113422.533 58561.843 66124.000 36883.453 13958.715 18441.477 12324.478 30819.484 68877.980 34439.240 13109.073 55110.393 39851.780 7472.368 9962.620 7126.793 134500.733 100870.433 100874.433 100689.085 100874.433 100874.433 100700.551 100870.433 100862.967 140758.350 116015.663 100684.640 101396.879 93610.550 97163.088 50960.607 25480.453 8977.778 12739.977 6642.178 39851.780 19926.040 7472.368"/>
+      <rec alg="HC" makespan="521590.771 102590.028 61599.141"/>
+      <rec alg="SA" makespan="488683.147 134778.403 43539.576 59524.380 45746.654 42065.533"/>
+      <rec alg="EMSC-NSGAII" makespan="9794.013 11878.978 12857.811 13605.927 13673.129 13945.615 14689.557 15655.469 19926.089 22782.238 42767.387 100857.700 100857.700 100857.700 134475.600 134475.600 134475.600 134475.600 268946.000 268946.000 8640.851 9775.517 10333.913 11582.608 12775.143 13927.558 15100.903 15919.774 16011.687 60382.387 86442.667 268946.000 268946.000 268946.000 268946.000 8181.700 9194.360 10057.284 11557.107 11965.853 16360.297 36578.743 89651.833 100857.700 134475.600 134475.600 134475.600 268946.000"/>
+      <rec alg="EMSC-SPEA2" makespan="9299.429 10046.240 10422.040 10810.530 13329.278 89651.833 100857.700 134475.600 268946.000 9282.587 10816.654 12636.533 13786.213 14708.391 18022.929 89651.833 100857.700 134475.600 268946.000 9184.884 11530.579 15173.201 18745.623 55335.380 63326.353 89651.833 100857.700 134475.600 268946.000"/>
+      <rec alg="EMSC-MOEA/D" makespan="10338.000 11048.802 12439.153 13078.419 15307.487 8005.036 10025.042 10874.948 11358.531 13471.217 26202.429 9771.359 9884.105 10542.922 10586.974 10815.723 14648.393 9803.175 9808.606 10739.784 12115.693 12572.058 15002.741 15344.727 10672.710 11359.513 11966.606 12587.167 12818.911 12829.253 14167.098 16444.170 20695.179"/>
+      <rec alg="MOHEFT" makespan="307787.340 358980.603 336531.352 453903.630 307787.340 358980.603 336531.352 453903.630 307787.340 358980.603 336531.352 453903.630"/>
     </model>
     <model name="Sipht_100">
-      <rec alg="RIOT" hypervolume="0.667 0.688 0.684 0.701 0.690"/>
-      <rec alg="HC" hypervolume="0.489"/>
-      <rec alg="SA" hypervolume="0.608"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.775"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.781"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.675"/>
+      <rec alg="RIOT" makespan="3869.246 4352.515 5801.420 23192.079 3867.217 3868.064 3864.422 3864.969 3595.478 3723.163 3362.766 3093.961 3361.573 2429.092 2772.812 1806.372 2323.147 1650.692 2132.299 1371.241 1827.884 2225.254 1121.715 997.082 11598.439 5801.420 3869.246 4352.515 11598.439 5801.420 23192.079 3843.435 3452.818 3440.908 3420.617 3326.082 3408.348 3160.188 2530.065 1417.925 1987.814 2085.782 1123.937 1764.105 998.068 1908.523 1122.371 997.785 1121.715 997.082 4352.515 5801.420 23192.079 3869.246 3868.499 3867.865 3866.714 3864.814 3052.093 2767.502 1130.721 1528.101 1005.163 2239.665 1298.922 1984.128 1121.715 997.102 997.082 3869.246 4352.515 5801.420 23192.079 5803.850 3869.067 4352.009 3868.931 23190.585 3864.043 3410.154 3250.249 2811.996 2107.058 2803.072 2365.058 1121.692 1500.979 2626.184 1006.290 997.082 4352.515 3869.519 3869.390 5802.973 3869.519 4354.197 3869.246 3870.037 4352.644 23192.079 5802.973 3867.589 3437.460 3263.672 2292.204 1624.541 2694.821 2413.568 2384.561 1132.913 1682.005 1007.056 1121.715 997.082"/>
+      <rec alg="HC" makespan="5801.420"/>
+      <rec alg="SA" makespan="4352.154 4352.650 2587.983"/>
+      <rec alg="EMSC-NSGAII" makespan="997.082 997.366 998.344 1019.460 1033.821 1087.503 1089.007 1141.009 1171.413 1234.097 1237.496 1367.442 1444.636 1452.001 1786.900 1908.521 3869.298 3869.298 3869.298 3869.298 4352.173 4352.173 4352.173 4352.173 5801.797 5801.797 5801.797 5801.797 5801.797 23192.289 23192.289 23192.289"/>
+      <rec alg="EMSC-SPEA2" makespan="997.093 1112.245 1506.513 1588.815 1640.881 1908.521 3869.298 4352.173 5801.797 23192.289"/>
+      <rec alg="EMSC-MOEA/D" makespan="997.355 997.082 997.453 997.344 1005.301 1005.017 1025.993 1037.348 1049.396 1085.728 1122.700 1122.952 1144.536 1395.295 1908.521 997.082 998.665 998.319 1010.927 1015.961 1055.030 1133.830 1472.086 1908.521 997.830 997.222 997.535 998.904 998.350 1001.027 1009.348 1012.776 1012.662 1036.697 1048.221 1856.742 1908.521 1038.559 1057.734 1082.420 1085.446 1239.307 1438.686 1845.706 1908.521"/>
+      <rec alg="MOHEFT" makespan="10599.724 11915.038 10599.724 11915.038 10599.724 11915.038"/>
     </model>
     <model name="Inspiral_1000">
-      <rec alg="RIOT" hypervolume="0.811 0.796 0.797 0.802 0.821"/>
-      <rec alg="HC" hypervolume="0.590"/>
-      <rec alg="SA" hypervolume="0.602"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.813"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.775"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.75 0.751 0.750"/>
+      <rec alg="RIOT" makespan="121725.032 55703.008 70823.572 256499.556 128262.185 46651.676 64148.789 42220.310 43780.820 40881.244 34400.267 21816.093 16941.240 8247.153 4099.900 2013.660 1016.690 4754.147 2343.080 1171.740 426.948 577.010 391.709 124085.434 67006.847 256499.556 128262.185 46651.676 64148.789 42220.310 39523.822 39902.097 36669.438 17211.960 16517.187 5236.633 2618.467 1302.580 492.215 618.173 434.136 42739.926 59763.148 95806.440 256499.556 128262.185 46651.676 64148.789 42220.310 73678.065 41244.992 38598.246 36390.641 39301.315 19589.480 10512.327 2592.067 1275.753 5194.607 2597.407 1299.120 487.135 649.413 433.011 48794.943 46247.282 256499.556 128262.185 46651.676 42220.310 45022.929 40408.818 34978.356 28324.227 24292.927 9922.353 4979.020 2432.880 1229.143 5155.293 2581.100 1254.447 474.113 649.423 425.491 51299.050 57764.533 256499.556 128262.185 46651.676 42220.310 54408.528 87051.675 40351.237 40422.221 34608.933 24817.580 9250.680 4391.487 1978.933 989.567 402.833 549.330 370.556"/>
+      <rec alg="HC" makespan="512953.339 489328.185 473454.383 417432.095 392954.492 329883.715 292505.592 207803.224 163496.337 108124.533 117251.980 66437.160 43313.587 34412.591 23588.380 11928.780 6353.420"/>
+      <rec alg="SA" makespan="512088.599 126318.820 95518.167 56364.567 51491.620 39026.110 36217.286 21799.851 12580.042 6619.363 6471.807 3679.667"/>
+      <rec alg="EMSC-NSGAII" makespan="568.627 846.400 1642.567 1742.353 1814.640 1865.120 3048.562 3106.427 3368.340 5618.193 50648.028 50648.028 50648.028 50648.028 50648.028 50648.028 50648.028 50648.028 50648.028 56976.506 56976.506 56976.506 56976.506 56976.506 56976.506 56976.506 303669.767 303669.767 303669.767"/>
+      <rec alg="EMSC-SPEA2" makespan="553.516 1588.380 2995.254 3435.489 3929.321 4347.759 5618.193 50648.028 56976.506 303669.767"/>
+      <rec alg="EMSC-MOEA/D" makespan="539.824 596.123 654.923 741.948 841.790 1624.780 1649.167 4733.629 5618.193"/>
+      <rec alg="MOHEFT" makespan="259705.319 257186.419 250378.832 251285.296 250233.908 250347.015 259705.319 257186.419 250378.832 251285.296 250233.908 250347.015 169884.568"/>
     </model>
     <model name="CyberShake_100">
-      <rec alg="RIOT" hypervolume="0.635 0.633 0.624 0.633"/>
-      <rec alg="HC" hypervolume="0.339"/>
-      <rec alg="SA" hypervolume="0.537"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.741 0.743 0.744"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.735 0.726 0.724"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.573 0.577 0.622"/>
+      <rec alg="RIOT" makespan="1049.193 633.623 1167.987 1351.773 1169.020 534.249 1963.253 492.600 683.313 1351.773 1352.540 1352.540 2232.807 1167.520 2341.527 2655.500 492.269 634.316 465.153 523.135 439.338 453.424 400.092 365.872 350.467 308.169 349.392 286.333 239.542 939.790 637.138 1857.667 1139.972 1156.237 2284.887 718.267 553.194 2806.553 1217.573 1158.123 2805.620 2285.353 507.543 523.349 446.167 447.300 535.519 421.881 355.551 364.489 313.703 342.693 295.438 271.780 310.616 493.347 697.737 653.937 653.103 1930.480 493.713 1395.880 2480.320 494.647 560.537 1395.413 1930.013 2765.207 2480.320 632.886 697.050 1000.047 493.224 2764.173 1169.207 2292.300 560.352 1396.647 2765.207 2480.320 493.131 545.777 478.674 628.360 431.852 452.422 430.490 417.424 349.113 357.854 312.631 288.180 327.921 278.800 1129.347 495.382 495.616 1777.857 2212.553 588.566 694.690 2008.440 2713.400 2391.240 436.411 531.937 1345.973 601.243 683.847 2686.493 1976.920 398.173 388.945 353.626 356.671 395.068 386.154 311.409 308.522 303.582 274.978"/>
+      <rec alg="HC" makespan="3918.687 3860.167 3717.227 3445.693 3482.007 3225.473 3088.793 2661.820 2508.187 2282.613 1761.460 1432.867 1177.193"/>
+      <rec alg="SA" makespan="1896.656 702.657 616.128 514.162 491.534 436.232 270.998"/>
+      <rec alg="EMSC-NSGAII" makespan="130.771 144.116 152.664 154.222 156.731 173.000 176.464 186.353 200.007 212.704 225.341 236.816 253.026 384.213 411.184 480.116 538.847 566.503 566.503 566.503 754.703 754.703 754.703 754.703 1503.707 1503.707 3002.213 3002.213 3002.213 3002.213 3002.213 137.047 136.208 153.418 155.078 156.613 163.273 165.993 167.177 171.323 175.311 177.809 209.518 217.453 375.531 425.800 426.293 437.682 453.380 504.169 504.169 504.169 504.169 504.169 504.169 504.169 504.169 1503.707 1503.707 1503.707 1503.707 3002.213 3002.213 130.802 151.099 152.764 160.402 169.653 179.451 206.569 213.740 228.216 229.552 232.494 382.980 412.087 449.318 468.561 504.169 566.503 754.703 754.703 754.703 1503.707 3002.213"/>
+      <rec alg="EMSC-SPEA2" makespan="125.998 157.325 217.178 372.996 405.351 479.819 566.503 754.703 1503.707 3002.213 140.911 188.347 237.611 382.760 419.787 477.511 566.503 754.703 1503.707 3002.213 123.658 163.831 223.010 356.796 438.220 504.169 566.503 754.703 1503.707 3002.213"/>
+      <rec alg="EMSC-MOEA/D" makespan="118.607 127.267 137.835 152.553 159.238 179.611 191.998 223.331 125.961 130.361 141.527 157.234 160.338 207.467 224.558 129.168 141.734 147.721 151.490 151.482 177.900 179.558 201.124 243.547 119.238 124.318 129.540 137.316 139.280 143.838 172.893 185.133 219.213 127.247 132.493 142.721 149.604 149.173 154.678 207.348 239.976 242.751"/>
+      <rec alg="MOHEFT" makespan="2733.617 2665.360 2736.133 2733.617 2665.360 2736.133 2733.617 2665.360 2736.133"/>
     </model>
     <model name="Sipht_60">
-      <rec alg="RIOT" hypervolume="0.714 0.749 0.711 0.697"/>
-      <rec alg="HC" hypervolume="0.237"/>
-      <rec alg="SA" hypervolume="0.592"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.795 0.788 0.809"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.796 0.800 0.786"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.623 0.707 0.585"/>
+      <rec alg="RIOT" makespan="2599.926 2607.152 2925.827 2599.926 2934.275 2599.265 2598.857 2597.300 2591.072 2593.098 2343.885 2121.598 2075.186 1565.413 1799.413 1384.624 1271.713 1127.590 1314.549 1033.894 1267.062 15571.858 2599.767 2597.518 31143.560 15573.180 2288.654 2532.129 1808.714 1469.335 2099.232 1539.652 2097.079 1120.719 1044.116 1043.006 1033.894 2924.978 2605.758 2922.989 31143.660 15573.280 2598.640 2603.325 2600.292 2598.860 2598.845 31143.660 15573.280 2355.565 2510.036 2354.904 2304.382 2172.102 2292.765 2171.077 1805.083 1033.894 1315.425 1250.111 2597.246 2924.678 2600.578 31146.152 15574.376 2598.589 15570.716 2596.260 2596.651 2583.297 2312.467 2307.840 1761.122 1844.124 2300.855 1164.338 1035.258 1551.812 1550.640 1033.894"/>
+      <rec alg="HC" makespan="31143.360 31136.489 31116.035 31122.831 27532.963 26270.735 19105.547 14207.916 13291.957"/>
+      <rec alg="SA" makespan="15572.980 2597.390"/>
+      <rec alg="EMSC-NSGAII" makespan="1033.821 1033.894 1034.951 1043.943 1045.537 1058.238 1071.816 1109.275 1154.799 1204.012 1450.619 1630.835 1729.966 2175.932 2598.131 2598.131 2598.131 2922.373 2922.373 2922.373 2922.373 2922.373 15575.588 15575.588 1033.776 1033.848 1033.821 1052.884 1070.936 1075.101 1087.327 1285.329 1349.350 1412.383 1436.474 1526.722 1572.858 1659.734 1834.332 2598.131 2598.131 2598.131 2598.131 2598.131 2922.373 2922.373 2922.373 2922.373 2922.373 15575.588 15575.588 1034.171 1034.222 1033.848 1034.434 1037.910 1042.181 1050.961 1103.002 1110.649 1152.671 1155.192 1155.044 1227.710 1570.296 2160.403 2598.131 2598.131 2598.131 2922.373 2922.373 2922.373 2922.373 2922.373 15575.588 15575.588 15575.588 15575.588"/>
+      <rec alg="EMSC-SPEA2" makespan="1033.848 1129.456 1292.113 1327.423 1610.923 1697.995 1777.607 1901.826 2598.131 2922.373 1034.126 1033.821 1035.499 1037.955 1169.330 1317.586 1703.620 2598.131 2922.373 15575.588 1033.821 1119.510 1206.573 1452.477 1864.130 2140.542 2522.622 2598.131 2922.373 15575.588"/>
+      <rec alg="EMSC-MOEA/D" makespan="1033.894 1034.689 1033.776 1035.250 1036.512 1039.349 1038.452 1840.698 1035.755 1034.967 1034.099 1034.282 1040.664 1047.956 1159.644 1203.102 1885.718 1034.851 1034.192 1033.848 1038.968 1066.641 1105.395 1119.192 1725.594 1035.157 1034.535 1033.821 1034.959 1043.077 1206.096 1254.392 1490.702 1823.655 1034.766 1034.455 1033.776 1035.444 1038.943 1096.293"/>
+      <rec alg="MOHEFT" makespan="28623.623 14513.510 17081.633 13410.077 13641.172 28623.623 14513.510 17081.633 13410.077 13641.172 28623.623 14513.510 17081.633 13410.077 13641.172"/>
     </model>
     <model name="CyberShake_50">
-      <rec alg="RIOT" hypervolume="0.674 0.676 0.669 0.668"/>
-      <rec alg="HC" hypervolume="0.369"/>
-      <rec alg="SA" hypervolume="0.567"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.787 0.781 0.784"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.770 0.762 0.754"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.514 0.523 0.508"/>
+      <rec alg="RIOT" makespan="402.045 455.130 390.545 632.677 454.303 1340.793 664.037 2530.947 1876.013 292.940 1876.033 1455.887 364.066 2341.020 401.545 1876.013 1016.033 1876.013 364.126 2530.947 1876.013 267.848 258.402 287.260 250.912 223.404 240.853 204.547 661.790 1552.773 319.338 962.840 406.749 964.440 320.924 369.477 810.060 811.660 1330.587 647.719 468.270 368.517 2816.793 1862.093 1526.673 318.318 297.436 402.349 272.822 219.302 229.207 172.327 225.753 960.033 1499.767 461.570 807.147 960.153 321.549 682.447 2116.987 321.442 2761.053 1799.640 959.587 1530.853 420.750 347.288 409.403 301.238 300.984 365.585 291.442 279.161 288.522 260.261 253.443 224.636 367.329 1240.753 1184.180 1773.320 366.742 1519.573 812.187 812.187 649.617 618.955 2129.747 366.922 460.419 460.286 2677.773 649.497 338.841 1750.180 312.609 648.186 385.926 299.627 298.321 299.958 420.627 1150.600 267.784 255.436 282.787 250.418 215.531"/>
+      <rec alg="HC" makespan="2727.953 2627.013 2253.533 2232.327 1618.247 1309.680 1204.707"/>
+      <rec alg="SA" makespan="2054.867 2056.300 1311.413 768.231 441.930 693.903 409.920"/>
+      <rec alg="EMSC-NSGAII" makespan="106.779 112.373 114.067 124.533 129.369 132.062 136.905 145.000 157.738 164.781 165.423 171.810 171.404 178.036 198.244 206.762 215.658 224.811 244.084 245.327 247.170 250.373 287.756 295.852 298.940 298.940 298.940 298.940 335.395 335.395 335.395 335.395 447.360 447.360 447.360 447.360 891.920 891.920 1781.240 1781.240 1781.240 1781.240 1781.240 1781.240 3559.980 3559.980 109.348 119.267 121.786 121.033 126.769 128.049 127.856 128.862 144.389 147.480 152.533 154.929 158.227 159.762 180.600 198.696 203.747 232.658 243.420 252.938 252.486 262.572 285.413 288.067 298.940 298.940 298.940 335.395 335.395 335.395 335.395 335.395 335.395 335.395 447.360 447.360 447.360 891.920 891.920 891.920 891.920 1781.240 3559.580 117.547 118.577 119.809 124.636 127.553 154.469 153.525 159.996 160.893 196.045 213.983 253.256 255.960 262.130 274.037 274.276 281.816 287.940 298.940 298.772 335.395 335.395 335.395 335.395 335.395 447.360 447.360 447.360 891.920 891.920 1781.240 1781.240 1781.240 3559.780"/>
+      <rec alg="EMSC-SPEA2" makespan="122.984 155.006 185.794 237.464 287.029 335.395 447.360 891.920 1781.240 3559.980 109.456 148.458 183.267 235.584 295.306 335.395 447.360 891.920 1781.240 3559.080 113.319 146.892 183.420 232.682 282.297 335.395 447.360 891.920 1781.240 3559.980"/>
+      <rec alg="EMSC-MOEA/D" makespan="98.173 108.440 109.449 110.976 112.572 115.806 118.959 118.242 129.322 134.762 134.262 139.794 144.766 166.639 244.959 362.738 374.063 110.830 113.803 118.710 120.740 127.023 147.876 153.304 158.873 177.480 194.108 892.340 101.219 102.876 104.027 113.812 116.916 120.740 124.157 123.382 140.961 148.096 173.116 334.080 1014.397 101.319 113.067 114.427 128.473 127.786 132.849 147.797 160.164 199.439 240.722 367.377 3095.313 106.429 109.496 119.063 123.002 142.604 149.209 187.983"/>
+      <rec alg="MOHEFT" makespan="1361.953 1412.979 1559.756 1824.812 1361.953 1412.979 1559.756 1824.812 1361.953 1412.979 1559.756 1824.812"/>
     </model>
     <model name="Montage_50">
-      <rec alg="RIOT" hypervolume="0.822 0.833 0.816 0.830 0.824"/>
-      <rec alg="HC" hypervolume="0.502"/>
-      <rec alg="SA" hypervolume="0.601"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.860 0.859 0.862"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.856 0.851 0.801"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.789 0.721 0.706"/>
+      <rec alg="RIOT" makespan="144.040 332.540 184.580 231.313 88.580 141.171 80.486 652.500 164.200 62.130 82.650 93.435 76.668 57.963 121.532 516.667 258.500 49.105 43.880 137.847 39.183 41.957 25.120 33.427 24.945 22.190 30.180 22.163 16.890 22.953 15.536 249.167 120.073 740.853 374.787 186.913 95.247 239.470 165.570 651.640 345.867 82.680 55.670 544.987 273.093 136.947 50.540 68.950 62.737 117.870 95.770 129.338 39.163 163.440 80.273 30.165 40.437 27.160 25.060 22.263 22.378 30.147 19.735 16.890 15.536 98.257 82.280 175.832 764.607 371.080 190.527 67.558 340.753 59.368 264.773 50.488 113.716 140.357 143.173 66.409 708.760 357.513 64.523 33.030 43.873 38.273 27.653 36.547 31.713 24.948 22.263 19.698 19.683 16.890 22.953 15.536 113.636 185.247 76.157 165.687 712.960 332.593 179.040 62.388 515.720 259.173 129.500 49.098 65.053 42.985 484.500 242.880 118.600 44.905 59.600 40.180 35.715 22.273 30.097 22.213 30.000 19.723 26.560 19.643 26.500 16.890 15.536 16.890 15.536 275.700 165.800 765.287 389.940 192.547 97.073 82.117 107.303 166.447 545.433 300.447 143.840 50.538 72.450 70.143 130.507 99.223 284.033 120.473 43.698 31.030 40.310 27.585 33.517 22.240 19.723 26.560 19.618 16.890 15.536"/>
+      <rec alg="HC" makespan="652.593 565.847 374.033 262.167 235.147 206.420 205.913 178.727"/>
+      <rec alg="SA" makespan="215.980 140.197 138.998 226.250 89.965 89.576"/>
+      <rec alg="EMSC-NSGAII" makespan="20.033 49.308 57.469 58.289 65.673 69.849 72.469 77.861 79.186 86.442 86.828 91.124 95.209 109.052 114.913 116.090 117.776 117.776 117.776 117.776 131.810 131.810 131.810 131.810 175.313 175.313 175.313 175.313 348.727 348.727 695.153 695.153 695.153 695.153 695.153 695.153 1387.907 1387.907 20.149 46.538 53.300 52.973 59.878 60.106 64.058 67.331 68.433 70.480 77.971 79.918 84.549 86.284 90.629 92.298 100.944 102.347 117.776 117.776 117.776 131.810 131.810 131.810 131.810 131.810 131.810 131.810 175.313 175.313 175.313 348.727 348.727 348.727 348.727 695.153 1387.907 1387.907 20.142 19.625 53.280 53.033 57.464 57.360 58.967 64.591 68.535 71.040 71.457 77.469 82.371 83.378 89.740 105.896 117.776 131.810 131.810 131.810 131.810 131.810 175.313 175.313 175.313 348.727 348.727 695.153 695.153 695.153 1387.907 1387.907"/>
+      <rec alg="EMSC-SPEA2" makespan="20.031 49.082 64.567 82.847 100.759 131.810 175.313 348.727 695.153 1387.907 17.984 20.040 49.143 73.230 91.459 126.592 175.313 348.727 695.153 1387.907 19.600 35.415 49.518 67.616 95.536 131.810 175.313 348.727 695.153 1387.907"/>
+      <rec alg="EMSC-MOEA/D" makespan="18.009 24.740 26.603 30.077 40.704 44.975 48.721 50.680 56.862 62.357 73.831 79.227 97.491 125.933 151.327 156.047 23.063 22.593 26.490 26.690 33.423 49.554 63.039 62.280 68.667 80.027 88.153 119.526 458.080 22.196 27.932 30.970 36.236 38.194 41.084 42.472 45.178 47.032 54.940 55.248 64.973 64.303 73.650 81.380 118.907 192.233 22.198 26.483 30.117 29.539 36.788 40.826 51.566 61.380 64.712 73.398 80.630 105.080 113.873 232.280 22.278 27.735 28.178 33.340 36.327 36.897 46.589 54.483 54.103 58.237 61.250 60.840 84.255 100.025"/>
+      <rec alg="MOHEFT" makespan="590.120 693.788 590.120 693.788 590.120 693.788"/>
     </model>
     <model name="Montage_100">
-      <rec alg="RIOT" hypervolume="0.798 0.800 0.792 0.807"/>
-      <rec alg="HC" hypervolume="0.545"/>
-      <rec alg="SA" hypervolume="0.627"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.856 0.851 0.855"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.833 0.829 0.844"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.775 0.737 0.745"/>
+      <rec alg="RIOT" makespan="245.313 728.307 493.136 249.209 355.573 773.833 2295.020 797.747 299.477 382.057 545.377 217.365 231.731 339.865 286.134 2358.387 1180.493 220.285 197.100 242.070 187.676 204.296 145.476 104.068 54.768 54.297 76.273 38.537 123.673 56.080 55.080 21.030 27.840 18.460 207.141 905.727 387.703 654.547 2450.987 244.884 314.240 352.520 2513.200 1262.173 288.632 209.168 675.313 208.856 302.637 469.350 2066.280 1034.540 195.433 412.780 390.273 698.493 355.867 168.854 156.752 168.091 143.628 113.913 151.287 75.993 38.270 76.080 41.640 123.673 122.673 56.080 55.080 21.030 27.840 18.460 524.110 213.921 280.368 787.473 473.377 327.947 324.640 297.456 487.727 656.167 309.498 315.627 2308.520 1138.840 212.500 189.602 242.642 651.533 270.389 203.661 169.832 110.620 69.048 129.010 62.513 150.547 75.660 28.803 38.187 25.553 138.880 70.040 26.303 35.073 23.647 921.920 843.053 1224.767 306.291 399.138 206.856 591.060 288.707 2343.413 1173.067 217.840 194.276 858.727 538.927 259.342 266.394 497.145 335.296 2220.967 185.798 223.472 737.820 202.653 190.791 173.201 114.857 121.460 137.280 69.140 26.345 34.970 34.960 123.833 122.833 62.767 23.635 31.180 20.887 123.673 56.080 55.080 21.030 27.840 18.460"/>
+      <rec alg="HC" makespan="2264.393 2099.060 2012.047 1632.120 1418.400 1074.840 794.780 890.507 571.540 417.120 274.960 274.587 218.420"/>
+      <rec alg="SA" makespan="547.587 334.862 220.579 242.900 174.974 156.618 152.092 133.263 130.499 116.119"/>
+      <rec alg="EMSC-NSGAII" makespan="23.396 28.815 29.583 29.000 35.709 138.473 165.982 180.676 187.029 187.098 192.600 206.811 238.003 250.214 276.985 276.985 276.985 367.947 367.947 367.947 367.947 731.393 731.393 1458.387 1458.387 1458.387 1458.387 1458.387 2912.173 2912.173 2912.173 26.320 26.353 28.800 38.098 141.016 141.199 148.576 158.718 161.838 169.076 178.480 182.613 188.688 213.456 216.364 246.598 246.598 246.598 246.598 246.598 246.598 246.598 246.598 731.393 731.393 731.393 731.393 1458.387 1458.387 2912.173 2912.173 2912.173 2912.173 23.373 23.996 26.278 29.013 29.003 34.850 34.930 37.387 141.287 148.231 152.033 152.427 173.231 175.903 174.938 200.342 210.158 232.351 246.598 276.985 367.947 367.947 367.947 731.393 1458.387 2912.173 2912.173 2912.173 2912.173 2912.173 2912.173 2912.173"/>
+      <rec alg="EMSC-SPEA2" makespan="25.669 37.562 131.481 164.660 207.500 276.985 367.947 731.393 1458.387 2912.173 23.276 38.062 131.353 165.862 219.184 276.985 367.947 731.393 1458.387 2912.173 25.771 35.591 126.638 163.767 201.740 276.985 367.947 731.393 1458.387 2912.173"/>
+      <rec alg="EMSC-MOEA/D" makespan="28.973 35.647 37.909 26.318 28.968 51.068 57.723 59.065 59.731 59.596 97.363 100.742 110.607 124.138 199.353 273.163 23.209 25.773 29.658 29.040 35.804 34.890 28.147 34.890 37.729 25.618 31.725 34.890 34.907 37.424 152.047"/>
+      <rec alg="MOHEFT" makespan="1032.118 1032.118 1032.118"/>
     </model>
     <model name="Inspiral_50">
-      <rec alg="RIOT" hypervolume="0.728 0.720 0.714 0.723"/>
-      <rec alg="HC" hypervolume="0.449"/>
-      <rec alg="SA" hypervolume="0.505"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.782 0.779 0.800"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.771 0.687 0.707"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.616 0.570 0.592"/>
+      <rec alg="RIOT" makespan="3265.588 5362.735 5862.467 2618.911 2624.778 3432.165 2791.720 3290.587 2784.680 2791.720 5362.735 2618.911 2784.680 2566.294 2223.113 960.380 360.312 480.390 320.316 1483.520 716.637 355.882 474.337 316.184 1896.133 948.267 474.450 355.770 5362.935 2631.918 2951.457 2624.878 2619.498 3450.889 2621.358 2631.918 2781.760 2785.280 2958.497 11852.973 3928.210 9203.555 11861.547 9929.877 15699.167 15707.740 9925.790 2618.986 1511.227 2166.687 1154.967 541.900 1896.133 948.267 407.060 474.337 355.882 332.991 355.770 316.273 2618.986 2782.577 9702.887 15698.967 3262.801 3426.685 2946.461 3448.086 2786.664 2780.284 2618.986 9711.460 3932.097 15698.967 3262.801 2610.614 1580.660 903.590 2411.713 1232.573 434.800 603.203 1896.133 948.267 355.770 316.273 2800.639 3441.638 2619.111 11852.273 2625.989 2952.441 5939.797 2948.354 2952.441 2948.354 3932.197 15698.367 2619.111 3433.165 2569.616 2556.271 1864.059 1896.133 948.267 374.573 474.337 336.782 355.770 324.898 316.273"/>
+      <rec alg="HC" makespan="31396.033 3457.629"/>
+      <rec alg="SA" makespan="23690.887 16889.838 3567.608 2571.707 2158.897 2149.569 2051.613"/>
+      <rec alg="EMSC-NSGAII" makespan="329.874 385.147 945.910 970.040 1009.607 1063.047 1194.320 1303.253 1307.243 1388.360 1509.682 1528.509 1564.593 1600.007 1629.173 1678.381 1716.982 2343.733 2351.147 2453.493 2474.012 2550.102 2618.711 2618.711 2618.711 2618.711 2945.237 2945.237 2945.237 2945.237 15698.967 15698.967 15698.967 15698.967 15698.967 15698.967 376.087 389.380 393.864 404.973 893.173 1211.173 1284.827 1609.423 1684.615 1843.380 1941.504 2059.751 2187.604 2494.483 2618.711 2618.711 2618.711 2945.237 2945.237 2945.237 2945.237 2945.237 2945.237 2945.237 15698.967 333.022 862.107 905.982 944.340 960.867 1035.237 1145.176 1272.847 1309.064 1416.080 1489.447 1517.536 1662.344 1732.757 1775.911 1822.322 1889.467 1899.102 1987.658 2061.977 2098.433 2491.538 2526.060 2618.711 2945.237 2945.237 2945.237 2945.237 2945.237"/>
+      <rec alg="EMSC-SPEA2" makespan="403.656 1020.302 1192.691 1347.618 1523.621 1905.887 2231.284 2579.505 2945.237 15698.967 334.587 586.998 781.942 1044.837 1319.252 1608.603 1899.035 2318.052 2945.237 15698.967 388.131 761.223 1111.497 1240.271 1402.159 1534.715 2010.728 2528.737 2945.237 15698.967"/>
+      <rec alg="EMSC-MOEA/D" makespan="316.273 334.849 342.484 361.180 446.934 484.337 561.550 575.623 592.123 748.880 3254.802 316.184 316.871 371.188 461.735 480.940 782.038 2335.200 330.896 422.010 426.155 451.073 542.753 562.719 562.867 595.466 623.583 630.602 3617.804 363.122 413.696 451.578 515.675 559.687 594.338 642.278 844.343 3063.267 384.982 412.527 510.591 522.617 567.906 659.816 2447.457"/>
+      <rec alg="MOHEFT" makespan="9729.774 10136.386 10120.835 15493.440 11318.462 13198.196 16066.607 9729.774 10136.386 10120.835 15493.440 11318.462 13198.196 16066.607 9729.774 10136.386 10120.835 15493.440 11318.462 13198.196 16066.607"/>
     </model>
     <model name="CyberShake_1000">
-      <rec alg="RIOT" hypervolume="0.780 0.790 0.792 0.795 0.795"/>
-      <rec alg="HC" hypervolume="0.631"/>
-      <rec alg="SA" hypervolume="0.602"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.819"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.810"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.799"/>
+      <rec alg="RIOT" makespan="4431.149 8583.458 3594.323 3493.186 4307.713 15531.975 13422.135 7800.244 6933.678 3199.156 3938.459 2685.779 2664.617 2284.957 2168.702 2079.588 2049.155 2036.432 1554.893 1447.349 1794.037 1270.633 1752.070 1233.056 1996.900 1200.882 10120.996 5763.373 3245.785 5070.640 4919.913 15531.975 13422.135 7800.244 6933.678 3199.156 2685.779 3936.321 2683.908 2674.135 2612.259 2173.222 2056.430 1586.158 2066.650 1434.189 1319.722 1288.798 1114.287 10076.611 4042.095 15531.975 13422.135 7800.244 6933.678 3199.156 3938.459 2685.779 4785.384 2669.310 2292.718 2650.597 1843.678 1823.204 1525.735 1477.871 1459.004 1357.129 1329.266 1268.389 1197.831 5240.602 3789.224 15531.975 13422.135 7800.244 6933.678 3199.156 2685.779 10616.267 2532.036 2304.075 1842.498 1558.002 1462.484 1821.055 1387.080 1218.751 1209.647 3627.546 5886.655 5827.174 4615.851 15531.975 3199.156 2685.779 2654.266 2059.056 2024.463 1564.456 1506.953 1429.420 1314.478 1252.191 1191.227"/>
+      <rec alg="HC" makespan="25484.023 25234.832 24893.763 19296.279 13093.531 8203.737 6388.261 5510.231 4839.657 4419.631 3346.320"/>
+      <rec alg="SA" makespan="10264.023 14237.852 8871.174 8043.915 7881.244 7691.589 6382.027 5182.440 4217.394 3994.617 3644.982 3736.267"/>
+      <rec alg="EMSC-NSGAII" makespan="1178.898 1294.415 1431.067 1465.816 1606.740 1648.983 1759.368 1890.618 5235.985 5235.985 5235.985 5235.985 5235.985 5235.985 5881.246 5881.246 15599.756 31152.612 31152.612"/>
+      <rec alg="EMSC-SPEA2" makespan="1175.120 1386.727 1447.519 1618.646 1771.657 1890.618 5235.985 5881.246 15599.756 31152.612"/>
+      <rec alg="EMSC-MOEA/D" makespan=""/>
+      <rec alg="MOHEFT" makespan="11147.851 11147.851 11147.851"/>
     </model>
     <model name="Epigenomics_997">
-      <rec alg="RIOT" hypervolume="0.811 0.802 0.807 0.792 0.800"/>
-      <rec alg="HC" hypervolume="0.487"/>
-      <rec alg="SA" hypervolume="0.497"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.686"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.670"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.658"/>
+      <rec alg="RIOT" makespan="433088.999 163156.233 215673.433 737474.927 372134.726 142164.335 67470.993 33733.320 12649.475 16871.743 10332.223 49968.580 24982.027 9371.142 12489.603 8328.113 45484.327 22740.333 8530.490 7614.947 7581.002 163156.233 815636.940 406916.520 155506.283 205339.833 353489.500 134579.080 118138.748 133634.633 90699.307 45339.360 45484.327 22739.933 22719.753 9354.538 11368.057 8355.062 8530.645 7581.002 8530.240 856980.092 433088.999 163156.233 215673.433 843895.612 424230.693 155394.622 110649.807 20819.370 108718.513 74546.293 37268.787 18641.050 45485.327 22740.207 8530.392 11368.057 7581.002 45479.327 22737.333 8529.490 7580.002 856980.092 433088.999 163156.233 215673.433 84448.540 29838.177 42222.947 84707.233 42344.767 19373.100 21170.533 16797.162 64768.520 32381.267 16188.480 45479.327 22737.020 8529.372 11367.037 7580.002 429366.667 163098.358 215560.216 834698.612 407806.660 153893.565 654123.907 123209.075 134395.287 123508.472 45485.327 22741.047 22719.753 8530.658 11368.057 7581.002 22740.333 8530.490"/>
+      <rec alg="HC" makespan="1380127.064 1371555.460 1184379.320 793642.447 588845.353 337437.560 188159.404 166100.847 115483.240 90844.367 90843.113"/>
+      <rec alg="SA" makespan="1462995.410 992330.203 953698.445 860571.838 738613.958 367841.158 344540.576 107181.033 104893.407 102095.677 90739.787 90423.677 70080.213"/>
+      <rec alg="EMSC-NSGAII" makespan="12812.984 13313.518 13805.180 15770.410 18248.627 37534.113 40247.873 41272.893 73712.493 75025.347 157072.479 856676.515 963752.642 963752.642 963752.642 963752.642"/>
+      <rec alg="EMSC-SPEA2" makespan="14110.598 22565.437 38503.987 56356.508 66219.107 69205.660 72221.353 157072.479 856676.515 963752.642"/>
+      <rec alg="EMSC-MOEA/D" makespan=""/>
+      <rec alg="MOHEFT" makespan="2898814.677 3088606.788 2883673.444 2816922.175 2898814.677 3088606.788 2883673.444 2816922.175 2922378.976 2992782.228 3008251.968 3496027.457 3000205.968"/>
     </model>
     <model name="Epigenomics_46">
-      <rec alg="RIOT" hypervolume="0.688 0.652 0.669 0.680"/>
-      <rec alg="HC" hypervolume="0.145"/>
-      <rec alg="SA" hypervolume="0.390"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.683 0.677 0.686"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.649 0.691 0.682"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.615 0.598 0.569"/>
+      <rec alg="RIOT" makespan="17292.960 36468.513 18234.907 8656.541 33964.120 14224.373 6869.182 6208.643 4369.967 24639.880 10343.313 1939.010 2922.963 3789.883 2599.317 1730.769 3724.637 2585.357 3671.577 5936.954 6932.659 37721.260 34766.173 6861.587 4003.448 4614.831 6237.490 6136.977 3438.806 17674.133 3006.050 3264.603 1935.420 1939.010 2585.037 1899.156 2584.777 1722.273 8296.230 7729.427 9644.043 6518.141 34101.927 5938.691 6581.785 4498.255 5143.615 4227.558 2643.190 3599.037 3538.659 1944.598 1943.155 1742.278 1939.010 1730.769 6462.090 6590.172 13242.440 7142.585 2384.978 14295.080 7147.740 2659.760 3573.920 3873.213 2406.651 2045.255 1730.769 1939.010"/>
+      <rec alg="HC" makespan="29038.153 42375.727 15215.063 20649.513 20649.067"/>
+      <rec alg="SA" makespan="7417.307 12909.965 20206.309 14531.807 13204.528 8702.148 5667.985"/>
+      <rec alg="EMSC-NSGAII" makespan="1729.680 1803.936 1851.866 1921.472 2011.438 2049.494 2108.851 2207.399 2225.467 2393.596 3611.842 4373.044 4585.491 5205.939 6127.662 6978.844 9205.040 9205.040 10355.695 10355.695 10355.695 10355.695 10355.695 10355.695 10355.695 1722.273 1724.059 1736.286 1777.252 1776.891 1855.463 1908.882 1948.716 2165.584 3240.869 3422.500 3537.604 3640.956 4023.815 4357.566 5027.580 5893.344 5959.851 6222.076 6881.329 6984.546 8394.796 9205.040 13806.260 13806.260 13806.260 13806.260 1727.357 1859.021 2039.218 2230.835 2337.183 3651.031 4732.849 5218.669 6570.413 6605.391 8341.342 8861.009 10101.993 10355.695 10355.695 10355.695 10355.695 10355.695 10355.051"/>
+      <rec alg="EMSC-SPEA2" makespan="1722.396 1747.438 2092.133 2335.728 2565.741 5574.847 6943.479 8682.747 9205.040 10355.695 1725.779 3527.506 3615.756 4667.222 5551.273 6721.957 7898.515 9205.040 10355.695 10355.695 1778.127 1947.958 1974.726 2246.218 2332.570 2356.242 2381.811 2506.535 9205.040 10355.695"/>
+      <rec alg="EMSC-MOEA/D" makespan="1725.193 1737.918 1780.464 1811.449 2908.284 1766.371 1766.756 1821.603 1971.584 18252.240 1731.291 1739.040 1740.253 1763.300 1818.213 1900.657 1956.587 2976.589 1723.736 1760.152 1789.120 2141.703 2236.321 2353.712 9344.931 1726.447 1759.576 1777.898 1828.929 1918.086 1932.866 1939.799 2066.169 3190.116"/>
+      <rec alg="MOHEFT" makespan="29769.677 40008.403 29769.677 40008.403 29769.677 40008.403"/>
     </model>
     <model name="Sipht_1000">
-      <rec alg="RIOT" hypervolume="0.673 0.642 0.726 0.685 0.702"/>
-      <rec alg="HC" hypervolume="0.470"/>
-      <rec alg="SA" hypervolume="0.498"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.773"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.708"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.735"/>
+      <rec alg="RIOT" makespan="38643.652 38643.967 38646.941 43465.091 115835.987 231627.483 38643.061 38647.891 38444.802 24919.660 12064.684 6032.492 2271.926 3115.220 2023.498 43466.996 38648.432 57946.842 38647.420 38646.226 231625.732 38643.039 38650.568 37961.366 7274.022 37586.592 18802.084 9396.974 3528.870 4698.737 6577.973 7200.009 7039.270 29704.263 15780.005 7426.284 2806.110 3620.224 2476.306 38644.686 38643.320 43469.330 38643.820 115837.594 57946.144 231624.744 38642.883 38647.736 43469.029 43470.588 37857.353 14395.643 7197.921 3552.697 1331.741 1799.705 1203.112 43467.056 43467.808 43466.418 38644.578 38643.470 231625.961 115835.981 38642.960 43466.889 43465.684 57942.008 36978.128 38491.652 20078.087 10042.371 5021.235 1867.286 2509.848 1612.583 43468.012 38646.984 38645.554 38651.615 43467.818 43469.741 231625.469 115835.485 38642.555 38650.267 43466.864 38652.975 38623.226 17263.799 8634.936 4316.025 1623.066 2164.123"/>
+      <rec alg="HC" makespan="38656.600 24906.413"/>
+      <rec alg="SA" makespan="231630.056 119207.962 63274.123 17705.789 16494.714 15565.570 12812.247"/>
+      <rec alg="EMSC-NSGAII" makespan="1210.358 1799.705 3599.239 3685.919 6517.658 6630.487 7225.969 7307.541 8132.849 8400.657 9029.399 14395.643 14543.856 16790.076 38645.707 38645.707 38645.707 38645.707 38645.707 38645.707 43467.195 43467.195 43467.195 43467.195 43467.195 57945.260 57945.260 57945.260 115841.021 115841.021 115841.021 115841.021 231633.941 231633.941 231633.941 231633.941"/>
+      <rec alg="EMSC-SPEA2" makespan="1202.960 3915.395 7826.157 14797.400 16790.076 38645.707 43467.195 57945.260 115841.021 231633.941"/>
+      <rec alg="EMSC-MOEA/D" makespan=""/>
+      <rec alg="MOHEFT" makespan="170965.290 170044.142 170965.290 170044.142"/>
     </model>
     <model name="Inspiral_30">
-      <rec alg="RIOT" hypervolume="0.718 0.714 0.743 0.728"/>
-      <rec alg="HC" hypervolume="0.357"/>
-      <rec alg="SA" hypervolume="0.539"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.793 0.797 0.802"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.803 0.726 0.756"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.625 0.625 0.609"/>
+      <rec alg="RIOT" makespan="1921.553 2970.047 2976.513 1660.238 1924.787 4429.313 1564.098 1562.582 2976.513 3122.138 1663.472 3261.267 1474.704 1954.092 1567.332 1474.704 6747.307 1561.943 1663.472 4841.480 1549.854 17647.060 1459.906 1145.140 839.311 633.855 804.047 1317.735 660.633 549.543 1262.613 631.357 897.653 448.927 897.653 348.545 448.927 299.618 3124.338 1474.854 1875.553 1867.853 1926.270 3262.267 4419.913 1867.853 1488.304 6523.133 1926.270 4424.013 6523.133 1962.692 4419.913 1474.104 2971.630 1575.643 1261.692 1108.636 1193.939 880.164 712.852 653.087 413.072 299.251 897.653 413.072 448.927 400.543 6747.507 1954.092 3261.267 1474.639 3267.733 3267.733 1476.660 6753.873 1835.113 6753.873 2215.307 6753.873 1960.558 1573.698 1479.893 6744.173 1475.143 1573.698 1384.991 1381.758 1663.888 1664.655 4430.380 1953.092 6515.533 1355.105 1326.249 1055.227 337.985 527.730 1025.753 513.043 897.653 448.927 299.618 4419.713 1564.343 1664.655 3270.267 1477.004 1962.892 2224.507 6515.333 8846.527 6755.007 3116.238 1576.043 8838.527 4419.713 1474.504 3116.238 1568.343 1925.870 6515.333 1430.079 1370.215 1044.179 909.400 405.048 454.800 616.940 897.653 337.985 448.927 299.618 405.000 897.653 448.927 299.618"/>
+      <rec alg="HC" makespan="17675.753 16503.000 13691.533 12768.387 6351.673 6847.267 7930.240 4408.367 3590.013"/>
+      <rec alg="SA" makespan="4417.993 10697.773 6195.080 1430.216 4238.593 3884.067 1365.803 1220.113"/>
+      <rec alg="EMSC-NSGAII" makespan="299.486 299.251 307.529 311.180 337.603 348.316 662.525 675.673 803.280 873.983 897.653 902.303 906.182 934.309 947.783 969.895 1003.288 1172.004 1298.611 1382.382 1493.387 1658.417 1658.417 1658.417 1658.417 1658.417 2210.357 8838.627 8838.627 8838.627 8838.627 8838.627 299.251 307.453 307.176 309.620 310.159 316.173 342.091 568.120 571.301 764.269 811.545 878.169 892.247 915.605 959.141 1083.841 1227.918 1319.694 1471.347 1474.404 1474.404 1474.404 1474.404 1474.404 1658.417 1658.417 1658.417 1658.417 2210.357 8838.627 299.618 303.760 310.020 533.505 618.602 658.530 716.869 772.242 842.877 953.163 1000.810 1016.063 1025.898 1252.320 1301.012 1324.536 1397.642 1474.404 1658.417 1658.417 1658.417 2210.357 2210.357 2210.357 2210.357 8838.627 8838.627"/>
+      <rec alg="EMSC-SPEA2" makespan="301.089 481.120 645.997 796.533 973.333 1151.802 1390.229 1658.417 2210.357 8838.627 299.251 424.754 551.954 672.793 907.399 1151.178 1360.654 1658.417 2210.357 8838.627 299.618 408.141 557.468 666.401 850.359 1072.090 1455.593 1658.417 2210.357 8838.627"/>
+      <rec alg="EMSC-MOEA/D" makespan="317.680 328.317 337.461 348.765 348.458 359.132 361.260 399.216 599.633 3575.897 299.251 309.162 326.006 346.196 420.342 440.291 474.322 618.450 3549.460 299.251 330.575 361.254 380.866 384.356 410.429 459.310 485.957 2739.091 300.893 303.044 303.617 330.763 361.177 375.556 389.979 390.295 402.861 689.650 2040.262 305.819 318.662 323.039 333.692 361.705 410.364 1997.956"/>
+      <rec alg="MOHEFT" makespan="9802.609 11639.380 4521.353 6876.776 10672.327 11975.693 9802.609 11639.380 4521.353 6876.776 10672.327 11975.693 9802.609 11639.380 4521.353 6876.776 10672.327 11975.693"/>
     </model>
     <model name="Epigenomics_24">
-      <rec alg="RIOT" hypervolume="0.744 0.741 0.720 0.728"/>
-      <rec alg="HC" hypervolume="0.402"/>
-      <rec alg="SA" hypervolume="0.654"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.786 0.784 0.781"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.789 0.769 0.785"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.576 0.587 0.600"/>
+      <rec alg="RIOT" makespan="6391.750 5045.379 5045.379 6391.750 6406.117 5045.379 12776.667 12776.667 11847.967 7314.417 12776.667 5939.917 23668.167 23655.133 11847.967 4779.897 2695.363 4367.028 1743.781 2305.223 1402.007 1868.293 2415.195 3118.453 4449.921 4402.646 6397.983 4418.013 4449.921 5021.779 6390.983 5043.579 4456.721 7327.183 3990.708 7333.317 23654.633 5037.146 5037.146 6382.017 7333.317 4127.967 4581.613 4012.325 3626.323 2223.082 3723.362 2018.894 2715.893 1698.735 1509.713 1650.663 1402.303 23667.967 5926.783 7327.383 5972.779 7333.417 7327.383 5043.579 6390.983 23655.033 7333.417 3710.393 2430.110 2259.242 2106.405 1591.440 2027.789 2006.102 1590.538 1840.143 5030.246 5030.246 4441.354 23654.933 4560.579 3920.725 3599.851 3552.032 5174.242 4409.787 2013.616 2804.132 1667.374 3022.161 2002.987 1401.990"/>
+      <rec alg="HC" makespan="12763.633 9191.317"/>
+      <rec alg="SA" makespan="12769.333 5494.467 3704.058 9307.800 2218.828 6308.487"/>
+      <rec alg="EMSC-NSGAII" makespan="1243.078 1246.471 1248.591 1250.836 1258.409 1310.785 1310.465 1341.246 1408.128 1414.289 1419.630 1430.122 2100.223 2197.139 2234.668 2536.563 2742.868 2884.572 3162.159 3215.816 3941.856 3941.856 4433.987 4433.987 5911.983 5911.983 5911.983 23643.033 23643.033 1243.456 1247.629 1250.318 1253.751 1256.809 1275.102 1291.927 1302.140 1401.991 1402.137 1407.558 1413.922 1455.969 1630.325 1719.995 1927.660 2209.177 2617.139 2867.987 2869.253 3126.849 3426.697 3646.816 3941.856 3941.856 3941.856 3941.856 4433.987 4433.987 4433.987 4433.987 4433.987 4433.987 5911.983 5911.983 5911.983 5911.983 23643.533 1245.654 1246.656 1247.239 1248.957 1249.693 1262.812 1302.854 1315.811 1410.191 1412.237 1713.569 1772.455 2068.694 2097.572 2244.830 2577.822 2614.320 2859.150 2969.243 3078.452 3415.096 3489.627 4127.467 4433.987 4433.987 5911.983 23643.033 23643.033 23643.033"/>
+      <rec alg="EMSC-SPEA2" makespan="1249.876 1326.254 1421.971 2214.912 2740.413 2856.167 3416.892 4433.987 5911.983 23643.033 1246.427 1418.908 1635.424 1853.433 2118.873 3346.753 3941.856 4433.987 5911.983 23643.033 1258.783 1393.206 1726.648 2285.410 2687.383 3050.396 3572.072 4433.987 5911.983 23643.033"/>
+      <rec alg="EMSC-MOEA/D" makespan="1244.128 1260.779 1271.893 1279.736 1293.990 1299.017 1299.229 15816.707 1250.387 1253.123 1265.939 1265.711 1269.496 1277.297 1473.592 2966.296 1245.264 1246.848 1247.941 1248.784 1250.653 1258.413 12894.100 1249.033 1248.720 1250.668 1256.784 1262.558 1266.753 1278.504 6888.433 1247.246 1247.182 1249.929 1253.624 1256.523 1267.727 1304.053 1501.871 4896.447"/>
+      <rec alg="MOHEFT" makespan="24262.197 16374.809 32709.624 12134.500 20878.151 24262.197 16374.809 32709.624 12134.500 20878.151 24262.197 16374.809 32709.624 12134.500 20878.151"/>
     </model>
     <model name="Sipht_30">
-      <rec alg="RIOT" hypervolume="0.724 0.737 0.722 0.723"/>
-      <rec alg="HC" hypervolume="0.240"/>
-      <rec alg="SA" hypervolume="0.592"/>
-      <rec alg="EMSC-NSGAII" hypervolume="0.749 0.745 0.750"/>
-      <rec alg="EMSC-SPEA2" hypervolume="0.746 0.748 0.726"/>
-      <rec alg="EMSC-MOEA/D" hypervolume="0.112 0.126 0.423"/>
+      <rec alg="RIOT" makespan="1853.848 7411.192 1853.848 7411.192 1390.636 1853.848 1390.636 1853.848 1236.365 1390.636 7411.192 1226.477 1227.925 1226.588 1147.965 1152.103 1017.314 1018.489 1129.494 1017.987 1003.879 983.736 991.938 982.405 985.495 982.405 1236.565 1390.736 1236.565 1853.648 1853.648 1390.736 1853.648 1390.736 1853.648 7411.092 1853.648 1236.565 1236.565 1076.070 1144.199 1017.012 1009.991 1007.866 992.384 1006.241 984.401 984.114 982.405 1390.936 1390.936 1236.265 7411.492 1236.265 1854.148 7411.492 7411.492 1390.936 1236.265 1390.936 1854.148 7411.492 1854.148 1854.148 1236.265 7411.492 1235.978 1019.452 1015.987 1059.538 1058.301 1117.622 1002.652 982.405 992.661 1390.436 1853.748 1390.436 7411.192 7411.192 7411.192 1853.748 1236.165 1236.165 1853.748 1390.436 1390.436 1236.165 7411.192 1853.748 1390.436 1389.970 1235.651 1235.436 1006.312 1114.599 1006.576 1006.166 1134.378 1004.000 982.405 983.683"/>
+      <rec alg="HC" makespan="7415.531"/>
+      <rec alg="SA" makespan="1235.865 1391.007 7341.949 1234.862 1136.387 1004.281"/>
+      <rec alg="EMSC-NSGAII" makespan="982.405 982.332 984.568 990.471 992.384 992.560 995.000 1005.265 1016.999 1220.168 1225.193 1228.137 1231.077 1236.188 1236.188 1390.661 1853.682 1853.682 1853.682 1853.682 7411.127 7411.127 7411.127 982.332 982.405 983.036 982.465 983.416 984.826 986.933 1010.935 1150.472 1206.715 1215.974 1231.089 1236.188 1236.188 1236.188 1235.852 1390.661 1853.682 1853.682 1853.682 1853.682 7411.127 983.050 982.332 982.405 1001.591 1104.706 1104.605 1212.011 1215.833 1236.188 1236.188 1236.188 1390.661 1390.661 1390.661 1853.682 1853.682 1853.682 1853.682 1853.682 1853.682 7411.127 7411.127 7411.127"/>
+      <rec alg="EMSC-SPEA2" makespan="982.332 983.416 996.948 1003.370 1048.750 1192.116 1236.188 1390.661 1853.682 7411.127 982.332 986.787 996.517 1054.615 1093.595 1228.335 1236.188 1390.661 1853.682 7411.127 982.393 984.184 1022.435 1097.906 1130.361 1166.817 1236.188 1390.661 1853.682 7411.127"/>
+      <rec alg="EMSC-MOEA/D" makespan="982.759 982.648 982.465 982.405 982.332 995.948 1006.762 983.154 983.111 982.808 982.416 982.405 985.325 985.495 1152.827 2175.590 982.682 982.332 983.416 4253.475 982.405 982.332 983.579 983.429 983.087 985.837 985.948 1117.990 4912.764 982.659 983.191 982.465 982.393 983.818 990.166 994.723 2632.499"/>
+      <rec alg="MOHEFT" makespan="8932.621 3689.244 12840.221 10463.782 3512.011 8932.621 3689.244 12840.221 10463.782 3512.011 8932.621 3689.244 12840.221 10463.782 3512.011"/>
     </model>
-  </hypervolumes>
+  </makespans>
 </reports>

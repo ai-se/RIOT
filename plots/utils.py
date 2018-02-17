@@ -46,8 +46,8 @@ def read_all_data():
     newe = None
 
     for fileName, algName in zip(
-            ['emsc-nsgaii.txt', 'emsc-spea2.txt', 'emsc-moead.txt', 'riot.txt', 'riotHc.txt', 'riotSa.txt'],
-            ['EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'RIOT', 'HC', 'SA']):
+            ['emsc-nsgaii.txt', 'emsc-spea2.txt', 'emsc-moead.txt', 'riot.txt', 'riotHc.txt', 'riotSa.txt', 'moheft.txt'],
+            ['EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'RIOT', 'HC', 'SA', 'MOHEFT']):
         with open("../results/" + fileName, 'r') as f:
             content = f.read()
             for line in content.split('\n'):

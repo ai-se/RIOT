@@ -513,10 +513,10 @@ public class MOHEFT {
 
 		alg.setInputParameter("K", tradeOffSolNum);
 		alg.setInputParameter("N", Math.min(maxSimultaneousIns, problem_.tasksNum));
-		if (tradeOffSolNum * maxSimultaneousIns * problem_.tasksNum > 110000) {
-			System.err.println("[MOHEFT] K * N too large. Not suitable for MOHEFT algorithm!");
-			return new SolutionSet(1);
-		}
+//		if (tradeOffSolNum * maxSimultaneousIns * problem_.tasksNum > 110000) {
+//			System.err.println("[MOHEFT] K * N too large. Not suitable for MOHEFT algorithm!");
+//			return new SolutionSet(1);
+//		}
 
 		SolutionSet p = alg.execute();
 

@@ -27,9 +27,9 @@ from lxml import etree
 import xml.etree.ElementTree as ET
 import numpy
 import sys
-import pdb
 from scipy.stats import ttest_ind
 import scipy
+import pdb
 
 algorithms = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'SA', 'HC']
 modelref = ['Montage', 'Epigenomics', 'Inspiral', 'CyberShake', 'Sipht']
@@ -46,22 +46,32 @@ def get_data_by_tag(tag):
 
 
 def get_runtime_csv():
-    algorithms = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']
+    algorithms = ['RIOT', 'MOHEFT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']
 
     # f1 = open('../results/combined/runtime.csv', 'w+')
     f1 = sys.stdout
     data = get_data_by_tag("runtimes")
+    MK = get_data_by_tag("makespans")
     models = [i.get('name') for i in data.getchildren()]
     models = sorted(models, key=lambda n: (modelref.index(n.split('_')[0]), int(n.split('_')[1])))
-    header = ['model'] + algorithms
+    # header = ['model'] + algorithms
     # print(','.join(header), file=f1)
 
     for model in models:
         d = [i for i in data.getchildren() if i.get('name') == model][0]
+        dd = [i for i in MK.getchildren() if i.get('name') == model][0]
         times = list()
+        makespans = list()
+
         for alg in algorithms:
             time = [i for i in d.getchildren() if i.get('alg') == alg][0].get('algRunTime').split(' ')
-            if len(time) == 0 or (int(time[0]) < 3 and alg == 'MOHEFT'):
+            sub_makespans = [i for i in dd.getchildren() if i.get('alg') == alg][0].get('makespan').split(' ')
+
+            if '' not in sub_makespans:
+                sub_makespans = [float(i) for i in sub_makespans]
+                makespans.extend(sub_makespans)
+
+            if '' in time:
                 times.append('N/A')
             else:
                 time = [int(i) for i in time]
@@ -72,10 +82,12 @@ def get_runtime_csv():
         times.append(int(min(times[1:]) / times[0]))
 
         times = [str(i) for i in times]
-
-        print(' & '.join([model.replace('_', ' ')] + times) + '\\\\', file=f1)
-        if models.index(model) % 4 == 3:
-            print('\\midrule', file=f1)
+        makespans = sorted(makespans)[: int(len(makespans) * 0.95)]  #.6
+        makespan = int(numpy.median(makespans))
+        simple_model_name = model[0] + '.' + model.split('_')[1]
+        print(' & '.join([simple_model_name] + [str(makespan)] + times) + '\\\\', file=f1)
+        if models.index(model) % 4 == 3 and models.index(model) != 19:
+            print('\\hline', file=f1)
 
 
 def get_hv_csv():
@@ -245,7 +257,5 @@ def rq2_in_latex():
 
 
 if __name__ == '__main__':
-    # get_runtime_csv()
-    import debug
-
-    rq2_in_latex()
+    get_runtime_csv()
+    # rq2_in_latex()

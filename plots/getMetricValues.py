@@ -31,6 +31,7 @@ import math
 import sys
 import xml.etree.ElementTree as ET
 import debug
+import pdb
 from lxml import etree
 
 from assPkg.hv import HyperVolume
@@ -40,7 +41,7 @@ debug.activate()
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
 
-algorithms = ['RIOT', 'HC', 'SA', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']  # pls put MOHEFT at the end
+algorithms = ['RIOT', 'HC', 'SA', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # pls put MOHEFT at the end
 
 
 def format_obj_list(objs):
@@ -130,6 +131,18 @@ def get_hv(exps, modelName):
         res.append(volume)
 
     print("Hypervolume for " + modelName + " checked!", file=sys.stderr)
+    return res
+
+
+def get_makespans(exps, modelName):  # TODO here
+    res = list()
+    for O in exps:
+        objs = O.objs
+        makespans = zip(*objs)[0]
+        for m in makespans:
+            res.append(m)
+
+    print("Makespan for " + modelName + " checked!", file=sys.stderr)
     return res
 
 
@@ -251,7 +264,26 @@ def report():
 
             hvs.append(child)
 
-    reports.append(hvs)
+    """ makespan """
+    makespans = etree.Element('makespans')
+    for model in models:
+        child = etree.Element("model")
+        child.set("name", model)
+
+        for alg in algorithms:
+            exps = filter(lambda i: i.model == model and i.alg == alg, AllExps)
+            ss = get_makespans(exps, model)
+            ss = ['%.3f' % i for i in ss]
+
+            cchild = etree.Element("rec")
+            cchild.set("alg", alg)
+            cchild.set("makespan", " ".join(ss))
+
+            child.append(cchild)
+
+            makespans.append(child)
+
+    reports.append(makespans)
 
     with open('../results/combined/reports.xml', 'w') as f:
         f.write(etree.tostring(reports, pretty_print=True))
