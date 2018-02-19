@@ -29,42 +29,71 @@ import pdb
 from PIL import Image
 
 # TODO SETTING HERE...
-folder = '../results/objCmprImg/'
-saveat = '../results/combined/objCmpr.png'
+folder = '../results/objCmprImg2/'
+saveat = '../results/combined/ana.png'
 
 ifs = glob.glob(folder + '*.png')
 ifs = [i for i in ifs if 'combine' not in i]
 images = map(Image.open, ifs)
 widths, heights = zip(*(i.size for i in images))
 
-# fetch all models
-models = set()
 ifiles = list()
 for i in ifs:
     t = i[len(folder):-4]  # name
     ifiles.append(t)
-    if t.split('_')[0] not in models:
-        models.add(t.split('_')[0])
 
-new_im = Image.new('RGB', ((max(widths) + 5) * 4, (max(heights) + 10) * 5))  # TODO ATTENTION: grid size set here
 
-x_offset = 0
-y_offset = 0
+def combine_all():
+    new_im = Image.new('RGB', ((max(widths)) * 10-17*9, (max(heights) + 10) * 2),
+                       (255, 255, 255, 0))  # TODO ATTENTION: grid size set here
 
-for m in models:
-    ENT = list()
-
-    for im, ifile in zip(images, ifiles):
-        if m not in ifile:
-            continue
-        ENT.append((im, ifile, int(ifile.split('_')[1])))
-    ENT.sort(key=lambda i: i[2])
-
-    for im, ifile, nn in ENT:
-        new_im.paste(im, (x_offset, y_offset))
-        x_offset += im.size[0] + 5
-
-    y_offset += im.size[1] + 10
     x_offset = 0
+    y_offset = 0
 
-new_im.save(saveat)
+    models = ['Montage', 'Epigenomics', 'Inspiral', 'CyberShake', 'Sipht']
+    m_i = 0
+    for m in models:
+        ENT = list()
+
+        for im, ifile in zip(images, ifiles):
+            if m not in ifile:
+                continue
+            ENT.append((im, ifile, int(ifile.split('_')[1])))
+        ENT.sort(key=lambda i: i[2])
+        for im, ifile, nn in ENT:
+            new_im.paste(im, (x_offset, y_offset))
+            m_i += 1
+            x_offset += im.size[0]-17
+            if m_i == 10:
+                y_offset += im.size[1] + 10
+                x_offset = 0
+
+    new_im.save(saveat)
+
+
+def combine_large_only():
+    new_im = Image.new('RGB', ((max(widths) + 1) * 5, (max(heights)) * 1), (255, 255, 255, 0))  # 5 cols * 1 row
+
+    x_offset = 0
+    y_offset = 0
+    models = ['Montage', 'Epigenomics', 'Inspiral', 'CyberShake', 'Sipht']
+
+    for m in models:
+        ENT = list()
+
+        for im, ifile in zip(images, ifiles):
+            if m not in ifile:
+                continue
+            ENT.append((im, ifile, int(ifile.split('_')[1])))
+
+        ENT.sort(key=lambda i: i[2])
+
+        new_im.paste(ENT[-1][0], (x_offset, y_offset))
+        x_offset += im.size[0] + 1
+
+    new_im.save("../results/combined/largeObj.png")
+
+
+if __name__ == '__main__':
+    # combine_large_only()
+    combine_all()

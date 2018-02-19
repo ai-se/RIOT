@@ -41,7 +41,7 @@ debug.activate()
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
 
-algorithms = ['RIOT', 'HC', 'SA', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT']  # pls put MOHEFT at the end
+algorithms = ['RIOT', 'HC', 'SA', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT', 'RAND']  # pls put MOHEFT at the end
 
 
 def format_obj_list(objs):
@@ -263,6 +263,8 @@ def report():
             child.append(cchild)
 
             hvs.append(child)
+
+    reports.append(hvs)
 
     """ makespan """
     makespans = etree.Element('makespans')

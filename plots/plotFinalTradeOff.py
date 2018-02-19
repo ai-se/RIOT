@@ -41,15 +41,18 @@ def jitter(x, y, drawed):
 
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
-algs = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'HC', 'SA']  # pls put MOHEFT at the end
-colors = ['darkgreen', 'red', 'blue', 'darkmagenta',
-          'orange', 'black']  # https://matplotlib.org/examples/color/named_colors.html
-markers = ['d', 's', 'x', 'p', '^', '1']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
+algs = ['EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT', 'RIOT']
+colors = ['red', 'blue', 'darkmagenta',
+          'orange', 'darkgreen']  # https://matplotlib.org/examples/color/named_colors.html
+markers = ['s', 'x', 'p', '^', 'd']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
 
 for model in models:
     plt.clf()
+    plt.figure(figsize=(2.4, 2.4), dpi=200)
+    matplotlib.rcParams.update({'font.size': 7})
     ax = plt.gca()
     drawed = list()
+    ymax = -1
 
     for alg, color, mk in zip(algs, colors, markers):
         points = filter(lambda exp: exp.alg == alg and exp.model == model, AllExps)
@@ -72,25 +75,22 @@ for model in models:
         tmp1 = zip(*drawed)[1]
         tmp1 = tmp1[:len(tmp1) - len(y)]
         currentN = max(tmp1) if tmp1 else -1
+        ax.plot(x, y, c=color, label=alg, marker=mk, markersize=1.5, ls='--', linewidth=0.5)
 
-        if alg != 'MOHEFT' or not x or np.mean(x) <= math.log10(
-                currentM):  # dont show if extremely bad or no results in MOHEFT
-            ax.plot(x, y, c=color, label=alg if alg != 'RIOT' else 'Our method', marker=mk, ls='--', linewidth=0.8)
-            if not x and alg == 'MOHEFT':
-                plt.text((currentM) * 0.8, currentN * 0.8, 'Model too large for MOHEFT', fontsize=9,
-                         color='gray')
-        else:
-            ax.plot([], [], c=color, label=alg, marker=mk, ls='--', linewidth=0.8)
-            plt.text(math.log10(currentM) * 0.8, currentN * 0.8, 'MOHEFT out of bound', fontsize=9, color='gray')
+        if alg != "MOHEFT":
+            ymax = max(ymax, max(y))
 
-        ax.set_xscale("log")
-        ax.get_xaxis().get_major_formatter().labelOnlyBase = False
+    ax.set_xscale("log")
+    ax.get_xaxis().get_major_formatter().labelOnlyBase = False
 
-        ax.set_xlabel('makespan')
-        ax.set_ylabel('cost')
-        ax.set_aspect(1.5)
+    ax.set_xlabel('makespan')
+    ax.set_ylabel('cost')
+    ax.set_aspect(1.5)
+    ax.set_ylim([-ymax*0.1, ymax * 1.1])
 
+    if model == 'Sipht_1000':  # only show legends once
         plt.legend(loc=0)
-        plt.title(model)
-        # plt.show()
-        plt.savefig('../results/tradeOffPF/' + model + '.png')
+
+    plt.title(model)
+    # plt.show()
+    plt.savefig('../results/tradeOffPF/' + model + '.png')

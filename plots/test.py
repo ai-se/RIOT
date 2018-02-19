@@ -1,47 +1,22 @@
-import matplotlib.pyplot as plt
-
-from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
-
 import numpy as np
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+import pdb
 
+# example data
+mu = 100  # mean of distribution
+sigma = 15  # standard deviation of distribution
+x = mu + sigma * np.random.randn(10000)
 
-def get_demo_image():
-    from matplotlib.cbook import get_sample_data
-    import numpy as np
-    f = get_sample_data("axes_grid/bivariate_normal.npy", asfileobj=False)
-    z = np.load(f)
-    # z is a numpy array of 15x15
-    return z, (-3, 4, -4, 3)
+num_bins = 50
+# the histogram of the data
+n, bins, patches = plt.hist(x, num_bins, normed=1, facecolor='green', alpha=0.5)
+# add a 'best fit' line
+# y = mlab.normpdf(bins, mu, sigma)
+plt.xlabel('Smarts')
+plt.ylabel('Probability')
+plt.title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
 
-
-fig, ax = plt.subplots(figsize=[5, 4])
-
-# prepare the demo image
-Z, extent = get_demo_image()
-Z2 = np.zeros([150, 150], dtype="d")
-ny, nx = Z.shape
-Z2[30:30 + ny, 30:30 + nx] = Z
-
-# extent = [-3, 4, -4, 3]
-ax.imshow(Z2, extent=extent, interpolation="nearest",
-          origin="lower")
-
-axins = zoomed_inset_axes(ax, 6, loc=1)  # zoom = 6
-axins.imshow(Z2, extent=extent, interpolation="nearest",
-             origin="lower")
-
-# sub region of the original image
-x1, x2, y1, y2 = -1.5, -0.9, -2.5, -1.9
-axins.set_xlim(x1, x2)
-axins.set_ylim(y1, y2)
-
-plt.xticks(visible=False)
-plt.yticks(visible=False)
-
-# draw a bbox of the region of the inset axes in the parent axes and
-# connecting lines between the bbox and the inset axes area
-mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
-
-plt.draw()
+# Tweak spacing to prevent clipping of ylabel
+plt.subplots_adjust(left=0.15)
 plt.show()

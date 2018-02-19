@@ -31,7 +31,6 @@ from scipy.stats import ttest_ind
 import scipy
 import pdb
 
-algorithms = ['RIOT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'SA', 'HC']
 modelref = ['Montage', 'Epigenomics', 'Inspiral', 'CyberShake', 'Sipht']
 
 
@@ -43,6 +42,14 @@ def get_data_by_tag(tag):
     tree = ET.parse('../results/combined/reports.xml')
     subtree = filter(lambda t: t.tag == tag, tree.getroot().getchildren())[0]
     return subtree
+
+
+def _change_sec_to_hour(s):
+    if s == 'N/A':
+        return s
+    if int(s) < 1500:
+        return s
+    return '%.1fH' % (int(s) / 3600)
 
 
 def get_runtime_csv():
@@ -82,10 +89,14 @@ def get_runtime_csv():
         times.append(int(min(times[1:]) / times[0]))
 
         times = [str(i) for i in times]
-        makespans = sorted(makespans)[: int(len(makespans) * 0.95)]  #.6
-        makespan = int(numpy.median(makespans))
+        times = map(_change_sec_to_hour, times)
+
+        makespans = sorted(makespans)[: int(len(makespans) * 0.6)]  # .6
+        makespan = str(int(numpy.median(makespans)))
+        makespan = _change_sec_to_hour(makespan)
+
         simple_model_name = model[0] + '.' + model.split('_')[1]
-        print(' & '.join([simple_model_name] + [str(makespan)] + times) + '\\\\', file=f1)
+        print(' & '.join([simple_model_name] + [makespan] + times) + '\\\\', file=f1)
         if models.index(model) % 4 == 3 and models.index(model) != 19:
             print('\\hline', file=f1)
 
@@ -167,18 +178,19 @@ def wilconTest(x, y):
     # return scipy.stats.wilcoxon(x, y)[1] > 0.05
 
 
-def rq2_in_latex():
+def results_in_latex():
+    algorithms = ['RIOT', 'MOHEFT', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'RAND']
     hv_data = get_data_by_tag("hypervolumes")
-    spread_data = get_data_by_tag("spreads")
     igd_data = get_data_by_tag("igds")
+    spread_data = get_data_by_tag("spreads")
 
     models = [i.get('name') for i in hv_data.getchildren()]
     models = sorted(models, key=lambda n: (modelref.index(n.split('_')[0]), int(n.split('_')[1])))
 
     for model in models:
         unforn1 = False
-        unforn2 = False
         unforn3 = False
+        unforn2 = False
 
         # hvs
         d = [i for i in hv_data.getchildren() if i.get('name') == model][0]
@@ -193,35 +205,12 @@ def rq2_in_latex():
                 iqrh = max(iqrh, .01)
                 iqrh = ('%.2f' % iqrh)[1:]
 
-        if hvr[0] / (sum(hvr[1:4]) / 3) < 0.9:
+        if hvr[0] / (sum(hvr[2:5]) / 3) < 0.95:
             unforn1 = True
 
         if hvr[-1] < 0.1:
             hvr[-1] = 0.1
-        # tmp_h = [str(round(i / hvr[-1], 2)) for i in hvr[:-1]]
-        # hvr = tmp_h
-        hvr = [str(round(i, 2)) for i in hvr]
-
-        # spreads
-        d = [i for i in spread_data.getchildren() if i.get('name') == model][0]
-        spr = list()
-        for alg in algorithms:
-            spx = [i for i in d.getchildren() if i.get('alg') == alg][0].get('spread').split(' ')
-            spx = [float(i) for i in spx]
-            spr.append(median(spx))
-
-            if alg == 'RIOT':
-                q75, q25 = numpy.percentile(spr, [75, 25])
-                iqrs = q75 - q25
-                iqrs = max(iqrs, .01)
-                iqrs = ('%.2f' % iqrs)[1:]
-
-        if spr[0] / (sum(spr[1:4]) / 3) > 1.15:
-            unforn2 = True
-
-        # tmp_s = [str(round(i / spr[-1], 2)) for i in spr[:-1]]
-        # spr = tmp_s
-        spr = [str(round(i, 2)) for i in spr]
+        hvr = ["{0:.2f}".format(round(i, 2)) for i in hvr]
 
         # igds
         d = [i for i in igd_data.getchildren() if i.get('name') == model][0]
@@ -236,20 +225,36 @@ def rq2_in_latex():
                 iqri = max(iqri, .01)
                 iqri = ('%.2f' % iqri)[1:]
 
-        if ir[0] / (sum(ir[1:4]) / 3) > 1.15:
+        if ir[0] / (sum(ir[2:5]) / 3) > 1.15:
             unforn3 = True
 
-        # tmp_i = [str(round(i / ir[-1], 2)) for i in ir[:-1]]
-        # ir = tmp_i
-        ir = [str(round(i, 2)) for i in ir]
-        # pdb.set_trace()
+        ir = ["{0:.2f}".format(round(i, 2)) for i in ir]
+
+        # spreads
+        d = [i for i in spread_data.getchildren() if i.get('name') == model][0]
+        spr = list()
+        for alg in algorithms[:-1]:
+            spx = [i for i in d.getchildren() if i.get('alg') == alg][0].get('spread').split(' ')
+            spx = [float(i) for i in spx]
+            spr.append(median(spx))
+
+            if alg == 'RIOT':
+                q75, q25 = numpy.percentile(spr, [75, 25])
+                iqrs = q75 - q25
+                iqrs = max(iqrs, .01)
+                iqrs = ('%.2f' % iqrs)[1:]
+
+        if spr[0] / (sum(spr[2:5]) / 3) > 1.15:
+            unforn2 = True
+
+        spr = ["{0:.2f}".format(round(i, 2)) if i > 0 else '~{\it n.a.}' for i in spr]
+
+        simple_model_name = model[0] + '.' + model.split('_')[1]
         printseq = [model.replace('_', ' '),
-                    '\\s' + ('s' if unforn1 else '') + 'val{%s}{%s}' % (hvr[0], iqrh), '/'.join(hvr[1:4]), hvr[4],
-                    hvr[5],
-                    '\\s' + ('s' if unforn2 else '') + 'val{%s}{%s}' % (spr[0], iqrs),
-                    '/'.join(spr[1:4]), spr[4], spr[5],
-                    '\\s' + ('s' if unforn3 else '') + 'val{%s}{%s}' % (ir[0], iqri),
-                    '/'.join(ir[1:4]), ir[4], ir[5]]
+                    '\\s' + ('s' if unforn1 else '') + 'val{%s}{%s}' % (hvr[0], iqrh), '/'.join(hvr[1:5]), hvr[5],
+                    '\\s' + ('s' if unforn3 else '') + 'val{%s}{%s}' % (ir[0], iqri), '/'.join(ir[1:5]), ir[5],
+                    '\\s' + ('s' if unforn2 else '') + 'val{%s}{%s}' % (spr[0], iqrs), '/'.join(spr[1:5])
+                    ]
 
         print(' & '.join(printseq) + '\\\\')
         if models.index(model) % 4 == 3:
@@ -257,5 +262,5 @@ def rq2_in_latex():
 
 
 if __name__ == '__main__':
-    get_runtime_csv()
-    # rq2_in_latex()
+    # get_runtime_csv()
+    results_in_latex()
