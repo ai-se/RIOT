@@ -23,6 +23,10 @@
 
 
 from __future__ import division
+import pdb
+import re
+import os
+import glob
 
 
 class Exp:
@@ -46,7 +50,8 @@ def read_all_data():
     newe = None
 
     for fileName, algName in zip(
-            ['emsc-nsgaii.txt', 'emsc-spea2.txt', 'emsc-moead.txt', 'riot.txt', 'riotHc.txt', 'riotSa.txt', 'moheft.txt', 'sanity.txt'],
+            ['emsc-nsgaii.txt', 'emsc-spea2.txt', 'emsc-moead.txt', 'riot.txt', 'riotHc.txt', 'riotSa.txt',
+             'moheft.txt', 'sanity.txt'],
             ['EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'RIOT', 'HC', 'SA', 'MOHEFT', 'RAND']):
         with open("../results/" + fileName, 'r') as f:
             content = f.read()
@@ -82,3 +87,23 @@ def read_all_data():
     #         newe.add_obj(float(os[0]), float(os[1]))
 
     return currentExpDatas
+
+
+def rename_files(folder, fileExtension='eps'):
+    """
+    rename files int folder into 1.*, 2.*, etc.
+    :param folder:
+    :return:
+    """
+    if folder[-1] != '/':
+        folder += '/'
+    files = glob.glob(folder + '*.' + fileExtension)
+    models = ['Montage', 'Epigenomics', 'Inspiral', 'CyberShake', 'Sipht']
+
+    i = 0
+    for m in models:
+        subs = filter(lambda x: m in x, files)
+        subs.sort(key=lambda x: map(int, re.findall(r'\d+', x))[-1])
+        for f in subs:
+            os.rename(f, folder + str(i) + '.' + fileExtension)
+            i += 1

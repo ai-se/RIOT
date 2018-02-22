@@ -24,16 +24,14 @@
 
 from __future__ import division
 
-from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
-import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-import matplotlib
 import glob
-import math
-import pdb
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from utils import rename_files
 
 ifs = glob.glob('../results/objCmpr/' + '*.txt')
 
@@ -62,7 +60,7 @@ for f in ifs:
     errors = [i for i in errors if i != 0]
 
     plt.clf()
-    plt.figure(figsize=(0.8, 1.4), dpi=200)
+    plt.figure(figsize=(0.8, 0.8), dpi=200)
     matplotlib.rcParams.update({'font.size': 5.0})
     matplotlib.rc('axes', edgecolor='gray')
 
@@ -75,14 +73,13 @@ for f in ifs:
     vals = frame1.get_xticks()
     frame1.set_xticklabels(['' for x in vals])
     simple_model_name = model_name[0] + '.' + model_name.split('_')[1]
-    plt.title(simple_model_name)
-
+    # plt.title(simple_model_name)
     # showing the 80% data
     n_l = len(errors)
     r = -1
-    for i in range(0, 100, 2):
+    for i in range(0, 100, 5):
         r = float(i) / 100
-        if len([q for q in errors if -r < q < r]) > 0.78 * n_l:
+        if len([q for q in errors if -r < q < r]) > 0.75 * n_l:
             break
 
     for b, thispatch in zip(bins, patches):
@@ -91,49 +88,52 @@ for f in ifs:
         else:
             thispatch.set_facecolor('gray')
 
+    plt.text(-0.85, plt.ylim()[1]*0.9, simple_model_name, fontdict={'weight': 'bold', 'size': 5.3})
+
     plt.tight_layout()
     # plt.show()
-    plt.savefig('../results/objCmprImg2/' + model_name + '.png')
+    plt.savefig('../results/objCmprImg2/' + model_name + '.eps')
+rename_files('../results/objCmprImg2/', fileExtension='eps')
 
-    #
-    # plt.figure(figsize=(8, 8))
-    # ax = plt.gca()
-    #
-    # # plot scatters
-    # plt.xlim(-1, 1)
-    # plt.ylim(-1, 1)
-    # ax.scatter(x=df['delta0'], y=df['delta1'], s=0.2)
-    #
-    # # zoom in the center part
-    # axins = zoomed_inset_axes(ax, zoom=1.15, loc=1)
-    # axins.scatter(x=df['delta0'], y=df['delta1'], s=0.2)
-    # axins.set_xlim(-0.25, 0.25)
-    # axins.set_ylim(-0.25, 0.25)
-    # axins.axes.get_yaxis().set_visible(False)
-    #
-    # axins2 = zoomed_inset_axes(ax, zoom=2, loc=9)
-    # axins2.scatter(x=df['delta0'], y=df['delta1'], s=0.2)
-    # axins2.set_xlim(-0.1, 0.1)
-    # axins2.set_ylim(-0.1, 0.1)
-    # axins2.axes.get_xaxis().set_visible(False)
-    #
-    # mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
-    # mark_inset(axins, axins2, loc1=1, loc2=3, fc="none", ec="0.5")
-    #
-    # # print model name
-    # ax.text(-0.3, 1.1, model_name, fontsize=10)
-    #
-    # # print ratios between +-25%
-    # case_in_total = df.shape[0]
-    # center_count = df[(abs(df.delta0) < 0.25) & (abs(df.delta1) < 0.25)].shape[0]
-    # center_count2 = df[(abs(df.delta0) < 0.1) & (abs(df.delta1) < 0.1)].shape[0]
-    #
-    # # ax.text(0.3, -0.6, "Error in [+-0.25]^2 = %d/%d = %.2f%%" % (
-    # #     center_count, case_in_total, center_count / case_in_total * 100), fontsize=9, color='r')
-    # ax.text(0.75, -0.75, "100%", color='r')
-    # axins.text(0.15, -0.15, str(int(center_count / case_in_total * 100)) + '%', color='r')
-    # axins2.text(0.06, -0.08, str(int(center_count2 / case_in_total * 100)) + '%', color='r')
+#
+# plt.figure(figsize=(8, 8))
+# ax = plt.gca()
+#
+# # plot scatters
+# plt.xlim(-1, 1)
+# plt.ylim(-1, 1)
+# ax.scatter(x=df['delta0'], y=df['delta1'], s=0.2)
+#
+# # zoom in the center part
+# axins = zoomed_inset_axes(ax, zoom=1.15, loc=1)
+# axins.scatter(x=df['delta0'], y=df['delta1'], s=0.2)
+# axins.set_xlim(-0.25, 0.25)
+# axins.set_ylim(-0.25, 0.25)
+# axins.axes.get_yaxis().set_visible(False)
+#
+# axins2 = zoomed_inset_axes(ax, zoom=2, loc=9)
+# axins2.scatter(x=df['delta0'], y=df['delta1'], s=0.2)
+# axins2.set_xlim(-0.1, 0.1)
+# axins2.set_ylim(-0.1, 0.1)
+# axins2.axes.get_xaxis().set_visible(False)
+#
+# mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
+# mark_inset(axins, axins2, loc1=1, loc2=3, fc="none", ec="0.5")
+#
+# # print model name
+# ax.text(-0.3, 1.1, model_name, fontsize=10)
+#
+# # print ratios between +-25%
+# case_in_total = df.shape[0]
+# center_count = df[(abs(df.delta0) < 0.25) & (abs(df.delta1) < 0.25)].shape[0]
+# center_count2 = df[(abs(df.delta0) < 0.1) & (abs(df.delta1) < 0.1)].shape[0]
+#
+# # ax.text(0.3, -0.6, "Error in [+-0.25]^2 = %d/%d = %.2f%%" % (
+# #     center_count, case_in_total, center_count / case_in_total * 100), fontsize=9, color='r')
+# ax.text(0.75, -0.75, "100%", color='r')
+# axins.text(0.15, -0.15, str(int(center_count / case_in_total * 100)) + '%', color='r')
+# axins2.text(0.06, -0.08, str(int(center_count2 / case_in_total * 100)) + '%', color='r')
 
-    # pdb.set_trace()
-    # plt.show()
-    # plt.savefig('../results/objCmprImg/' + model_name + '.png')
+# pdb.set_trace()
+# plt.show()
+# plt.savefig('../results/objCmprImg/' + model_name + '.png')

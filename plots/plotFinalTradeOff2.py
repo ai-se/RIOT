@@ -42,10 +42,9 @@ def jitter(x, y, drawed):
 
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
-algs = ['EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D', 'MOHEFT', 'RIOT']
-colors = ['red', 'blue', 'darkmagenta',
-          'orange', 'darkgreen']  # https://matplotlib.org/examples/color/named_colors.html
-markers = ['s', 'x', 'p', '^', 'd']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
+algs = ['HC', 'SA', 'RIOT']
+colors = ['blue', 'darkmagenta', 'darkgreen']  # https://matplotlib.org/examples/color/named_colors.html
+markers = ['x', 'p', '^', 'd']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
 
 fontdict = {'weight': 'normal', 'size': 10}
 matplotlib.rc('font', **fontdict)
@@ -78,7 +77,7 @@ for model in models:
         tmp1 = zip(*drawed)[1]
         tmp1 = tmp1[:len(tmp1) - len(y)]
         currentN = max(tmp1) if tmp1 else -1
-        ax.plot(x, y, c=color, label=alg, marker=mk, markersize=4.0, ls='--', linewidth=1.0, alpha=0.5)
+        ax.plot(x, y, c=color, label=alg, marker=mk, markersize=4.0, ls='--', linewidth=1.0, alpha=0.8)
 
         if alg != "MOHEFT":
             ymax = max(ymax, max(y))
@@ -93,13 +92,9 @@ for model in models:
     # major_ticks = ax.get_yticks()[::2]
     # major_ticks[0] = 0
     # ax.set_yticks(major_ticks)
-
+    plt.legend(loc=0)
     plt.title(model.replace('_', ' '), fontdict=fontdict)
     plt.tight_layout()
     # plt.show()
-    plt.savefig('../results/tradeOffPF/' + model + '.pdf')
+    plt.savefig('../results/tradeOffPF2/' + model + '.png')
 
-    if model == 'Sipht_1000':  # only show legends once
-        figLegend = pylab.figure(figsize=(7, 0.35))
-        pylab.figlegend(*ax.get_legend_handles_labels(), loc=9, ncol=5)
-        figLegend.savefig('../results/tradeOffPF/legend.pdf')

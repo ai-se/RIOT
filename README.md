@@ -27,6 +27,3 @@ ARGS2 = model name/small/all
 
 - Changing internal parameters?!
 See src in package edu.ncsu.experiments
-
-## Statistical Analysis
-Doc to write

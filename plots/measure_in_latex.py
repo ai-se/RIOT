@@ -251,9 +251,10 @@ def results_in_latex():
 
         simple_model_name = model[0] + '.' + model.split('_')[1]
         printseq = [model.replace('_', ' '),
-                    '\\s' + ('s' if unforn1 else '') + 'val{%s}{%s}' % (hvr[0], iqrh), '/'.join(hvr[1:5]), hvr[5],
-                    '\\s' + ('s' if unforn3 else '') + 'val{%s}{%s}' % (ir[0], iqri), '/'.join(ir[1:5]), ir[5],
-                    '\\s' + ('s' if unforn2 else '') + 'val{%s}{%s}' % (spr[0], iqrs), '/'.join(spr[1:5])
+                    '\\s' + ('s' if unforn1 else '') + 'val{%s}{%s}' % (hvr[0], iqrh), hvr[1], hvr[2], hvr[3], hvr[4],
+                    hvr[5],
+                    '\\s' + ('s' if unforn3 else '') + 'val{%s}{%s}' % (ir[0], iqri), ir[1], ir[2], ir[3], ir[4], ir[5],
+                    '\\s' + ('s' if unforn2 else '') + 'val{%s}{%s}' % (spr[0], iqrs), spr[1], spr[2], spr[3], spr[4]
                     ]
 
         print(' & '.join(printseq) + '\\\\')

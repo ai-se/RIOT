@@ -29,8 +29,8 @@ import pdb
 from PIL import Image
 
 # TODO SETTING HERE...
-folder = '../results/objCmprImg2/'
-saveat = '../results/combined/ana.png'
+folder = '../results/tradeOffPF2/'
+saveat = '../results/combined/sa_hc.png'
 
 ifs = glob.glob(folder + '*.png')
 ifs = [i for i in ifs if 'combine' not in i]
