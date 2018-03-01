@@ -203,14 +203,14 @@ def results_in_latex():
                 q75, q25 = numpy.percentile(hvx, [75, 25])
                 iqrh = q75 - q25
                 iqrh = max(iqrh, .01)
-                iqrh = ('%.2f' % iqrh)[1:]
+                iqrh = ('%d' % (iqrh * 100))
 
         if hvr[0] / (sum(hvr[2:5]) / 3) < 0.95:
             unforn1 = True
 
         if hvr[-1] < 0.1:
             hvr[-1] = 0.1
-        hvr = ["{0:.2f}".format(round(i, 2)) for i in hvr]
+        hvr = [str(int(i * 100)) for i in hvr]
 
         # igds
         d = [i for i in igd_data.getchildren() if i.get('name') == model][0]
@@ -223,12 +223,12 @@ def results_in_latex():
                 q75, q25 = numpy.percentile(ix, [75, 25])
                 iqri = q75 - q25
                 iqri = max(iqri, .01)
-                iqri = ('%.2f' % iqri)[1:]
+                iqri = ('%d' % (iqri * 100))
 
         if ir[0] / (sum(ir[2:5]) / 3) > 1.15:
             unforn3 = True
 
-        ir = ["{0:.2f}".format(round(i, 2)) for i in ir]
+        ir = [str(int(i * 100)) for i in ir]
 
         # spreads
         d = [i for i in spread_data.getchildren() if i.get('name') == model][0]
@@ -242,12 +242,12 @@ def results_in_latex():
                 q75, q25 = numpy.percentile(spr, [75, 25])
                 iqrs = q75 - q25
                 iqrs = max(iqrs, .01)
-                iqrs = ('%.2f' % iqrs)[1:]
+                iqrs = ('%d' % (iqrs * 100))
 
         if spr[0] / (sum(spr[2:5]) / 3) > 1.15:
             unforn2 = True
 
-        spr = ["{0:.2f}".format(round(i, 2)) if i > 0 else '~{\it n.a.}' for i in spr]
+        spr = [str(int(i * 100)) if i > 0 else '~{\it n.a.}' for i in spr]
 
         simple_model_name = model[0] + '.' + model.split('_')[1]
         printseq = [model.replace('_', ' '),

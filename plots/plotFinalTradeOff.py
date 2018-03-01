@@ -52,7 +52,7 @@ matplotlib.rc('font', **fontdict)
 
 for model in models:
     plt.clf()
-    plt.figure(figsize=(2.4, 2.4))
+    plt.figure(figsize=(5, 5))
     ax = plt.gca()
     drawed = list()
     ymax = -1
@@ -93,7 +93,7 @@ for model in models:
     # major_ticks = ax.get_yticks()[::2]
     # major_ticks[0] = 0
     # ax.set_yticks(major_ticks)
-
+    plt.legend()
     plt.title(model.replace('_', ' '), fontdict=fontdict)
     plt.tight_layout()
     # plt.show()

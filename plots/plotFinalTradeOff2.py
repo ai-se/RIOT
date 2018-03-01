@@ -42,16 +42,16 @@ def jitter(x, y, drawed):
 
 AllExps = read_all_data()
 models = set([i.model for i in AllExps])
-algs = ['HC', 'SA', 'RIOT']
-colors = ['blue', 'darkmagenta', 'darkgreen']  # https://matplotlib.org/examples/color/named_colors.html
-markers = ['x', 'p', '^', 'd']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
+algs = ['HC', 'SA', 'EMSC-NSGAII', 'EMSC-SPEA2', 'EMSC-MOEA/D']
+colors = ['green', 'orange', 'red', 'blue', 'darkmagenta']  # https://matplotlib.org/examples/color/named_colors.html
+markers = ['d', '^', 's', 'x', 'p']  # https://matplotlib.org/examples/lines_bars_and_markers/marker_reference.html
 
 fontdict = {'weight': 'normal', 'size': 10}
 matplotlib.rc('font', **fontdict)
 
 for model in models:
     plt.clf()
-    plt.figure(figsize=(2.4, 2.4))
+    plt.figure(figsize=(6, 6))
     ax = plt.gca()
     drawed = list()
     ymax = -1
