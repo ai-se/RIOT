@@ -10,7 +10,7 @@
 ## Building the project
 - install Apache Ant. See [here](http://ant.apache.org/manualdownload.cgi) 
 - build the java project  
-```ant build```
+```ant create_run_jar```
 - run corresponding jar file
 
 ## Executing jar files  
