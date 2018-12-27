@@ -10,18 +10,21 @@
 ## Building the project
 - install Apache Ant. See [here](http://ant.apache.org/manualdownload.cgi) 
 - build the java project  
-```ant create_run_jar```
+```
+cd vmlb
+ant build
+```
 - run corresponding jar file
 
 ## Executing jar files  
 - Executing EMSC algorithms  
-```java -jar emsc.jar ARGS1 ARGS2 ARGS3```  
+```ant ExpEMSC ARGS1 ARGS2 ARGS3```  
 ARGS1 = number of repeats  
 ARGS2 = model name/small/all  
 ARGS3 = algorithm. nsgaii/spea2/moead
 
 - Executing RIOT algorithms  
-```java -jar riot.jar ARGS1 ARGS2```  
+```ant ExpRIOT ARGS1 ARGS2```  
 ARGS1 = number of repeats  
 ARGS2 = model name/small/all
 
