@@ -2,7 +2,6 @@
 
 ## Files Organization
 - LICENSE: This project is under MIT License
-- build.xml: For maven build
 - plots: Source code for concluding / ploting results, implementing in Python
 - vmlb: Source code and models for RIOT, implementing in Java
 - results: Saved results
